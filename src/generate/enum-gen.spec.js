@@ -43,7 +43,7 @@
     /**
      */
     it("Should generate all values in the enumeration.", function(){
-      let gen = new EnumGen({nullChance: 1/(someEnumValues.length)}).values(someEnumValues)
+      let gen = new EnumGen().nullChance( 1/(someEnumValues.length)).values(someEnumValues)
       let seed = 1
       Math.seedrandom(seed)
 

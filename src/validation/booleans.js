@@ -1,11 +1,6 @@
 "use strict"
 
-let BooleanRestrictions = Object.assign({
-    isBoolean: true
-  },
-  BaseRestrictions)
 
-Object.freeze(BooleanRestrictions)
 
 class IsBooleanValidator extends Validator {
   check(value) {

@@ -1,13 +1,5 @@
 "use strict"
 
-let NumberRestrictions = Object.assign({
-  isNumber: true,
-  integral: false,
-  min: Number.MIN_VALUE,
-  max: Number.MAX_VALUE,
-}, BaseRestrictions)
-
-Object.freeze(NumberRestrictions)
 
 
 class IsNumberValidator extends Validator {

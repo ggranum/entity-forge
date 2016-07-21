@@ -3,29 +3,26 @@
 
 class EnumGen extends DataGen {
   constructor(cfg = null) {
-    super(Object.assign({}, {allowedValues: []}, cfg || {}))
+    super(cfg, ObjectRestrictions)
   }
 
-  values(allowedValues){
-    this.allowedValues = allowedValues
+  values(values){
+    this.restrictions.values = values
     return this
   }
 
   gen() {
-    if (this.allowedValues.length == 0) {
+    if (this.restrictions.values.length == 0) {
       throw new Error("No valid enumeration allowedValues available to generate.")
     }
     let data = super.gen()
     if (data !== null) {
-      let randomIndex = Math.floor(Math.random() * this.allowedValues.length)
-      data = this.allowedValues[randomIndex]
+      let randomIndex = Math.floor(Math.random() * this.restrictions.values.length)
+      data = this.restrictions.values[randomIndex]
     }
     return data
   }
 }
-Object.assign(EnumGen.prototype, {
-  allowedValues: null
-})
 
 
 

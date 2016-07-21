@@ -5,11 +5,11 @@ class EnumForge extends Forge{
 
   constructor(defaultValue = null, msg = "@validations.enumeration.enumeration") {
     super(defaultValue)
-    this.restrictions = Object.assign({}, this.restrictions, {allowedValues: []}, ObjectRestrictions)
+    this.restrictions = Object.assign({}, this.restrictions, {values: []}, ObjectRestrictions)
 
     this.applyValidation({
       name: 'enumeration',
-      fn: (v) => v === null || EnumForge.isMember(this.restrictions.allowedValues, v),
+      fn: (v) => v === null || EnumForge.isMember(this.restrictions.values, v),
       msg: msg, abortOnFail: true
     })
     this._check = Checks.any()
@@ -18,7 +18,7 @@ class EnumForge extends Forge{
 
   ignite(){
     if(this.restrictions.notNull && this.defaultValue == null){
-      this.initTo(this.restrictions.allowedValues[0])
+      this.initTo(this.restrictions.values[0])
     }
     super.ignite()
   }
@@ -29,8 +29,8 @@ class EnumForge extends Forge{
   }
 
   values(values) {
-    this.restrictions.allowedValues = values
-    this._check.isOneOf(this.restrictions.allowedValues)
+    this.restrictions.values = values
+    this._check.isOneOf(this.restrictions.values)
 
     return this
   }

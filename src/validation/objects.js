@@ -1,12 +1,6 @@
 "use strict"
 
 
-let ObjectRestrictions = Object.assign({
-  exists: false,
-  allowedValues: null
-}, BaseRestrictions)
-
-Object.freeze(ObjectRestrictions)
 
 class ExistsValidator extends Validator {
   check(value) {
@@ -21,12 +15,12 @@ Object.assign(ExistsValidator.prototype, {
 
 
 class IsOneOfValidator extends Validator {
-  constructor(allowedValues) {
-    super({allowedValues: allowedValues})
+  constructor(values) {
+    super({values: values})
   }
 
   check(value) {
-    return this.args.allowedValues.some((allowedValue)=> {
+    return this.args.values.some((allowedValue)=> {
       return allowedValue === value
     })
   }
@@ -36,7 +30,7 @@ Object.assign(IsOneOfValidator.prototype, {
   name: 'isOneOf',
   message: '@restriction.isOneOf',
   args: {
-    allowedValues: []
+    values: []
   }
 })
 

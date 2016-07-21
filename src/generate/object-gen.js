@@ -3,7 +3,8 @@
 
 class ObjectGen extends DataGen {
   constructor(cfg = null) {
-    super(Object.assign({}, cfg || { fields: {}}))
+    super(cfg , ObjectRestrictions)
+    this.fields = this.fields || {}
   }
 
   childFields(fields) {

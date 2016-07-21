@@ -255,7 +255,10 @@ class Forge {
       throw new ConfigurationError("DataGen package not loaded.")
     }
     if (additionalGeneratorConfig) {
-      Object.assign(this.dataGen, additionalGeneratorConfig)
+      // @revisit ggranum: Find a better hack for the field/method collisions inherent in fluent JS.
+      Object.keys(additionalGeneratorConfig).forEach((key)=>{
+        this.dataGen['_' + key] = additionalGeneratorConfig[key]
+      })
     }
     return this.dataGen.gen()
   }

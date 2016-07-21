@@ -6,6 +6,7 @@
 
   describe('EntityForge.boolean', function () {
     beforeEach(function () {
+      Math.seedrandom(4)
     });
 
     it('Allows null values by default', function () {

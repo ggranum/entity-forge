@@ -4,8 +4,7 @@
 class BooleanGen extends DataGen {
 
   constructor(cfg = null) {
-    super(cfg)
-    Object.assign(this, cfg || {})
+    super(cfg, BooleanRestrictions)
   }
 
   gen() {
@@ -16,7 +15,6 @@ class BooleanGen extends DataGen {
     return data
   }
 }
-Object.assign(BooleanGen.prototype, {})
 
 
 

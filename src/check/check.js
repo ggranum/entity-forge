@@ -59,8 +59,8 @@ class Check {
     this.add(Validators.isFunction, Validators.exists)
   }
 
-  isOneOf(allowedValues = []) {
-    this.add(new IsOneOfValidator(allowedValues), Validators.exists)
+  isOneOf(values = []) {
+    this.add(new IsOneOfValidator(values), Validators.exists)
     return this
   }
 }

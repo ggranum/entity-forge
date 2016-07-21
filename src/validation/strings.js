@@ -14,14 +14,6 @@ Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP = Strings.COMMON_UTF_RANGES.UT
 Object.freeze(Strings.COMMON_UTF_RANGES)
 
 
-let StringRestrictions = {
-  notNull: false,
-  minLength: 0,
-  maxLength: 1024,
-  allowedCodePoints: Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP,
-  matchesRegex: {},
-  notMatchesRegex: {}
-}
 
 class IsStringValidator extends Validator {
   check(value) {
