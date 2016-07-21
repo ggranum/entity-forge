@@ -1,0 +1,52 @@
+"use strict"
+
+
+class StringGen extends DataGen {
+  constructor(cfg = null) {
+    super(cfg)
+  }
+
+  allowCodePoints(codePointRanges) {
+    this.allowedCodePoints = codePointRanges
+    return this
+  }
+
+  gen() {
+    let data = super.gen()
+    if (data !== null) {
+      let range = this.maxLength - this.minLength
+      let charCount = this.minLength + Math.floor(Math.random() * range)
+      data = ""
+      for (let i = 0; i < charCount; i++) {
+        data += this._generateChar()
+      }
+    }
+    return data
+  }
+
+  _generateChar() {
+    let rand = Math.random()
+    let allowedCount = 0
+    let L = this.allowedCodePoints.length
+    let pointers = []
+    for (let i = 0; i < L; i += 2) {
+      allowedCount += this.allowedCodePoints[i + 1] - this.allowedCodePoints[i] + 1
+      pointers.push(allowedCount)
+    }
+    let choiceIndex = Math.floor(rand * allowedCount)
+    let randomCodePoint
+    for (let i = 0; i < pointers.length; i++) {
+      if (choiceIndex < pointers[i]) {
+        let randomRangeMin = this.allowedCodePoints[i * 2]
+        let correction = i > 0 ? pointers[i - 1] : 0
+        randomCodePoint = choiceIndex - correction + randomRangeMin
+        break
+      }
+    }
+    return String.fromCodePoint(randomCodePoint)
+  }
+}
+Object.assign(StringGen.prototype, StringRestrictions)
+
+
+

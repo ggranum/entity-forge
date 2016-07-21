@@ -1,0 +1,44 @@
+{
+  "name": "EntityForge",
+  "description": "Entities >> Objects",
+  "version": "0.0.1-alpha",
+  "homepage": "https://github.com/ggranum/entity-forge",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ggranum/entity-forge"
+  },
+  "license": "MIT",
+  "private": false,
+  "contributors": [
+    "ggranum <geoff.granum@gmail.com>"
+  ],
+  "devDependencies": {
+    "del": "^2.x.x",
+    "git-rev": "^0.2.1",
+    "glob": "^7.0.x",
+    "gulp": "^3.9.x",
+    "gulp-concat": "~2.6.x",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.3",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-watch": "^4.2.4",
+    "gulp-webserver": "^0.9.1",
+    "http-proxy": "^1.11.3",
+    "jasmine-core": "^2.4.1",
+    "minimist": "^1.1.1",
+    "node-zip": "^1.1.1",
+    "open": "0.0.5",
+    "proxy-middleware": "^0.x.x",
+    "serve-index": "^1.6.3",
+    "serve-static": "^1.x.x"
+  },
+  "scripts": {
+    "serve": "gulp serve || true",
+    "test": "gulp clean && gulp build && gulp serve --open=/build/unit-tests.html",
+    "docs": "gulp clean && gulp build && gulp serve --open=/build/docs/index.html"
+  },
+  "dependencies": {
+    "es6-shim": ">=0.22.0",
+    "seedrandom": "^2.4.2"
+  }
+}
