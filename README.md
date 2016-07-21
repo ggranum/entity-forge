@@ -6,6 +6,7 @@ An integer isn't a data type, it's a compiler hint.
 
 *If you clone the project you can see the following in a browser by running `npm run docs' and opening the debug console in your browser.* 
 
+
 Define a model to match reality:
 
 ```javascript
@@ -39,7 +40,7 @@ console.log("UUID wasn't modified by the attempt to set it to illegal value:", e
 
 ```
 
-Take care to recognize that there is a difference between setting minLength to zero and forbidding null.
+Take care to recognize that there is a difference between setting minLength to zero and not allowing null. A null string is still valid even if minLength is set to zero.
 
 ### Generating data
 One advantage of specifying our data type in detail is that we can use that specification to do cool things. Like generate semi-random instances of our models:
@@ -49,7 +50,7 @@ let randomUser = UserForge.gen()
 console.log(randomUser) // This instance will be as valid (or invalid) as your Forge definition constraints allow.
 ```
 
-There is still work to be done on the data generation side. Of the missing functionality, the most important is the handling cases that are hard to code for explicitly, such as string matching on a regex.
+There is still work to be done on the data generation side. Of the missing functionality, the most important is the handling of cases that are hard to code for explicitly, such as string matching on a regex.
 
 ### Built In Forges
 
