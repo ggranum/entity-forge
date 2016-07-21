@@ -1,16 +1,30 @@
 {
-  "name": "EntityForge",
+  "name": "entityforge",
   "description": "Entities >> Objects",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1-alpha.1",
   "homepage": "https://github.com/ggranum/entity-forge",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ggranum/entity-forge"
+    "url": "git+https://github.com/ggranum/entity-forge.git"
   },
+  "bugs": {
+    "url": "https://github.com/ggranum/entity-forge/issues"
+  },
+  "main": "entityforge.js",
+  "keywords": [
+    "utilities",
+    "types",
+    "validate",
+    "validation",
+    "generate",
+    "entities",
+    "objects"
+  ],
   "license": "MIT",
   "private": false,
+  "author": "Geoff M. Granum <geoff.granum@gmail.com> (https://geoffgranum.com)",
   "contributors": [
-    "ggranum <geoff.granum@gmail.com>"
+    "Geoff M. Granum <geoff.granum@gmail.com>"
   ],
   "devDependencies": {
     "del": "^2.x.x",

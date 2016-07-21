@@ -54,7 +54,7 @@ There is still work to be done on the data generation side. Of the missing funct
 
 ### Built In Forges
 
-The initial batch of forges cover only the basic primitive types, with Arrays 'on the way'.
+The initial batch of forges cover only the basic primitive types, with Arrays/Lists 'on the way'.
 
 ```javascript
 let BiggerUserForge = EF.obj({
