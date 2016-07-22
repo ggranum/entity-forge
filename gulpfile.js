@@ -1,13 +1,24 @@
 "use strict";
-var fs = require('fs')
+
+var tools = {}
+
+tools.http = require('http');
+tools.url = require('url');
+
+// from npm
+tools.connect = require('connect');
+tools.del = require('del')
+tools.gitRev = require('git-rev')
 var gulp = require('gulp')
-var rename = require('gulp-rename')
-var concat = require('gulp-concat')
-var del = require('del')
-var minimist = require('minimist')
-var replace = require('gulp-replace')
-var exec = require('child_process').exec
-var sourceMaps = require('gulp-sourcemaps');
+tools.concat = require('gulp-concat')
+tools.rename = require('gulp-rename')
+tools.replace = require('gulp-replace')
+tools.sourceMaps = require('gulp-sourcemaps');
+tools.minimist = require('minimist')
+tools.open = require('open');
+tools.proxy = require('proxy-middleware');
+tools.serveIndex = require('serve-index');
+tools.serveStatic = require('serve-static');
 
 var config = {
   appProtocol: 'http',
@@ -36,7 +47,7 @@ var minimistCliOpts = {
     env: process.env.NODE_ENV || 'dev'
   }
 };
-config.args = minimist(process.argv.slice(2), minimistCliOpts)
+config.args = tools.minimist(process.argv.slice(2), minimistCliOpts)
 
 if (config.args.env) {
   if (config.args.env.startsWith('prod')) {
@@ -50,7 +61,7 @@ var project = {
   server: null,
   clean: function (cb) {
     console.log("Starting 'Clean'")
-    del.sync([config.distDir, config.buildDir, './gh_pages'])
+    tools.del.sync([config.distDir, config.buildDir, './gh_pages'])
     console.log("Finished 'Clean'")
     cb()
   },
@@ -95,7 +106,7 @@ var project = {
         var inFile = libFile[config.buildTarget] || libFile['all']
         if (inFile) {
           gulp.src('./node_modules/' + basePath + inFile)
-            .pipe(rename(function (path) {
+            .pipe(tools.rename(function (path) {
               var outFile = libFile['out'] || libFile['all']
               path.basename = outFile.substring(0, outFile.lastIndexOf("."))
               return path
@@ -117,12 +128,11 @@ var project = {
 
   compileStatic: function (cb) {
     var done = project.callbackOnCount(2, cb)
-    var gitRev = require('git-rev')
     gulp.src('./src/**/*.{js,css,eot,svg,ttf,woff,woff2,png}').pipe(gulp.dest(config.buildDir)).on('finish', done);
-    gitRev.short(function (rev) {
+    tools.gitRev.short(function (rev) {
       gulp.src([config.srcDir + '/**/*.html'])
-        .pipe(replace(/\$\{build.revision\}/, rev))
-        .pipe(replace(/\$\{build.date\}/, new Date().toISOString()))
+        .pipe(tools.replace(/\$\{build.revision\}/, rev))
+        .pipe(tools.replace(/\$\{build.date\}/, new Date().toISOString()))
         .pipe(gulp.dest(config.buildDir)).on('finish', done);
     })
   },
@@ -136,9 +146,9 @@ var project = {
       filePaths.push(srcPath + fileName)
     })
     return gulp.src(filePaths)
-      .pipe(sourceMaps.init())
-      .pipe(concat(outFileName || 'bundle.js'))
-      .pipe(sourceMaps.write('./'))
+      .pipe(tools.sourceMaps.init())
+      .pipe(tools.concat(outFileName || 'bundle.js'))
+      .pipe(tools.sourceMaps.write('./'))
       .pipe(gulp.dest(destPath)).on('finish', done);
   },
 
@@ -230,13 +240,7 @@ var project = {
   startServer: function () {
     console.log("startServer ")
 
-    var http = require('http');
-    var proxy = require('proxy-middleware');
-    var connect = require('connect');
-    var serveStatic = require('serve-static');
-    var serveIndex = require('serve-index');
-    var open = require('open');
-    var url = require('url');
+
 
     var proxyBasePaths = [
       'admin',
@@ -247,33 +251,33 @@ var project = {
       'DotAjaxDirector'
     ]
 
-    var app = connect();
+    var app = tools.connect();
     // proxy API requests to the node server
     proxyBasePaths.forEach(function (pathSegment) {
       var target = config.proxyHost + '/' + pathSegment;
-      var proxyOptions = url.parse(target)
+      var proxyOptions = tools.url.parse(target)
       proxyOptions.route = '/' + pathSegment
       proxyOptions.preserveHost = true
       app.use(function (req, res, next) {
         if (req.url.indexOf('/' + pathSegment + '/') === 0) {
           console.log("Forwarding request: ", req.url)
-          proxy(proxyOptions)(req, res, next)
+          tools.proxy(proxyOptions)(req, res, next)
         } else {
           next()
         }
       })
     })
-    app.use(serveStatic('./'))
-    app.use(serveIndex('./'))
+    app.use(tools.serveStatic('./'))
+    app.use(tools.serveIndex('./'))
 
-    project.server = http.createServer(app);
+    project.server = tools.http.createServer(app);
     project.server.on('error', project.catchError("Error connecting to httpServer"));
     project.server.on('listening', function () {
       console.log('Started connect web server on ' + config.appHost)
       if (config.args.open) {
         var openTo = config.args.open === true ? '/index-dev.html' : config.args.open
         console.log('Opening default browser to ' + openTo)
-        open(config.appHost + openTo)
+        tools.open(config.appHost + openTo)
       }
       else {
         console.log("add the '-o' flag to automatically open the default browser")
