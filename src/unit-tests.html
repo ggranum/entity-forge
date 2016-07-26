@@ -9,63 +9,32 @@
 </head>
 <body>
 
-<script  src="thirdparty/es6-shim/es6-shim.js"></script>
+<script src="thirdparty/systemjs/dist/system.js"></script>
+
+
+<script src="thirdparty/es6-shim/es6-shim.js"></script>
 <script src="thirdparty/seedrandom/seedrandom.js"></script>
 
 
-<script src="validation/restriction/restrictions.js"></script>
-<script src="validation/validator.js"></script>
-<script src="validation/objects.js"></script>
-<script src="validation/arrays.js"></script>
-<script src="validation/booleans.js"></script>
-<script src="validation/numbers.js"></script>
-<script src="validation/strings.js"></script>
-<script src="validation/index.js"></script>
+<script>
+
+  System.config({
+    packages: {
+      '': {
+        defaultExtension: 'js'
+      },
+    }
+  });
+  System.import('main-test')
+    .then(function (p) {
+      System.import('forge-bundle').then(function (p2) {
+        console.log("Ready...", "Maybe")
+        window.onload(p2) // notify Jasmine.
+      })
+    }, window.console.error.bind(console));
 
 
-<script src="check/constraint.js"></script>
-<script src="check/check.js"></script>
-<script src="check/array-check.js"></script>
-<script src="check/boolean-check.js"></script>
-<script src="check/number-check.js"></script>
-<script src="check/string-check.js"></script>
-<script src="check/index.js"></script>
-
-<script src="generate/data-gen.js"></script>
-<script src="generate/boolean-gen.js"></script>
-<script src="generate/enum-gen.js"></script>
-<script src="generate/number-gen.js"></script>
-<script src="generate/string-gen.js"></script>
-<script src="generate/object-gen.js"></script>
-
-
-<script src="forge/configuration-error.js"></script>
-<script src="forge/validate-failed-error.js"></script>
-<script src="forge/forge.js"></script>
-<script src="forge/entity-type.js"></script>
-<script src="forge/boolean-forge.js"></script>
-<script src="forge/number-forge.js"></script>
-<script src="forge/string-forge.js"></script>
-<script src="forge/descendant-validator.js"></script>
-<script src="forge/enum-forge.js"></script>
-<script src="forge/object-forge.js"></script>
-<script src="forge/index.js"></script>
-
-
-
-
-<script src="generate/data-gen.spec.js"></script>
-<script src="generate/boolean-gen.spec.js"></script>
-<script src="generate/number-gen.spec.js"></script>
-<script src="generate/enum-gen.spec.js"></script>
-<script src="generate/string-gen.spec.js"></script>
-<script src="generate/object-gen.spec.js"></script>
-<script src="check/check.spec.js"></script>
-<script src="forge/boolean-forge.spec.js"></script>
-<script src="forge/enum-forge.spec.js"></script>
-<script src="forge/number-forge.spec.js"></script>
-<script src="forge/string-forge.spec.js"></script>
-<script src="forge/object-forge.spec.js"></script>
+</script>
 
 
 </body>

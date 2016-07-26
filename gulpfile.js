@@ -2,6 +2,7 @@
 
 var tools = {}
 
+tools.exec = require('child_process').exec
 tools.http = require('http');
 tools.url = require('url');
 
@@ -13,12 +14,19 @@ var gulp = require('gulp')
 tools.concat = require('gulp-concat')
 tools.rename = require('gulp-rename')
 tools.replace = require('gulp-replace')
-tools.sourceMaps = require('gulp-sourcemaps');
+tools.sourcemaps = require('gulp-sourcemaps');
 tools.minimist = require('minimist')
 tools.open = require('open');
 tools.proxy = require('proxy-middleware');
 tools.serveIndex = require('serve-index');
 tools.serveStatic = require('serve-static');
+
+
+tools.browserify = require('browserify');
+tools.source = require('vinyl-source-stream');
+tools.tsify = require('tsify');
+tools.buffer = require('vinyl-buffer');
+
 
 var config = {
   appProtocol: 'http',
@@ -35,6 +43,9 @@ var config = {
 }
 config.appHost = config.appProtocol + '://' + config.appHostname + ':' + config.appPort
 config.proxyHost = config.proxyProtocol + '://' + config.proxyHostname + ':' + config.proxyPort
+config.paths = {
+  pages: [config.srcDir + '/*.html']
+};
 
 
 var minimistCliOpts = {
@@ -146,40 +157,39 @@ var project = {
       filePaths.push(srcPath + fileName)
     })
     return gulp.src(filePaths)
-      .pipe(tools.sourceMaps.init())
+      .pipe(tools.sourcemaps.init())
       .pipe(tools.concat(outFileName || 'bundle.js'))
-      .pipe(tools.sourceMaps.write('./'))
+      .pipe(tools.sourcemaps.write('./'))
       .pipe(gulp.dest(destPath)).on('finish', done);
   },
 
+
+  compileTsc: function(cb){
+    tools.exec('npm run tsc', function (err, stdout, stderr) {
+      // Ignoring non-zero exit code errors, as tsc will provide non-zero exit codes on warnings.
+      console.log(stdout);
+      cb();
+    })
+  },
+
+  compileTs: function (done) {
+    return tools.browserify({
+      basedir: '.',
+      debug: true,
+      entries: ['src/main-test.ts'],
+      cache: {},
+      packageCache: {}
+    }).plugin(tools.tsify)
+      .transform("babelify")
+      .bundle()
+      .pipe(tools.source('main.js'))
+      .pipe(tools.buffer())
+      .pipe(tools.sourcemaps.init({loadMaps: true}))
+      .pipe(tools.sourcemaps.write('./'))
+      .pipe(gulp.dest(config.buildDir)).on('finish', done);
+  },
+
   bundles: {
-    validation: [
-      "check/validation/restrictions.js",
-      "check/validation/validator.js",
-      "check/validation/objects.js",
-      "check/validation/arrays.js",
-      "check/validation/booleans.js",
-      "check/validation/numbers.js",
-      "check/validation/strings.js",
-      "check/validation/index.js",
-    ],
-    check: [
-      "check/constraint.js",
-      "check/check.js",
-      "check/array-check.js",
-      "check/boolean-check.js",
-      "check/number-check.js",
-      "check/string-check.js",
-      "check/index.js",
-    ],
-    generate: [
-      "generate/data-gen.js",
-      "generate/boolean-gen.js",
-      "generate/enum-gen.js",
-      "generate/number-gen.js",
-      "generate/string-gen.js",
-      "generate/object-gen.js",
-    ],
     forge: [
       "forge/configuration-error.js",
       "forge/validate-failed-error.js",
@@ -191,17 +201,7 @@ var project = {
       "forge/descendant-validator.js",
       "forge/enum-forge.js",
       "forge/object-forge.js",
-      "forge/index.js",
-    ],
-    specs: [
-      'generate/data-gen.spec.js',
-      'generate/boolean-gen.spec.js',
-      'generate/number-gen.spec.js',
-      'generate/enum-gen.spec.js',
-      'generate/string-gen.spec.js',
-      'generate/object-gen.spec.js',
-      'check/check.spec.js',
-      'forge/boolean-forge.spec.js',
+      "forge/index.js",'forge/boolean-forge.spec.js',
       'forge/enum-forge.spec.js',
       'forge/number-forge.spec.js',
       'forge/string-forge.spec.js',
@@ -210,16 +210,9 @@ var project = {
   },
 
   compile: function (cb) {
-    var done = project.callbackOnCount(8, cb, 'compile')
+    var done = project.callbackOnCount(3, cb, 'compile')
     project.compileStatic(done)
-    var b = project.bundles
-    let release = b.validation.concat(b.check, b.generate, b.forge)
-    project.doBundle(project.bundles.validation, 'check/validation/bundle.js', done)
-    project.doBundle(project.bundles.generate, 'generate/bundle.js', done)
-    project.doBundle(project.bundles.check, 'check/bundle.js', done)
-    project.doBundle(project.bundles.forge, 'forge/bundle.js', done)
-    project.doBundle(project.bundles.specs, 'specs.bundle.js', done)
-    project.doBundle(release, 'entity-forge.js', done)
+    project.doBundle(project.bundles.forge, 'forge-bundle.js', done)
     project.copyNpm(done)
   },
 
@@ -230,7 +223,7 @@ var project = {
   },
   watch: function () {
     gulp.watch('./src/**/*.html', ['compile-static']).on('error', project.catchError("Error watching HTML files"))
-    return gulp.watch('./src/**/*.js', ['compile']).on('error', project.catchError("Error watching JS files"))
+    return gulp.watch('./src/**/*.{js,ts}', ['compile']).on('error', project.catchError("Error watching JS files"))
   },
 
 
@@ -239,7 +232,6 @@ var project = {
    */
   startServer: function () {
     console.log("startServer ")
-
 
 
     var proxyBasePaths = [
@@ -306,7 +298,13 @@ gulp.task('compile-static', [], function (done) {
   project.compileStatic(done)
 })
 
-gulp.task('compile', [], function (done) {
+gulp.task('compileTs', [], function (done) {
+  project.compileTs(done)
+});
+gulp.task('compileTsc', [], function (done) {
+  project.compileTsc(done)
+});
+gulp.task('compile', ['compileTsc'], function (done) {
   project.compile(done)
 })
 
@@ -322,8 +320,7 @@ gulp.task('clean', [], function (done) {
   project.clean(done)
 })
 
-gulp.task('build', [], function (done) {
-  project.compile(done)
+gulp.task('build', ['compile'], function () {
 })
 
 gulp.task('default', function (done) {

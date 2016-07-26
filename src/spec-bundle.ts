@@ -1,0 +1,1 @@
+import './check/check.spec'

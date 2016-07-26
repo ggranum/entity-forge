@@ -1,0 +1,11 @@
+import 'validation-bundle'
+import 'check-bundle'
+import 'gen-bundle'
+
+import './check/check.spec'
+import './generate/data-gen.spec'
+import './generate/boolean-gen.spec'
+import './generate/enum-gen.spec'
+import './generate/number-gen.spec'
+import './generate/object-gen.spec'
+import './generate/string-gen.spec'

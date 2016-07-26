@@ -1,0 +1,72 @@
+"use strict"
+import {Validator} from "./validator";
+
+
+
+class IsNumberValidator extends Validator {
+  check(value:any):boolean {
+    return (typeof value === 'number' || value instanceof Number)
+  }
+}
+Object.assign(IsNumberValidator.prototype, {
+  ordinal: 10,
+  name: 'number',
+  message: '@restriction.number'
+})
+
+
+class IsIntValidator extends Validator {
+  check(value:any):boolean {
+    return (value % 1 === 0)
+  }
+}
+Object.assign(IsIntValidator.prototype, {
+  ordinal: 100,
+  name: 'int',
+  message: '@restriction.int'
+})
+
+class MaxValidator extends Validator {
+  constructor(max = Number.MAX_VALUE, inclusive = false) {
+    super({max: max, inclusive: inclusive})
+
+  }
+
+  check(value:any):boolean {
+    return this.args.inclusive ? value <= this.args.max : value < this.args.max
+  }
+}
+Object.assign(MaxValidator.prototype, {
+  ordinal: 100,
+  name: 'max',
+  args: {
+    max: Number.MAX_SAFE_INTEGER,
+    inclusive: false
+  },
+  message: '@restriction.max'
+})
+
+
+class MinValidator extends Validator {
+  constructor(min = Number.MIN_VALUE, inclusive = true) {
+    super({min: min, inclusive: inclusive})
+  }
+
+  check(value:any):boolean {
+    return this.args.inclusive ? value >= this.args.min : value > this.args.min
+  }
+}
+Object.assign(MinValidator.prototype, {
+  ordinal: 100,
+  name: 'min',
+  args: {
+    min: Number.MIN_VALUE,
+    inclusive: true
+  },
+  message: '@restriction.min'
+})
+
+
+export {IsNumberValidator, IsIntValidator, MaxValidator,MinValidator }
+
+
