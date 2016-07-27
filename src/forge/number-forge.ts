@@ -1,8 +1,15 @@
 
 
-class NumberForge extends Forge{
+import {Forge} from "./forge";
+import {NumberRestrictions} from "../validation/restriction/restriction";
+import {Checks} from "../check/index";
+import {NumberCheck} from "../check/number-check";
+import {NumberGen} from "../generate/number-gen";
+export class NumberForge extends Forge {
 
-  constructor(defaultValue = 0, msg = "@validations.number.number" ) {
+  _check:NumberCheck
+
+  constructor(defaultValue:number = 0, msg = "@validations.number.number" ) {
     super(defaultValue, NumberRestrictions)
     this.applyCheck(Checks.number())
   }
@@ -23,7 +30,7 @@ class NumberForge extends Forge{
    * @param msg
    * @returns {NumberForge}
    */
-  static int(defaultValue = 0, msg = "@validations.number.int") {
+  static int(defaultValue:number = 0, msg = "@validations.number.int") {
     let forge = new NumberForge(defaultValue, msg)
     return forge.integer(msg)
   }
@@ -47,7 +54,7 @@ class NumberForge extends Forge{
    * @param msg
    * @returns {NumberForge}
    */
-  min(min, msg = "@validations.number.min") {
+  min(min:number, msg = "@validations.number.min") {
     this.restrictions.min = min
     this._check.min(min)
     return this
@@ -56,7 +63,7 @@ class NumberForge extends Forge{
   /**
    * @returns {NumberForge}
    */
-  max(max, msg = "@validations.number.max") {
+  max(max:number, msg = "@validations.number.max") {
     this.restrictions.max = max
     this._check.max(max)
     return this
@@ -65,7 +72,7 @@ class NumberForge extends Forge{
 }
 
 
-Forge.onBeforeIgnition(NumberForge, function (event) {
+Forge.onBeforeIgnition(NumberForge, function (event:any) {
   let dataGen = new NumberGen(event.forge.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()

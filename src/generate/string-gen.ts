@@ -4,11 +4,11 @@ import {StringRestrictions} from "../validation/restriction/restriction";
 
 
 export class StringGen extends DataGen {
-  constructor(cfg = null) {
+  constructor(cfg:any = null) {
     super(cfg, StringRestrictions)
   }
 
-  allowCodePoints(codePointRanges) {
+  allowCodePoints(codePointRanges:number[]) {
     this.restrictions.allowedCodePoints = codePointRanges
     return this
   }
@@ -30,13 +30,13 @@ export class StringGen extends DataGen {
     let rand = Math.random()
     let allowedCount = 0
     let L = this.restrictions.allowedCodePoints.length
-    let pointers = []
+    let pointers:number[] = []
     for (let i = 0; i < L; i += 2) {
       allowedCount += this.restrictions.allowedCodePoints[i + 1] - this.restrictions.allowedCodePoints[i] + 1
       pointers.push(allowedCount)
     }
     let choiceIndex = Math.floor(rand * allowedCount)
-    let randomCodePoint
+    let randomCodePoint:number
     for (let i = 0; i < pointers.length; i++) {
       if (choiceIndex < pointers[i]) {
         let randomRangeMin = this.restrictions.allowedCodePoints[i * 2]

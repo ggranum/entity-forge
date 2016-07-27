@@ -1,6 +1,14 @@
-class StringForge extends Forge{
+import {Forge} from "./forge";
+import {StringRestrictions} from "../validation/restriction/restriction";
+import {Strings} from "../validation/string";
+import {Checks} from "../check/index";
+import {StringCheck} from "../check/string-check";
+import {StringGen} from "../generate/string-gen";
+export class StringForge extends Forge{
 
-  constructor(defaultValue = null, msg = "@validations.string.string") {
+  _check:StringCheck
+
+  constructor(defaultValue:string = null, msg = "@validations.string.string") {
     super(defaultValue, StringRestrictions)
     this.restrictions.allowedCodePoints = Strings.COMMON_UTF_RANGES.UTF_PLANE_BMP
     this.restrictions.minLength = null
@@ -8,16 +16,17 @@ class StringForge extends Forge{
     this._check = Checks.string()
   }
 
-  static string(defaultValue = null, msg = "@validations.string.string") {
+  static string(defaultValue:string = null, msg = "@validations.string.string") {
     return new StringForge(defaultValue, msg)
   }
 
 
-  notNull(msg = "@validations.notNull") {
+  notNull(msg:string = "@validations.notNull"):this {
     if(this.defaultValue === null){
       this.initTo("")
     }
-    return super.notNull(msg);
+    super.notNull(msg)
+    return this
   }
 
   ascii(){
@@ -31,7 +40,7 @@ class StringForge extends Forge{
    * @param msg
    * @returns {*}
    */
-  minLength(min, msg = "@validations.string.minLength") {
+  minLength(min:number, msg = "@validations.string.minLength"):this {
     this.restrictions.minLength = min
     this._check.minLength(min)
     return this
@@ -43,7 +52,7 @@ class StringForge extends Forge{
    * @param msg
    * @returns {*}
    */
-  maxLength(max, msg = "@validations.string.maxLength") {
+  maxLength(max:number, msg = "@validations.string.maxLength"):this {
     this.restrictions.maxLength = max
     this._check.maxLength(max)
     return this
@@ -57,7 +66,7 @@ class StringForge extends Forge{
 }
 
 
-Forge.onBeforeIgnition(StringForge, function (event) {
+Forge.onBeforeIgnition(StringForge, function (event:any) {
   let dataGen = new StringGen(event.forge.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()

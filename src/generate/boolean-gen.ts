@@ -3,7 +3,7 @@ import {BooleanRestrictions} from "../validation/restriction/restriction";
 
 export class BooleanGen extends DataGen {
 
-  constructor(cfg = null) {
+  constructor(cfg:any = null) {
     super(cfg, BooleanRestrictions)
   }
 

@@ -1,4 +1,4 @@
-"use strict";
+import {EntityForge} from "./index";
 
 (function () {
   let EF = EntityForge
@@ -13,7 +13,7 @@
         foo: EF.enumeration().values(["100", "Bob", "Sally"])
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -28,7 +28,7 @@
         foo: EF.enumeration().values(["100", "Bob", "Sally"]).notNull()
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -43,7 +43,7 @@
         foo: EF.enumeration().notNull().values(["100", "Bob", "Sally"])
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -58,7 +58,7 @@
       let model = {
         foo: EF.enumeration().values(["100", "Bob", "Sally"]).notNull()
       }
-      let disallowed = ['1', 100, "bob", "sally", "sam", false, true, 1.2, 0, ((x)=> false), model];
+      let disallowed:any = ['1', 100, "bob", "sally", "sam", false, true, 1.2, 0, ((x:any)=> false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
         expect(result).toBeDefined()

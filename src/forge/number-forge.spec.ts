@@ -1,5 +1,4 @@
-"use strict";
-
+import {EntityForge} from "./index";
 (function () {
   let EF = EntityForge
 
@@ -13,7 +12,7 @@
         foo: EF.int()
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -28,7 +27,7 @@
         foo: EF.int().notNull()
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -42,7 +41,7 @@
       let model = {
         foo: EF.int()
       }
-      let disallowed = ['1', 1.001, "bob", ((x)=> false), model];
+      let disallowed:any = ['1', 1.001, "bob", ((x:any)=> false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
         expect(result).toBeDefined()
@@ -78,7 +77,7 @@
 
       it('Does not generate null ints when null values are not allowed: ', function () {
         let forge = EF.int().min(0).max(3).notNull()
-        let ex
+        let ex:any
         let generatedNull = false
         for (let i = 0; i < 10000; i++) {
           ex = forge.gen()

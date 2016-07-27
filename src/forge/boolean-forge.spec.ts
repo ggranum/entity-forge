@@ -1,5 +1,5 @@
-"use strict";
 
+import {EntityForge} from "./index";
 (function () {
   let EF = EntityForge
 
@@ -14,7 +14,7 @@
         foo: EF.bool()
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -29,7 +29,7 @@
         foo: EF.bool().notNull()
       }).asNewable()
       let m = new Model()
-      let error = null
+      let error:any = null
       try{
         m.foo = null
       } catch(e){
@@ -43,7 +43,7 @@
       let model = {
         foo: EF.bool()
       }
-      let disallowed = ['1', 1, 10, 100, "bob", 1.2, 0, ((x)=> false), model];
+      let disallowed:any = ['1', 1, 10, 100, "bob", 1.2, 0, ((x:any)=> false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
         expect(result).toBeDefined()

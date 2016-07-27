@@ -1,18 +1,50 @@
-"use strict"
+import {Forge} from "./forge";
+import {ObjectRestrictions} from "../validation/restriction/restriction";
+import {DescendantValidator} from "./descendant-validator";
+import {Validators} from "../validation/index";
+import {EntityType} from "./entity-type";
+import {ValidateFailedError} from "./validate-failed-error";
+import {ObjectGen} from "../generate/object-gen";
 
 
-class ObjectForge extends Forge {
+/**
+ * State 1: Defining a new data type:
+ *    let EF = EntityForge
+ *    let Foo = EF.obj("Foo", { name : EF.string().minLength(1).maxLength(25) }).notNull().asNewable()
+ *
+ * State 2: Creating an instance of a data type and setting values:
+ *    let fooInstance = new Foo()
+ *    fooInstance.name = null // throws validation error
+ *    fooInstance.name = '' // throws validation error
+ *    fooInstance.name = 'Narwhal' // no error
+ *
+ * State 3: Calling validate on an instance of a data type (e.g. 'Foo', above).
+ *    let fooInstance = new Foo()
+ *    fooInstance.validate(null) //  returns error descriptor ({ notNull: { msg: "name is null" }}).
+ *    fooInstance.validate('Honey Badger') // no error, returns null.
+ *    fooInstance.name = 'Honey Badger' // no error
+ *  ------
+ *
+ *  State 2 flow:
+ *     - newInstance is called
+ *     - - If defaultValue is absent use the value provided by 'defaultValue' getter instead.
+ *     - - If defaultValue still undefined , create empty object.
+ *    <- - If defaultValue is empty and empty values are allowed, set current value to the empty object and return.
+ *     - - iterate through defined child fields, performing this process on each.
+ *    <- - return the new instance
+ *
+ *     ======
+ *     - set {value} is called
+ *     - -
+ */
+export class ObjectForge extends Forge {
+  private entityType:any = null
+  private fieldDefinitions:any
 
-  /**
-   *
-   * @param fields
-   * @param defaultValue
-   * @param msg
-   */
-  constructor(fields = {}, defaultValue = null, msg = "@validations.object.object") {
+  constructor(fields:any = {}, defaultValue:any = null, msg = "@validations.object.object", fieldName:string = null) {
     super(defaultValue, ObjectRestrictions)
-    this.entityType = null
     this.fieldDefinitions = fields || {}
+    this.fieldName = fieldName
     this.applyValidation(new DescendantValidator(this), Validators.exists)
   }
 
@@ -34,7 +66,7 @@ class ObjectForge extends Forge {
    * Creates a new instance of the data type.
    * @returns {any}
    */
-  newInstance(defaultOverride = null) {
+  newInstance(defaultOverride:any = null) {
     return new (this.asNewable())(defaultOverride)
   }
 
@@ -56,7 +88,7 @@ class ObjectForge extends Forge {
     return theCtor
   }
 
-  _initMemberFields(theInstanceType, defaults) {
+  _initMemberFields(theInstanceType:any, defaults:any) {
     let fieldDefs = this.fieldDefinitions
     Object.keys(fieldDefs).forEach((key)=> {
       let fieldForge = fieldDefs[key]
@@ -76,7 +108,7 @@ class ObjectForge extends Forge {
    * @param defaultOverride
    * @returns {*}
    */
-  _defineProperty(fieldForge, entityInstance, fieldName, defaultOverride = null) {
+  _defineProperty(fieldForge:any, entityInstance:any, fieldName:string, defaultOverride:any = null) {
     fieldForge.fieldName = fieldName
     if(fieldForge.defaultValue === null){
       fieldForge.initTo(defaultOverride)
@@ -99,9 +131,9 @@ class ObjectForge extends Forge {
     }
   }
 
-  forgeSetter(privateFieldName){
+  forgeSetter(privateFieldName:string){
     let fieldForge = this
-    return function (value) {
+    return function (value:any) {
       if(value && !value._forge){
         value = fieldForge.newInstance(value)
       }
@@ -124,14 +156,14 @@ class ObjectForge extends Forge {
    * @param fieldName
    * @returns {ObjectForge}
    */
-  static obj(fields = {}, defaultValue = null, msg = "@validations.object.object", fieldName = '') {
+  static obj(fields:any = {}, defaultValue:any = null, msg = "@validations.object.object", fieldName:string = '') {
     return new ObjectForge(fields, defaultValue, msg, fieldName)
   }
 }
 
 
 
-Forge.onBeforeIgnition(ObjectForge, function (event) {
+Forge.onBeforeIgnition(ObjectForge, function (event:any) {
   let forge = event.forge
   let childFields = {}
   Object.keys(forge.fieldDefinitions).forEach((fieldName)=>{

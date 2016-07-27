@@ -1,5 +1,7 @@
-"use strict";
 
+import {EntityForge} from "./index";
+import {Strings} from "../validation/string";
+import {DataGen} from "../generate/data-gen";
 (function() {
   let EF = EntityForge
 
@@ -140,7 +142,7 @@
         name: EF.string().minLength(5).maxLength(5)
       }).asNewable()
       let model = new Model()
-      let e = null
+      let e:any = null
       try {
         model.name = "1234"
       } catch (error) {
@@ -169,15 +171,15 @@
       expect(Math.seedrandom).toBeDefined("This test requires Math.seedrandom: see https://github.com/davidbau/seedrandom")
       let forge = EF.string().notNull().minLength(25).maxLength(50).allowCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
       Math.seedrandom(100)
-      let first = []
+      let first:DataGen[] = []
       first.push(forge.gen(), forge.gen(), forge.gen())
 
       Math.seedrandom(100)
-      let second = []
+      let second:DataGen[] = []
       second.push(forge.gen(), forge.gen(), forge.gen())
 
       Math.seedrandom(101)
-      let third = []
+      let third:DataGen[] = []
       third.push(forge.gen(), forge.gen(), forge.gen())
 
       for (let i = 0; i < first.length; i++) {

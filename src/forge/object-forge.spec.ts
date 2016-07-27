@@ -1,13 +1,12 @@
-"use strict";
-
+import {EntityForge} from "./index";
 (function () {
 
   let EF = EntityForge
 
   describe('EntityForge.model', function () {
 
-    let UserContactForge
-    let UserForge
+    let UserContactForge:any
+    let UserForge:any
 
     beforeEach(function () {
       UserContactForge = EF.obj({
@@ -71,7 +70,7 @@
         ).asNewable()
 
         let uc = new UserContact()
-        let e = null
+        let e:any = null
         try {
           uc.name = "aa"
         } catch (error) {
@@ -85,7 +84,7 @@
       it("validates child objects set using '='", function () {
         let UserContact = UserContactForge.asNewable()
         let contact = new UserContact()
-        let e
+        let e:any
         try {
           contact.address = {
             line1: "bob",
@@ -111,8 +110,8 @@
             line1: line1Val
           })
         })
-        let e
-        let contact
+        let e:any
+        let contact:any
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
@@ -142,8 +141,8 @@
             line1: line1Val
           })
         })
-        let e
-        let contact
+        let e:any
+        let contact:any
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
@@ -173,8 +172,8 @@
             line1: line1Val
           })
         })
-        let e
-        let contact
+        let e:any
+        let contact:any
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()

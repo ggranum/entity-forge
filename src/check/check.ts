@@ -5,7 +5,7 @@ import {Validator} from "../validation/validator";
 
 
 export class Check {
-  private constraints: any[];
+  constraints: any[];
 
   constructor() {
     this.constraints = []

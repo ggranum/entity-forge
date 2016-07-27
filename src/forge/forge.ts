@@ -1,53 +1,37 @@
 "use strict"
+import {BaseRestrictions} from "../validation/restriction/restriction";
+import {Checks} from "../check/index";
+import {Check} from "../check/check";
+import {ValidateFailedError} from "./validate-failed-error";
+import {ExistsValidator} from "../validation/object";
+import {ConfigurationError} from "./configuration-error";
+import {Validator} from "../validation/validator";
+import {DataGen} from "../generate/data-gen";
 
-/**
- * State 1: Defining a new data type:
- *    let EF = EntityForge
- *    let Foo = EF.obj("Foo", { name : EF.string().minLength(1).maxLength(25) }).notNull().asNewable()
- *
- * State 2: Creating an instance of a data type and setting values:
- *    let fooInstance = new Foo()
- *    fooInstance.name = null // throws validation error
- *    fooInstance.name = '' // throws validation error
- *    fooInstance.name = 'Narwhal' // no error
- *
- * State 3: Calling validate on an instance of a data type (e.g. 'Foo', above).
- *    let fooInstance = new Foo()
- *    fooInstance.validate() // throws error, name is null.
- *    fooInstance.name = 'Honey Badger' // no error
- *    fooInstance.validate() // no error
- *
- *  ------
- *
- *  State 2 flow:
- *     - newInstance is called
- *     - - optional config object used as defaultValue.
- *     - - If defaultValue is absent use the value provided by 'defaultValue' getter instead.
- *     - - If defaultValue still undefined , create empty object.
- *    <- - If defaultValue is empty and empty values are allowed, set current value to the empty object and return.
- *     - - iterate through defined child fields, performing this process on each.
- *    <- - return the new instance
- *
- *     ======
- *     - set {value} is called
- *     - -
- */
 
 let beforeIgnitionListeners = {}
-class Forge {
+export class Forge {
+  private _defaultValue:any = null
+  private _lit:boolean = false
+  private _immutable:boolean = false
+  private _errorsAsEvents:boolean = false
+  fieldName:string = null
+  private parentFieldName:string = null
+  private _enumerable:boolean = false
+  private _transactional:boolean = false
+  private _version:number = null
+  private _versionFieldName:string = 'version'
+  private dataGen:DataGen
+  restrictions:any
+  _check:Check
 
-  constructor(defaultValue = null, restrictions = null) {
+  constructor(defaultValue:any = null, restrictions:any = null) {
     this._defaultValue = defaultValue
-    this._lit = false
-    this._immutable = false
-    this._errorsAsEvents = false
-    this.fieldName = null
-    this.parentFieldName = null
     this.restrictions = Object.assign({}, BaseRestrictions, restrictions)
   }
 
-  static onBeforeIgnition(targetType, listenerFn) {
-    let ary = beforeIgnitionListeners[targetType] || []
+  static onBeforeIgnition(targetType:any, listenerFn:Function) {
+    let ary = beforeIgnitionListeners['' + targetType] || []
     ary.push({fn: listenerFn})
     beforeIgnitionListeners[targetType] = ary
   }
@@ -55,7 +39,7 @@ class Forge {
   /**
    * @returns {*}
    */
-  newInstance(defaultOverride = null) {
+  newInstance(defaultOverride:any = null) {
     return defaultOverride === null ? this.defaultValue : defaultOverride
   }
 
@@ -64,7 +48,7 @@ class Forge {
    * @param {Validator[]} preconditions
    * @returns {Forge}
    */
-  applyValidation(validation, ...preconditions) {
+  applyValidation(validation:Validator, ...preconditions:Validator[]):this {
     if (!this._check) {
       this._check = Checks.any()
     }
@@ -76,7 +60,7 @@ class Forge {
    * @param {Check} check
    * @returns {Forge}
    */
-  applyCheck(check) {
+  applyCheck(check:Check) {
     if (!this._check) {
       this._check = check
     } else {
@@ -89,13 +73,13 @@ class Forge {
     return this._defaultValue
   }
 
-  validate(value) {
+  validate(value:any) {
     return this._check.validate(value)
   }
 
-  forgeSetter(privateFieldName) {
+  forgeSetter(privateFieldName:string) {
     let fieldForge = this
-    return function (value) {
+    return function (value:any) {
       let r = fieldForge.validate(value)
       if (r == null) {
         this[privateFieldName] = value
@@ -105,7 +89,7 @@ class Forge {
     }
   }
 
-  forgeGetter(privateFieldName) {
+  forgeGetter(privateFieldName:string) {
     return function () {
       return this[privateFieldName]
     }
@@ -114,6 +98,10 @@ class Forge {
 
   /* Fluent configuration calls */
 
+  static any(){
+    return new Forge()
+  }
+
   /**
    * Initialize Forged instances/fields-values to the provided value.
    * Using this method is equivalent to calling the primary Forge method with a default value.
@@ -121,7 +109,7 @@ class Forge {
    * @param defaultValue
    * @returns {Forge}
    */
-  initTo(defaultValue) {
+  initTo(defaultValue:any) {
     this._defaultValue = defaultValue;
     return this
   }
@@ -170,34 +158,12 @@ class Forge {
    * @param msg
    * @returns {*}
    */
-  notNull(msg = "@validations.notNull") {
+  notNull(msg:string = "@validations.notNull"):this {
     this.restrictions.notNull = true
     return this.applyValidation(new ExistsValidator())
   }
 
   /*****  Forge directives.  ******/
-
-  /**
-   * Enable exception-based validation. Any validation failure will immediately throw an exception up to the
-   * calling line.
-   *
-   * Enabled by default.
-   * @returns {Forge}
-   * @todo ggranum: Implement
-   */
-  throwOnFail(doThrow = true) {
-    return this
-  }
-
-  /**
-   *
-   * @param event
-   * @returns {Forge}
-   * @todo ggranum: Implement
-   */
-  eventOnFail(event = null) {
-    return this
-  }
 
 
   /**
@@ -223,8 +189,8 @@ class Forge {
    * @param {boolean} isEnumerable
    * @returns {Forge}
    */
-  enumerable(isEnumerable = true) {
-    this._isEnumerable = isEnumerable
+  enumerable(isEnumerable:boolean = true) {
+    this._enumerable = isEnumerable
     return this
   }
 
@@ -237,7 +203,7 @@ class Forge {
    * @param {string} fieldName
    * @returns {Forge}
    */
-  version(version = 1, fieldName = "version") {
+  version(version:number = 1, fieldName:string = "version") {
     this._version = version
     this._versionFieldName = fieldName
     return this
@@ -249,7 +215,7 @@ class Forge {
    * entries for and we'll just have to try a few times to get it. For example, 'matchesRegex' could be easier to
    * just keep trying at rather than spending time coding up a perfect generation function.
    */
-  gen(additionalGeneratorConfig = null) {
+  gen(additionalGeneratorConfig:any = null) {
     this.ignite()
     if (!this.dataGen) {
       throw new ConfigurationError("DataGen package not loaded.")
@@ -284,10 +250,10 @@ class Forge {
     }
   }
 
-  fireEvent(listeners, event) {
+  fireEvent(listeners:any, event:any) {
     let fail = false
-    let listenerAry = listeners[this.constructor] || []
-    listenerAry.forEach((listener)=> {
+    let listenerAry:any = listeners['' + this.constructor] || []
+    listenerAry.forEach((listener:any)=> {
       if (listener.fn(event) === false) {
         fail = true
       }

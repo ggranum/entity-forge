@@ -38,7 +38,7 @@ export class ObjectGen extends DataGen {
   }
 
   nextBaseObject():any{
-    let next
+    let next:any
     if(!this.baseObject){
       next = {}
     }

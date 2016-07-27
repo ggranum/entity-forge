@@ -3,7 +3,7 @@ import {NumberRestrictions} from "../validation/restriction/restriction";
 
 
 export class NumberGen extends DataGen {
-  constructor(cfg = null) {
+  constructor(cfg:any = null) {
     super(cfg, NumberRestrictions)
   }
 

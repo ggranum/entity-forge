@@ -3,7 +3,7 @@ import {DataGen} from "./data-gen";
 import {ObjectRestrictions} from "../validation/restriction/restriction";
 
 export class EnumGen extends DataGen {
-  constructor(cfg = null) {
+  constructor(cfg:any = null) {
     super(cfg, ObjectRestrictions)
   }
 

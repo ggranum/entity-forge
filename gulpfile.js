@@ -100,20 +100,6 @@ var project = {
   },
   bundles: {
     forge: [
-      "forge/configuration-error.js",
-      "forge/validate-failed-error.js",
-      "forge/forge.js",
-      "forge/entity-type.js",
-      "forge/boolean-forge.js",
-      "forge/number-forge.js",
-      "forge/string-forge.js",
-      "forge/enum-forge.js",
-      "forge/object-forge.js",
-      "forge/index.js",'forge/boolean-forge.spec.js',
-      'forge/enum-forge.spec.js',
-      'forge/number-forge.spec.js',
-      'forge/string-forge.spec.js',
-      'forge/object-forge.spec.js',
     ]
   },
 
@@ -122,6 +108,23 @@ var project = {
       // Ignoring non-zero exit code errors, as tsc will provide non-zero exit codes on warnings.
       console.log(stdout);
       cb();
+    })
+  },
+
+  runJspm: function(target, cb){
+    tools.exec('npm run build.jspm.' + target, function (err, stdout, stderr) {
+      // Ignoring non-zero exit code errors.
+      console.log(stdout);
+      cb();
+    })
+  },
+
+  jspmBuildWithTests: function(cb){
+    var done = project.callbackOnCount(3, cb, 'jspmBuildWithTests')
+    project.compileStatic(done)
+    project.runJspm('test', done)
+    project.doBundle(project.bundles.forge, 'forge-bundle.js', function(){
+      project.compileDist(done)
     })
   },
 
@@ -145,9 +148,9 @@ var project = {
       console.log(msg || "Error: ", e)
     }
   },
-  watch: function () {
+  watch: function (compileTarget) {
     gulp.watch('./src/**/*.html', ['compile-static']).on('error', project.catchError("Error watching HTML files"))
-    return gulp.watch('./src/**/*.{js,ts}', ['compile']).on('error', project.catchError("Error watching JS files"))
+    return gulp.watch('./src/**/*.{js,ts}', [compileTarget || 'compile']).on('error', project.catchError("Error watching JS files"))
   },
 
 
@@ -232,6 +235,18 @@ gulp.task('serve', ['start-server', 'watch'], function (done) {
 gulp.task('clean', [], function (done) {
   project.clean(done)
 })
+
+gulp.task('jspmBuildWithTests', function (done) {
+  project.jspmBuildWithTests(done)
+})
+
+gulp.task('watchJspm', ['compile-static'], function () {
+  return project.watch('jspmBuildWithTests')
+});
+gulp.task('serveJspm', ['start-server', 'watchJspm'], function (done) {
+  // if 'done' is not passed in this task will not block.
+})
+
 
 gulp.task('build', ['compile'], function () {
 })

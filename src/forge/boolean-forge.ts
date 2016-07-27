@@ -1,14 +1,16 @@
-"use strict";
+import {Forge} from "./forge";
+import {Checks} from "../check/index";
+import {BooleanRestrictions} from "../validation/restriction/restriction";
+import {BooleanGen} from "../generate/boolean-gen";
 
 /**
  * Forge booleans fields. A boolean field can be true, false or null. Null may be disabled by calling #notNull.
  */
-class BooleanForge extends Forge {
+export class BooleanForge extends Forge {
 
   constructor(defaultValue = false, msg = "@validations.boolean.bool") {
-    super(defaultValue)
+    super(defaultValue, BooleanRestrictions)
     this.applyCheck(Checks.boolean())
-    this.restrictions = Object.assign({}, BooleanRestrictions)
   }
 
   /**
@@ -24,7 +26,7 @@ class BooleanForge extends Forge {
 }
 
 
-Forge.onBeforeIgnition(BooleanForge, function (event) {
+Forge.onBeforeIgnition(BooleanForge, function (event:any) {
   let dataGen = new BooleanGen(event.forge.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()

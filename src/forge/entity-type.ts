@@ -1,16 +1,21 @@
-let EntityType = function () { }
-Object.assign(EntityType.prototype, {
+
+
+
+
+export class EntityType {
+  static defineValidateFn:Function
+
   toJson() {
     return JSON.stringify(this)
   }
-});
+}
 
 
 /**
  * Defines a validate function on the EntityType we are creating.
  * Refers to the validate function of its forge.
  */
-EntityType.defineValidateFn = function(proto){
+EntityType.defineValidateFn = function(proto:any){
 
   Object.defineProperty(proto, 'validate', {
     configurable: false,

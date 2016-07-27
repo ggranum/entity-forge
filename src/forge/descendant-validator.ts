@@ -9,7 +9,7 @@ export class DescendantValidator extends Validator {
   }
 
   validate(value:any):any {
-    let errors = null
+    let errors:any = null
     Object.keys(this.args.fieldForge.fieldDefinitions).forEach((key)=> {
       let fieldDef = this.args.fieldForge.fieldDefinitions[key]
       let result = fieldDef.validate(value[key], key)
@@ -18,7 +18,7 @@ export class DescendantValidator extends Validator {
         errors[key] = result
       }
     })
-    let result = null
+    let result:any = null
     if (errors) {
       result = this.toError(value, errors)
     }

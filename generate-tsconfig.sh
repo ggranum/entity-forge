@@ -8,7 +8,7 @@ echo "    \"sourceMap\": true," >> ./tsconfig.json
 echo "    \"emitDecoratorMetadata\": true," >> ./tsconfig.json
 echo "    \"experimentalDecorators\": true," >> ./tsconfig.json
 echo "    \"removeComments\": false," >> ./tsconfig.json
-echo "    \"noImplicitAny\": false," >> ./tsconfig.json
+echo "    \"noImplicitAny\": true," >> ./tsconfig.json
 echo "    \"suppressImplicitAnyIndexErrors\":true," >> ./tsconfig.json
 echo "    \"outDir\": \"./build/\"" >> ./tsconfig.json
 echo "  }," >> ./tsconfig.json
