@@ -25,9 +25,9 @@
       },
     }
   });
-  System.import('main-test')
+  System.import('test')
     .then(function (p) {
-      System.import('forge-bundle').then(function (p2) {
+      System.import('entityforge-bundle').then(function (p2) {
         console.log("Ready...", "Maybe")
         window.onload(p2) // notify Jasmine.
       })

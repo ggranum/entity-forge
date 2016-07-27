@@ -89,3 +89,6 @@ npm install typings --global
 npm install
 npm run test
 ```
+
+
+jspm bundleSFX src/main-test.ts dist/main-test.js --format umd --global-name EntityForge --skip-source-maps

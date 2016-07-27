@@ -1,7 +1,4 @@
-import 'validation-bundle'
-import 'check-bundle'
-import 'gen-bundle'
-
+import './entity-forge'
 import './check/check.spec'
 import './generate/data-gen.spec'
 import './generate/boolean-gen.spec'

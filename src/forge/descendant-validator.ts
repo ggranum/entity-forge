@@ -1,14 +1,14 @@
-"use strict"
+import {Validator} from "../validation/validator";
 
 /**
  * Validator that validates child fields.
  */
-class DescendantValidator extends Validator {
-  constructor(fieldForge) {
+export class DescendantValidator extends Validator {
+  constructor(fieldForge:any) {
     super({fieldForge: fieldForge})
   }
 
-  validate(value) {
+  validate(value:any):any {
     let errors = null
     Object.keys(this.args.fieldForge.fieldDefinitions).forEach((key)=> {
       let fieldDef = this.args.fieldForge.fieldDefinitions[key]
@@ -25,7 +25,7 @@ class DescendantValidator extends Validator {
     return result
   }
 
-  toError(value, childErrors) {
+  toError(value:any, childErrors:any) {
     let response = {}
     response[this.args.fieldForge.fieldName || 'instance'] = {
       message: this.message,

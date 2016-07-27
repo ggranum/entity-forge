@@ -1,0 +1,24 @@
+<html>
+<head>
+  <title>Jasmine Tests - Dev Packaging</title>
+  <link rel="stylesheet" href="node_modules/jasmine-core/lib/jasmine-core/jasmine.css">
+  <script src="node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+  <script src="node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+  <script src="node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+  <script src="node_modules/seedrandom/seedrandom.min.js"></script>
+
+</head>
+<body>
+
+<script src="jspm_packages/system.js"></script>
+<script src="jspm.config.js"></script>
+<script src="jspm.dev.js"></script>
+
+<script>
+  SystemJS.import('entityforge/entity-forge-test').then(function (p) {
+    console.log("Page loaded", "Executing tests...")
+    window.onload(p)
+  });
+</script>
+</body>
+</html>

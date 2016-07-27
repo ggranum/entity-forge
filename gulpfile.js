@@ -22,12 +22,6 @@ tools.serveIndex = require('serve-index');
 tools.serveStatic = require('serve-static');
 
 
-tools.browserify = require('browserify');
-tools.source = require('vinyl-source-stream');
-tools.tsify = require('tsify');
-tools.buffer = require('vinyl-buffer');
-
-
 var config = {
   appProtocol: 'http',
   appHostname: 'localhost',
@@ -39,13 +33,7 @@ var config = {
   distDir: __dirname + '/dist',
   srcDir: './src',
   buildTarget: 'dev'
-
 }
-config.appHost = config.appProtocol + '://' + config.appHostname + ':' + config.appPort
-config.proxyHost = config.proxyProtocol + '://' + config.proxyHostname + ':' + config.proxyPort
-config.paths = {
-  pages: [config.srcDir + '/*.html']
-};
 
 
 var minimistCliOpts = {
@@ -76,58 +64,6 @@ var project = {
     console.log("Finished 'Clean'")
     cb()
   },
-
-  copyNpm: function (cb) {
-
-    var libs =
-    {
-      'seedrandom/': [
-        {dev: 'seedrandom.js', prod: 'seedrandom.min.js', out: 'seedrandom.js'}
-      ],
-      'es6-shim/': [
-        {dev: 'es6-shim.js', prod: 'es6-shim.min.js', out: 'es6-shim.js'}
-      ],
-      'systemjs/dist/': [
-        {dev: 'system.src.js', prod: 'system.js', out: 'system.js'},
-        {dev: 'system.js.map', prod: null, out: 'system.js.map'},
-        {dev: 'system-polyfills.src.js', prod: 'system-polyfills.js', out: 'system-polyfills.js'},
-        {dev: 'system-polyfills.js.map', prod: null, out: 'system-polyfills.js.map'}
-      ]
-    }
-
-    var baseOutPath = config.buildDir + '/thirdparty/'
-    var libKeys = Object.keys(libs)
-
-
-    var count = 0
-    libKeys.forEach(function (basePath) {
-      var lib = libs[basePath]
-      lib.forEach(function (libFile) {
-        // build target is either dev or prod; we're counting the number of file copy promises we'll need to wait for.
-        if ((libFile[config.buildTarget] != null) || (libFile['all'] != null)) {
-          count++
-        }
-      })
-    })
-    var done = project.callbackOnCount(count, cb)
-
-    libKeys.forEach(function (basePath) {
-      var lib = libs[basePath]
-      lib.forEach(function (libFile) {
-        var inFile = libFile[config.buildTarget] || libFile['all']
-        if (inFile) {
-          gulp.src('./node_modules/' + basePath + inFile)
-            .pipe(tools.rename(function (path) {
-              var outFile = libFile['out'] || libFile['all']
-              path.basename = outFile.substring(0, outFile.lastIndexOf("."))
-              return path
-            }))
-            .pipe(gulp.dest(baseOutPath + basePath)).on('finish', done);
-        }
-      })
-    })
-  },
-
 
   callbackOnCount: function (count, cb) {
     return function () {
@@ -162,33 +98,6 @@ var project = {
       .pipe(tools.sourcemaps.write('./'))
       .pipe(gulp.dest(destPath)).on('finish', done);
   },
-
-
-  compileTsc: function(cb){
-    tools.exec('npm run tsc', function (err, stdout, stderr) {
-      // Ignoring non-zero exit code errors, as tsc will provide non-zero exit codes on warnings.
-      console.log(stdout);
-      cb();
-    })
-  },
-
-  compileTs: function (done) {
-    return tools.browserify({
-      basedir: '.',
-      debug: true,
-      entries: ['src/main-test.ts'],
-      cache: {},
-      packageCache: {}
-    }).plugin(tools.tsify)
-      .transform("babelify")
-      .bundle()
-      .pipe(tools.source('main.js'))
-      .pipe(tools.buffer())
-      .pipe(tools.sourcemaps.init({loadMaps: true}))
-      .pipe(tools.sourcemaps.write('./'))
-      .pipe(gulp.dest(config.buildDir)).on('finish', done);
-  },
-
   bundles: {
     forge: [
       "forge/configuration-error.js",
@@ -198,7 +107,6 @@ var project = {
       "forge/boolean-forge.js",
       "forge/number-forge.js",
       "forge/string-forge.js",
-      "forge/descendant-validator.js",
       "forge/enum-forge.js",
       "forge/object-forge.js",
       "forge/index.js",'forge/boolean-forge.spec.js',
@@ -209,11 +117,27 @@ var project = {
     ]
   },
 
+  compileTsc: function(cb){
+    tools.exec('npm run tsc', function (err, stdout, stderr) {
+      // Ignoring non-zero exit code errors, as tsc will provide non-zero exit codes on warnings.
+      console.log(stdout);
+      cb();
+    })
+  },
+
+
   compile: function (cb) {
-    var done = project.callbackOnCount(3, cb, 'compile')
+    var done = project.callbackOnCount(2, cb, 'compile')
     project.compileStatic(done)
-    project.doBundle(project.bundles.forge, 'forge-bundle.js', done)
-    project.copyNpm(done)
+    project.doBundle(project.bundles.forge, 'forge-bundle.js', function(){
+      project.compileDist(done)
+    })
+
+  },
+
+  compileDist: function (done) {
+    return gulp.src([config.buildDir + '/forge-bundle.js'])
+      .pipe(gulp.dest(config.distDir)).on('finish', done);
   },
 
   catchError: function (msg) {
@@ -235,12 +159,7 @@ var project = {
 
 
     var proxyBasePaths = [
-      'admin',
       'html',
-      'api',
-      'c',
-      'dwr',
-      'DotAjaxDirector'
     ]
 
     var app = tools.connect();
@@ -290,17 +209,11 @@ gulp.task('start-server', function (done) {
   done()
 })
 
-gulp.task('copy-npm', function (cb) {
-  project.copyNpm(cb)
-});
 
 gulp.task('compile-static', [], function (done) {
   project.compileStatic(done)
 })
 
-gulp.task('compileTs', [], function (done) {
-  project.compileTs(done)
-});
 gulp.task('compileTsc', [], function (done) {
   project.compileTsc(done)
 });
@@ -308,7 +221,7 @@ gulp.task('compile', ['compileTsc'], function (done) {
   project.compile(done)
 })
 
-gulp.task('watch', ['compile-static', 'copy-npm'], function () {
+gulp.task('watch', ['compile-static'], function () {
   return project.watch()
 });
 

@@ -1,5 +1,3 @@
-"use strict"
-
 class ValidateFailedError extends Error {
 
   constructor(msg, cause){
