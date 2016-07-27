@@ -47,15 +47,11 @@
   },
   "scripts": {
     "build.serve": "gulp serve || true",
-    "build.dev": "gulp clean && gulp build || true",
     "build.watch": "gulp clean && gulp build && gulp serve || true",
-    "build.test": "gulp clean && npm run build.jspm.test && gulp build && gulp serveJspm --open=/entity-forge-test.html",
-    "build.dev.test": "gulp clean && gulp jspmBuildWithTests spm && gulp serve --open=/entity-forge-test.dev.html",
-    "build.jspm.test":" jspm build src/entity-forge-test.ts  dist/entity-forge-test.js --format umd --global-name EntityForgeTest --minify",
-    "build.jspm.check":" jspm build check dist/check.umd.js --format umd --global-name ForgeCheck.js",
-    "docs": "gulp clean && gulp build && gulp serve --open=/build/docs/index.html",
-    "tsc": "tsc",
-    "jspm": "jspm"
+    "build.test": "gulp clean && gulp build && gulp serve --open=/entity-forge-test.html",
+    "jspm.dist":" jspm build src/entity-forge.ts dist/entityforge.umd.js --format umd --global-name EntityForge --minify --skip-source-maps",
+    "jspm.test":" jspm build src/entity-forge-test.ts  dist/entity-forge-test.js --format umd --global-name EntityForgeTest",
+    "docs": "gulp clean && gulp build && gulp serve --open=/build/docs/index.html"
   },
   "dependencies": {
     "es6-shim": ">=0.22.0",

@@ -34,6 +34,8 @@ var config = {
   srcDir: './src',
   buildTarget: 'dev'
 }
+config.appHost = config.appProtocol + '://' + config.appHostname + ':' + config.appPort
+config.proxyHost = config.proxyProtocol + '://' + config.proxyHostname + ':' + config.proxyPort
 
 
 var minimistCliOpts = {
@@ -65,42 +67,15 @@ var project = {
     cb()
   },
 
-  callbackOnCount: function (count, cb) {
-    return function () {
-      if (--count === 0) {
-        cb()
-      }
-    }
-  },
-
   compileStatic: function (cb) {
-    var done = project.callbackOnCount(2, cb)
-    gulp.src('./src/**/*.{js,css,eot,svg,ttf,woff,woff2,png}').pipe(gulp.dest(config.buildDir)).on('finish', done);
-    tools.gitRev.short(function (rev) {
-      gulp.src([config.srcDir + '/**/*.html'])
-        .pipe(tools.replace(/\$\{build.revision\}/, rev))
-        .pipe(tools.replace(/\$\{build.date\}/, new Date().toISOString()))
-        .pipe(gulp.dest(config.buildDir)).on('finish', done);
-    })
-  },
-
-  doBundle: function (fileNames, outFileName, done) {
-    let srcPath = config.srcDir + '/'
-    let destPath = config.buildDir + '/'
-
-    let filePaths = []
-    fileNames.forEach(function (fileName) {
-      filePaths.push(srcPath + fileName)
-    })
-    return gulp.src(filePaths)
-      .pipe(tools.sourcemaps.init())
-      .pipe(tools.concat(outFileName || 'bundle.js'))
-      .pipe(tools.sourcemaps.write('./'))
-      .pipe(gulp.dest(destPath)).on('finish', done);
-  },
-  bundles: {
-    forge: [
-    ]
+    gulp.src('./src/**/*.{js,css,eot,svg,ttf,woff,woff2,png}').pipe(gulp.dest(config.buildDir)).on('finish', function(){
+      tools.gitRev.short(function (rev) {
+        gulp.src([config.srcDir + '/**/*.html'])
+          .pipe(tools.replace(/\$\{build.revision\}/, rev))
+          .pipe(tools.replace(/\$\{build.date\}/, new Date().toISOString()))
+          .pipe(gulp.dest(config.buildDir)).on('finish', cb);
+      })
+    });
   },
 
   compileTsc: function(cb){
@@ -112,35 +87,24 @@ var project = {
   },
 
   runJspm: function(target, cb){
-    tools.exec('npm run build.jspm.' + target, function (err, stdout, stderr) {
+    console.log("project", "runJspm", target)
+    tools.exec('npm run jspm.' + target, function (err, stdout, stderr) {
       // Ignoring non-zero exit code errors.
       console.log(stdout);
       cb();
     })
   },
 
-  jspmBuildWithTests: function(cb){
-    var done = project.callbackOnCount(3, cb, 'jspmBuildWithTests')
-    project.compileStatic(done)
-    project.runJspm('test', done)
-    project.doBundle(project.bundles.forge, 'forge-bundle.js', function(){
-      project.compileDist(done)
-    })
-  },
-
-
   compile: function (cb) {
-    var done = project.callbackOnCount(2, cb, 'compile')
-    project.compileStatic(done)
-    project.doBundle(project.bundles.forge, 'forge-bundle.js', function(){
-      project.compileDist(done)
+    return project.compileStatic(function(){
+      project.runJspm('dist', function(){
+        project.runJspm('test', cb)
+      })
     })
-
   },
 
   compileDist: function (done) {
-    return gulp.src([config.buildDir + '/forge-bundle.js'])
-      .pipe(gulp.dest(config.distDir)).on('finish', done);
+    return done()
   },
 
   catchError: function (msg) {
@@ -148,6 +112,7 @@ var project = {
       console.log(msg || "Error: ", e)
     }
   },
+
   watch: function (compileTarget) {
     gulp.watch('./src/**/*.html', ['compile-static']).on('error', project.catchError("Error watching HTML files"))
     return gulp.watch('./src/**/*.{js,ts}', [compileTarget || 'compile']).on('error', project.catchError("Error watching JS files"))
@@ -212,7 +177,6 @@ gulp.task('start-server', function (done) {
   done()
 })
 
-
 gulp.task('compile-static', [], function (done) {
   project.compileStatic(done)
 })
@@ -220,6 +184,7 @@ gulp.task('compile-static', [], function (done) {
 gulp.task('compileTsc', [], function (done) {
   project.compileTsc(done)
 });
+
 gulp.task('compile', ['compileTsc'], function (done) {
   project.compile(done)
 })
@@ -235,18 +200,6 @@ gulp.task('serve', ['start-server', 'watch'], function (done) {
 gulp.task('clean', [], function (done) {
   project.clean(done)
 })
-
-gulp.task('jspmBuildWithTests', function (done) {
-  project.jspmBuildWithTests(done)
-})
-
-gulp.task('watchJspm', ['compile-static'], function () {
-  return project.watch('jspmBuildWithTests')
-});
-gulp.task('serveJspm', ['start-server', 'watchJspm'], function (done) {
-  // if 'done' is not passed in this task will not block.
-})
-
 
 gulp.task('build', ['compile'], function () {
 })

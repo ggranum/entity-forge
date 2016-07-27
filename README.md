@@ -82,13 +82,11 @@ console.log("A randomly generated 'BiggerUser:", biggerUser)
 
 ### Getting started
 
-The project has been kept simple, thought it does use ES6 classes and some syntax, mostly for the happiness that 
-is 'super'.   
+
 ```console
 npm install typings --global
+npm install typescript --global
+npm install jspm --global
 npm install
-npm run test
+npm run build.test
 ```
-
-
-jspm bundleSFX src/main-test.ts dist/main-test.js --format umd --global-name EntityForge --skip-source-maps
