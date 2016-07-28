@@ -1,5 +1,5 @@
 import {Check} from "./check";
-import {Validators, MinValidator, MaxValidator} from "../validation/index";
+import {Validators, MinValidator, MaxValidator} from "../validator/index";
 
 
 export class NumberCheck extends Check {

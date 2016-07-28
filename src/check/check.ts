@@ -1,6 +1,6 @@
-import {Validators, IsOneOfValidator} from "../validation/index";
+import {Validators, IsOneOfValidator} from "../validator/index";
 import {Constraint} from "./constraint";
-import {Validator} from "../validation/validator";
+import {Validator} from "../validator/validator";
 
 
 export class Check {

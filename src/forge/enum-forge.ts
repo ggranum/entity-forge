@@ -1,5 +1,5 @@
 import {Forge} from "./forge";
-import {ObjectRestrictionDefaults} from "../validation/restriction/restriction";
+import {ObjectRestrictionDefaults} from "../validator/restriction/restriction";
 import {Checks} from "../check/index";
 import {EnumGen} from "../generate/enum-gen";
 export class EnumForge extends Forge {

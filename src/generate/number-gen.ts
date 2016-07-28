@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {NumberRestrictionDefaults} from "../validation/restriction/restriction";
+import {NumberRestrictionDefaults} from "../validator/restriction/restriction";
 
 
 export class NumberGen extends DataGen {

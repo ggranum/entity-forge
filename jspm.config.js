@@ -5,7 +5,7 @@ SystemJS.config({
     "forge/": "src/forge",
     "check/": "src/check/",
     "generate/": "src/generate",
-    "validation/": "src/validation",
+    "validation/": "src/validator",
     "entityforge/": "src/"
   },
   browserConfig: {
@@ -34,7 +34,7 @@ SystemJS.config({
     },
     "validation": {
       defaultExtension: 'ts',
-      "main": "src/validation/index.ts",
+      "main": "src/validator/index.ts",
       "meta": {
         "*.ts": {
           "loader": "plugin-typescript"

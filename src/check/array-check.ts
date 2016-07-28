@@ -1,5 +1,5 @@
 import {Check} from "./check";
-import {Validators,MaxSizeValidator, MinSizeValidator} from "../validation/index";
+import {Validators,MaxSizeValidator, MinSizeValidator} from "../validator/index";
 
 export class ArrayCheck extends Check {
 

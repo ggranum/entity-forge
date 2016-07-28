@@ -1,6 +1,6 @@
 import {DataGen} from "./data-gen";
-import {ObjectRestrictionDefaults} from "../validation/restriction/restriction";
-import {Validators} from "../validation/index";
+import {ObjectRestrictionDefaults} from "../validator/restriction/restriction";
+import {Validators} from "../validator/index";
 
 
 export class ObjectGen extends DataGen {

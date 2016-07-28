@@ -1,6 +1,6 @@
 import {Forge} from "./forge";
 import {Checks} from "../check/index";
-import {BooleanRestrictionDefaults} from "../validation/restriction/restriction";
+import {BooleanRestrictionDefaults} from "../validator/restriction/restriction";
 import {BooleanGen} from "../generate/boolean-gen";
 
 /**

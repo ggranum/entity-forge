@@ -1,4 +1,4 @@
-import {Validator,} from "../validation/validator";
+import {Validator,} from "../validator/validator";
 
 
 let ordinalSortFn = (a:Validator, b:Validator) => {

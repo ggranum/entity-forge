@@ -1,5 +1,5 @@
 import {Check} from "./check";
-import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator} from "../validation/index";
+import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator} from "../validator/index";
 
 
 export class StringCheck extends Check {

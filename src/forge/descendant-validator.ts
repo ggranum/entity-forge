@@ -1,4 +1,4 @@
-import {Validator} from "../validation/validator";
+import {Validator} from "../validator/validator";
 
 /**
  * Validator that validates child fields.

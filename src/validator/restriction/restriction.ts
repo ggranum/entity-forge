@@ -6,10 +6,10 @@ export const CommonRestrictionDefaults: CommonRestrictions = {
 }
 
 export interface ObjectRestrictions extends CommonRestrictions {}
-export const ObjectRestrictionDefaults = Object.assign({}, CommonRestrictionDefaults)
+export const ObjectRestrictionDefaults:ObjectRestrictions = Object.assign({}, CommonRestrictionDefaults)
 
 export interface BooleanRestrictions extends CommonRestrictions {}
-export const BooleanRestrictionDefaults = Object.assign({isBoolean: true}, CommonRestrictionDefaults)
+export const BooleanRestrictionDefaults:BooleanRestrictions = Object.assign({isBoolean: true}, CommonRestrictionDefaults)
 
 export interface NumberRestrictions extends CommonRestrictions {
   isNumber: boolean

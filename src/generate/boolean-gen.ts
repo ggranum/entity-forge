@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {BooleanRestrictionDefaults} from "../validation/restriction/restriction";
+import {BooleanRestrictionDefaults} from "../validator/restriction/restriction";
 
 export class BooleanGen extends DataGen {
 

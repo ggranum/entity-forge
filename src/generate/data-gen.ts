@@ -1,4 +1,4 @@
-import {CommonRestrictionDefaults} from "../validation/restriction/restriction";
+import {CommonRestrictionDefaults} from "../validator/restriction/restriction";
 
 export class DataGen {
   restrictions:any = CommonRestrictionDefaults

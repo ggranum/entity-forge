@@ -1,10 +1,10 @@
-import {CommonRestrictionDefaults} from "../validation/restriction/restriction";
+import {CommonRestrictionDefaults} from "../validator/restriction/restriction";
 import {Checks} from "../check/index";
 import {Check} from "../check/check";
 import {ValidateFailedError} from "./validate-failed-error";
-import {ExistsValidator} from "../validation/object";
+import {ExistsValidator} from "../validator/object";
 import {ConfigurationError} from "./configuration-error";
-import {Validator} from "../validation/validator";
+import {Validator} from "../validator/validator";
 import {DataGen} from "../generate/data-gen";
 
 

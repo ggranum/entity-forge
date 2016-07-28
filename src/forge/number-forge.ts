@@ -1,7 +1,7 @@
 
 
 import {Forge} from "./forge";
-import {NumberRestrictionDefaults} from "../validation/restriction/restriction";
+import {NumberRestrictionDefaults} from "../validator/restriction/restriction";
 import {Checks} from "../check/index";
 import {NumberCheck} from "../check/number-check";
 import {NumberGen} from "../generate/number-gen";

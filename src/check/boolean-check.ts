@@ -1,5 +1,5 @@
 import {Check} from "./check";
-import {Validators} from "../validation/index";
+import {Validators} from "../validator/index";
 export class BooleanCheck extends Check {
 
   static boolean() {
