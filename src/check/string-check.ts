@@ -1,4 +1,3 @@
-"use strict"
 import {Check} from "./check";
 import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator} from "../validation/index";
 

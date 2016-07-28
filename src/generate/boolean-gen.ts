@@ -1,10 +1,10 @@
 import {DataGen} from "./data-gen";
-import {BooleanRestrictions} from "../validation/restriction/restriction";
+import {BooleanRestrictionDefaults} from "../validation/restriction/restriction";
 
 export class BooleanGen extends DataGen {
 
   constructor(cfg:any = null) {
-    super(cfg, BooleanRestrictions)
+    super(cfg, BooleanRestrictionDefaults)
   }
 
   gen() {

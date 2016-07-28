@@ -1,5 +1,5 @@
 import {Forge} from "./forge";
-import {StringRestrictions} from "../validation/restriction/restriction";
+import {StringRestrictionDefaults} from "../validation/restriction/restriction";
 import {Strings} from "../validation/string";
 import {Checks} from "../check/index";
 import {StringCheck} from "../check/string-check";
@@ -9,7 +9,7 @@ export class StringForge extends Forge{
   _check:StringCheck
 
   constructor(defaultValue:string = null, msg = "@validations.string.string") {
-    super(defaultValue, StringRestrictions)
+    super(defaultValue, StringRestrictionDefaults)
     this.restrictions.allowedCodePoints = Strings.COMMON_UTF_RANGES.UTF_PLANE_BMP
     this.restrictions.minLength = null
     this.restrictions.maxLength = null

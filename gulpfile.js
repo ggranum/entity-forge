@@ -3,8 +3,10 @@
 var tools = {}
 
 tools.exec = require('child_process').exec
-tools.http = require('http');
-tools.url = require('url');
+tools.http = require('http')
+tools.url = require('url')
+tools.fs = require('fs')
+tools.util = require('util')
 
 // from npm
 tools.connect = require('connect');
@@ -14,12 +16,12 @@ var gulp = require('gulp')
 tools.concat = require('gulp-concat')
 tools.rename = require('gulp-rename')
 tools.replace = require('gulp-replace')
-tools.sourcemaps = require('gulp-sourcemaps');
+tools.sourcemaps = require('gulp-sourcemaps')
 tools.minimist = require('minimist')
 tools.open = require('open');
-tools.proxy = require('proxy-middleware');
-tools.serveIndex = require('serve-index');
-tools.serveStatic = require('serve-static');
+tools.proxy = require('proxy-middleware')
+tools.serveIndex = require('serve-index')
+tools.serveStatic = require('serve-static')
 
 
 var config = {
@@ -98,7 +100,13 @@ var project = {
   compile: function (cb) {
     return project.compileStatic(function(){
       project.runJspm('dist', function(){
-        project.runJspm('test', cb)
+        project.runJspm('test', function(){
+          var stats = tools.fs.statSync(config.distDir + '/entityforge.umd.js')
+          var size = stats["size"]
+
+          console.log("Dist build size: ", Math.floor(size/1000) + '.' + (size % 1000 ) + 'kB')
+          cb()
+        })
       })
     })
   },

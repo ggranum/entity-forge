@@ -1,9 +1,7 @@
-"use strict"
 import {Validator} from "./validator";
 
 
-
-class IsNumberValidator extends Validator {
+export class IsNumberValidator extends Validator {
   check(value:any):boolean {
     return (typeof value === 'number' || value instanceof Number)
   }
@@ -15,7 +13,7 @@ Object.assign(IsNumberValidator.prototype, {
 })
 
 
-class IsIntValidator extends Validator {
+export class IsIntValidator extends Validator {
   check(value:any):boolean {
     return (value % 1 === 0)
   }
@@ -26,7 +24,7 @@ Object.assign(IsIntValidator.prototype, {
   message: '@restriction.int'
 })
 
-class MaxValidator extends Validator {
+export class MaxValidator extends Validator {
   constructor(max = Number.MAX_VALUE, inclusive = false) {
     super({max: max, inclusive: inclusive})
 
@@ -47,7 +45,7 @@ Object.assign(MaxValidator.prototype, {
 })
 
 
-class MinValidator extends Validator {
+export class MinValidator extends Validator {
   constructor(min = Number.MIN_VALUE, inclusive = true) {
     super({min: min, inclusive: inclusive})
   }
@@ -66,7 +64,5 @@ Object.assign(MinValidator.prototype, {
   message: '@restriction.min'
 })
 
-
-export {IsNumberValidator, IsIntValidator, MaxValidator,MinValidator }
 
 

@@ -36,5 +36,5 @@ export {ExistsValidator, IsOneOfValidator, IsObjectValidator, IsFunctionValidato
 export {IsIntValidator, IsNumberValidator,MaxValidator, MinValidator} from "./number";
 export {MaxLengthValidator, MinLengthValidator, Strings, CodePointsValidator} from "./string";
 export {MaxSizeValidator, MinSizeValidator} from "./array";
-export {StringRestrictions, BaseRestrictions, NumberRestrictions,
-  ObjectRestrictions, BooleanRestrictions} from './restriction/restriction'
+export {StringRestrictionDefaults, CommonRestrictionDefaults, NumberRestrictionDefaults,
+  ObjectRestrictionDefaults, BooleanRestrictionDefaults} from './restriction/restriction'

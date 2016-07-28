@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {ObjectRestrictions} from "../validation/restriction/restriction";
+import {ObjectRestrictionDefaults} from "../validation/restriction/restriction";
 import {Validators} from "../validation/index";
 
 
@@ -7,7 +7,7 @@ export class ObjectGen extends DataGen {
   private fields:any = {}
   private baseObject:any = null
   constructor(cfg:any = null) {
-    super(cfg , ObjectRestrictions)
+    super(cfg , ObjectRestrictionDefaults)
   }
 
   childFields(fields:any) {

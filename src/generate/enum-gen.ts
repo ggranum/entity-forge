@@ -1,10 +1,10 @@
 
 import {DataGen} from "./data-gen";
-import {ObjectRestrictions} from "../validation/restriction/restriction";
+import {ObjectRestrictionDefaults} from "../validation/restriction/restriction";
 
 export class EnumGen extends DataGen {
   constructor(cfg:any = null) {
-    super(cfg, ObjectRestrictions)
+    super(cfg, ObjectRestrictionDefaults)
   }
 
   values(values:any[]):EnumGen{

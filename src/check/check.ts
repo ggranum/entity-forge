@@ -1,4 +1,3 @@
-"use strict";
 import {Validators, IsOneOfValidator} from "../validation/index";
 import {Constraint} from "./constraint";
 import {Validator} from "../validation/validator";

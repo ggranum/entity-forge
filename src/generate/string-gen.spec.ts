@@ -1,4 +1,3 @@
-"use strict";
 import {StringGen} from "./string-gen";
 
 

@@ -1,11 +1,10 @@
-"use strict"
 import {DataGen} from "./data-gen";
-import {StringRestrictions} from "../validation/restriction/restriction";
+import {StringRestrictionDefaults} from "../validation/restriction/restriction";
 
 
 export class StringGen extends DataGen {
   constructor(cfg:any = null) {
-    super(cfg, StringRestrictions)
+    super(cfg, StringRestrictionDefaults)
   }
 
   allowCodePoints(codePointRanges:number[]) {
@@ -48,7 +47,7 @@ export class StringGen extends DataGen {
     return String.fromCodePoint(randomCodePoint)
   }
 }
-Object.assign(StringGen.prototype, StringRestrictions)
+Object.assign(StringGen.prototype, StringRestrictionDefaults)
 
 
 

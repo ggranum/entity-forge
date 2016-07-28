@@ -1,10 +1,10 @@
 import {DataGen} from "./data-gen";
-import {NumberRestrictions} from "../validation/restriction/restriction";
+import {NumberRestrictionDefaults} from "../validation/restriction/restriction";
 
 
 export class NumberGen extends DataGen {
   constructor(cfg:any = null) {
-    super(cfg, NumberRestrictions)
+    super(cfg, NumberRestrictionDefaults)
   }
 
   isInt():NumberGen {

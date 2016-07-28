@@ -1,6 +1,6 @@
 import {Forge} from "./forge";
 import {Checks} from "../check/index";
-import {BooleanRestrictions} from "../validation/restriction/restriction";
+import {BooleanRestrictionDefaults} from "../validation/restriction/restriction";
 import {BooleanGen} from "../generate/boolean-gen";
 
 /**
@@ -9,7 +9,7 @@ import {BooleanGen} from "../generate/boolean-gen";
 export class BooleanForge extends Forge {
 
   constructor(defaultValue = false, msg = "@validations.boolean.bool") {
-    super(defaultValue, BooleanRestrictions)
+    super(defaultValue, BooleanRestrictionDefaults)
     this.applyCheck(Checks.boolean())
   }
 

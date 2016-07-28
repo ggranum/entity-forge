@@ -1,5 +1,4 @@
-"use strict"
-import {BaseRestrictions} from "../validation/restriction/restriction";
+import {CommonRestrictionDefaults} from "../validation/restriction/restriction";
 import {Checks} from "../check/index";
 import {Check} from "../check/check";
 import {ValidateFailedError} from "./validate-failed-error";
@@ -27,7 +26,7 @@ export class Forge {
 
   constructor(defaultValue:any = null, restrictions:any = null) {
     this._defaultValue = defaultValue
-    this.restrictions = Object.assign({}, BaseRestrictions, restrictions)
+    this.restrictions = Object.assign({}, CommonRestrictionDefaults, restrictions)
   }
 
   static onBeforeIgnition(targetType:any, listenerFn:Function) {

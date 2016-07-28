@@ -1,5 +1,5 @@
 import {Forge} from "./forge";
-import {ObjectRestrictions} from "../validation/restriction/restriction";
+import {ObjectRestrictionDefaults} from "../validation/restriction/restriction";
 import {Checks} from "../check/index";
 import {EnumGen} from "../generate/enum-gen";
 export class EnumForge extends Forge {
@@ -8,7 +8,7 @@ export class EnumForge extends Forge {
 
   constructor(defaultValue:any = null, msg = "@validations.enumeration.enumeration") {
     super(defaultValue)
-    this.restrictions = Object.assign({}, this.restrictions, {values: []}, ObjectRestrictions)
+    this.restrictions = Object.assign({}, this.restrictions, {values: []}, ObjectRestrictionDefaults)
 
     // this.applyValidation({
     //   name: 'enumeration',

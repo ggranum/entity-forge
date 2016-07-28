@@ -1,12 +1,12 @@
-import {BaseRestrictions} from "../validation/restriction/restriction";
+import {CommonRestrictionDefaults} from "../validation/restriction/restriction";
 
 export class DataGen {
-  restrictions:any = BaseRestrictions
+  restrictions:any = CommonRestrictionDefaults
   private _nullChance:number = 1 / 1000
 
 
   constructor(cfg:any = null, restrictions:any = null) {
-    this.restrictions = Object.assign({}, restrictions || BaseRestrictions)
+    this.restrictions = Object.assign({}, restrictions || CommonRestrictionDefaults)
     Object.assign(this.restrictions, cfg)
   }
 

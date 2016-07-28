@@ -1,5 +1,5 @@
 import {Forge} from "./forge";
-import {ObjectRestrictions} from "../validation/restriction/restriction";
+import {ObjectRestrictionDefaults} from "../validation/restriction/restriction";
 import {DescendantValidator} from "./descendant-validator";
 import {Validators} from "../validation/index";
 import {EntityType} from "./entity-type";
@@ -42,7 +42,7 @@ export class ObjectForge extends Forge {
   private fieldDefinitions:any
 
   constructor(fields:any = {}, defaultValue:any = null, msg = "@validations.object.object", fieldName:string = null) {
-    super(defaultValue, ObjectRestrictions)
+    super(defaultValue, ObjectRestrictionDefaults)
     this.fieldDefinitions = fields || {}
     this.fieldName = fieldName
     this.applyValidation(new DescendantValidator(this), Validators.exists)

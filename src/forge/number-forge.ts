@@ -1,7 +1,7 @@
 
 
 import {Forge} from "./forge";
-import {NumberRestrictions} from "../validation/restriction/restriction";
+import {NumberRestrictionDefaults} from "../validation/restriction/restriction";
 import {Checks} from "../check/index";
 import {NumberCheck} from "../check/number-check";
 import {NumberGen} from "../generate/number-gen";
@@ -10,7 +10,7 @@ export class NumberForge extends Forge {
   _check:NumberCheck
 
   constructor(defaultValue:number = 0, msg = "@validations.number.number" ) {
-    super(defaultValue, NumberRestrictions)
+    super(defaultValue, NumberRestrictionDefaults)
     this.applyCheck(Checks.number())
   }
 
