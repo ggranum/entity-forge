@@ -7,10 +7,10 @@ import {Checks} from "./index";
   describe('Check', function () {
 
 
-    describe('Checks.exists', function () {
+    describe('Checks.notNull', function () {
 
       it('returns true for real values', function () {
-        let c = Checks.any().exists()
+        let c = Checks.any().notNull()
 
         let valid:any[] = ["", 1, 1.0, c, {}, ():any=> null, []]
 
@@ -20,7 +20,7 @@ import {Checks} from "./index";
       })
 
       it('returns false for null and undefined values', function () {
-        let c = Checks.any().exists()
+        let c = Checks.any().notNull()
         let y:any = null
         let z:any = undefined
         let invalid = [null, undefined, y, z]
@@ -59,7 +59,7 @@ import {Checks} from "./index";
         it("returns validation failure message if input is a string.", function () {
           let c = Checks.number()
           let result = c.validate("Not a number.")
-          expect(result).toBeDefined()
+          expect(result).toBeTruthy("The value should not be allowed.")
           expect(result.number).toBeDefined()
         })
 
@@ -78,14 +78,14 @@ import {Checks} from "./index";
         it("#min inclusive=false check returns validation failure message if input is equal to the specified min value", function () {
           let c = Checks.number().min(100, false)
           let result = c.validate(100)
-          expect(result).toBeDefined()
+          expect(result).toBeTruthy("The value should not be allowed.")
           expect(result.min).toBeDefined()
         })
 
         it("#min check returns only 'number' validation failure message if input is a string", function () {
           let c = Checks.number().min(100)
           let result = c.validate("12")
-          expect(result).toBeDefined()
+          expect(result).toBeTruthy("The value should not be allowed.")
           expect(result.number).toBeDefined()
           expect(result.min).toBeUndefined()
         })
@@ -102,17 +102,17 @@ import {Checks} from "./index";
           expect(result).toBeNull()
         })
 
-        it("#max check returns validation failure message if input is equal to the specified max value", function () {
-          let c = Checks.number().max(100)
+        it("#max inclusive=false check returns validation failure message if input is equal to the specified max value", function () {
+          let c = Checks.number().max(100, false)
           let result = c.validate(100)
-          expect(result).toBeDefined()
+          expect(result).toBeTruthy("The value should not be allowed.")
           expect(result.max).toBeDefined()
         })
 
         it("#max check returns only 'number' validation failure message if input is a string", function () {
           let c = Checks.number().max(100)
           let result = c.validate("12")
-          expect(result).toBeDefined()
+          expect(result).toBeTruthy("The value should not be allowed.")
           expect(result.number).toBeDefined()
           expect(result.max).toBeUndefined()
         })

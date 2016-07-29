@@ -1,38 +1,64 @@
 import {Check} from "./check";
 import {Validators, MinValidator, MaxValidator} from "../validator/index";
+import {
+  FluentNumberRestrictions,
+  NumberRestrictions,
+  RangeLimitRestriction
+} from "../validator/restriction/restriction";
 
 
-export class NumberCheck extends Check {
+export class NumberCheck extends Check implements FluentNumberRestrictions {
 
-  static number():NumberCheck {
-    let v = new NumberCheck()
-    return v.isNumber()
+  restrictions: NumberRestrictions
+
+  constructor() {
+    super()
+    this.isNumber()
   }
 
-  static int():NumberCheck {
+  static number(): NumberCheck {
+    return new NumberCheck()
+  }
+
+  static int(): NumberCheck {
     let v = new NumberCheck()
     return v.isInt()
   }
 
-  isNumber():NumberCheck {
-    this.add(Validators.isNumber, Validators.exists)
-    return this
+  isNumber(): this {
+    this.restrictions.numeric = true
+    return this._init()
   }
 
-  isInt():NumberCheck {
-    this.add(Validators.isInt, Validators.exists)
-    return this
+  isInt(): this {
+    this.restrictions.integral = true
+    return this._init()
   }
 
-  min(min:number, inclusive:boolean = true):NumberCheck {
-    this.add(new MinValidator(min, inclusive), Validators.isNumber, Validators.exists)
-    return this
+  min(value: number, inclusive?: boolean): this {
+    this.restrictions.min = {value: value, inclusive: inclusive !== false}
+    return this._init()
   }
 
-  max(max:number, inclusive:boolean = false):NumberCheck {
-    this.add(new MaxValidator(max, inclusive), Validators.isNumber, Validators.exists)
-    return this
+  max(value: number, inclusive?: boolean): this {
+    this.restrictions.max = {value: value, inclusive: inclusive !== false}
+    return this._init()
   }
+
+  _doInit() {
+    if (this.restrictions.integral) {
+      this.add(Validators.isInt, Validators.notNull)
+    } else {
+      this.add(Validators.isNumber, Validators.notNull)
+    }
+    if (this.restrictions.min) {
+      this.add(new MinValidator(this.restrictions.min.value, this.restrictions.min.inclusive), Validators.isNumber, Validators.notNull)
+    }
+    if (this.restrictions.max) {
+      this.add(new MaxValidator(this.restrictions.max.value, this.restrictions.max.inclusive), Validators.isNumber, Validators.notNull)
+    }
+  }
+
 
 }
 

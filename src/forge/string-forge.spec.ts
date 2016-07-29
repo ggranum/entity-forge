@@ -6,7 +6,7 @@ import {DataGen} from "../generate/data-gen";
   let EF = EntityForge
 
 
-  describe('EntityForge.string', function () {
+  describe('StringForge', function () {
     beforeEach(function () {
     });
 
@@ -135,7 +135,7 @@ import {DataGen} from "../generate/data-gen";
   })
 
 
-  describe('EntityForge.string.accessors', function () {
+  describe('StringForge.string.accessors', function () {
 
     it('handles minLength == maxLength on set operation', function () {
       let Model = EF.obj({
@@ -157,7 +157,7 @@ import {DataGen} from "../generate/data-gen";
   describe('EntityForge.string.generate', function () {
 
     it('generates random strings', function () {
-      let forge = EF.string().notNull().minLength(25).maxLength(50).allowCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
+      let forge = EF.string().notNull().minLength(25).maxLength(50).allowedCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
       let ex = forge.gen()
       expect(ex).toBeDefined()
       expect(ex.length).toBeGreaterThan(24)
@@ -169,7 +169,7 @@ import {DataGen} from "../generate/data-gen";
      */
     it('is reproducibly random', function () {
       expect(Math.seedrandom).toBeDefined("This test requires Math.seedrandom: see https://github.com/davidbau/seedrandom")
-      let forge = EF.string().notNull().minLength(25).maxLength(50).allowCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
+      let forge = EF.string().notNull().minLength(25).maxLength(50).allowedCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
       Math.seedrandom(100)
       let first:DataGen[] = []
       first.push(forge.gen(), forge.gen(), forge.gen())

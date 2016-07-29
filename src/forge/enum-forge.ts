@@ -1,48 +1,32 @@
-import {Forge} from "./forge";
-import {ObjectRestrictionDefaults} from "../validator/restriction/restriction";
-import {Checks} from "../check/index";
+import {Forge, BeforeIgnitionEvent} from "./forge";
 import {EnumGen} from "../generate/enum-gen";
 export class EnumForge extends Forge {
 
-
-
-  constructor(defaultValue:any = null, msg = "@validations.enumeration.enumeration") {
-    super(defaultValue)
-    this.restrictions = Object.assign({}, this.restrictions, {values: []}, ObjectRestrictionDefaults)
-
-    // this.applyValidation({
-    //   name: 'enumeration',
-    //   fn: (v) => v === null || EnumForge.isMember(this.restrictions.values, v),
-    //   msg: msg, abortOnFail: true
-    // })
-    this._check = Checks.any()
-
+  constructor() {
+    super()
   }
 
+  static enumeration(defaultValue?:any) {
+    return new EnumForge().initTo(defaultValue)
+  }
+
+
   ignite() {
-    if (this.restrictions.notNull && this.defaultValue == null) {
-      this.initTo(this.restrictions.values[0])
+    if (this._check.restrictions.notNull && this.defaultValue === undefined ) {
+      this.initTo(this._check.restrictions.isOneOf[0])
     }
     super.ignite()
   }
 
-
-  static enumeration(defaultValue:any = null, msg = "@validations.enumeration.enumeration") {
-    return new EnumForge(defaultValue, msg)
-  }
-
-  values(values:any) {
-    this.restrictions.values = values
-    this._check.isOneOf(this.restrictions.values)
-
+  values(values: any[]) {
+    this._check.isOneOf(values)
     return this
   }
-
 }
 
 
-Forge.onBeforeIgnition(EnumForge, function (event:any) {
-  let dataGen = new EnumGen(event.forge.restrictions)
+Forge.onBeforeIgnition(EnumForge, function (event: BeforeIgnitionEvent) {
+  let dataGen = new EnumGen(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

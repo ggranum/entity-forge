@@ -1,3 +1,4 @@
+"use strict";
 import {NumberGen} from "./number-gen";
 
 
@@ -24,7 +25,7 @@ import {NumberGen} from "./number-gen";
      */
     it("Should generate integers between a range.", function(){
       let cfg = {min: -100, max:100}
-      let gen = new NumberGen(cfg).isInt()
+      let gen = new NumberGen().isInt().min(cfg.min, true).max(cfg.max, true)
       let seed = 1003
       Math.seedrandom(seed)
 

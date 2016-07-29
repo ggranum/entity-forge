@@ -4,7 +4,7 @@ import {IsBooleanValidator} from "./boolean";
 import {IsStringValidator} from "./string";
 import {IsArrayValidator} from "./array";
 import {IsNumberValidator, IsIntValidator} from "./number";
-import {IsFunctionValidator, IsObjectValidator, ExistsValidator} from "./object";
+import {IsFunctionValidator, IsObjectValidator, NotNullValidator} from "./object";
 
 
 
@@ -12,7 +12,7 @@ import {IsFunctionValidator, IsObjectValidator, ExistsValidator} from "./object"
 
 
 let Validators = {
-  exists: new ExistsValidator(),
+  notNull: new NotNullValidator(),
   isObject: new IsObjectValidator(),
   isFunction: new IsFunctionValidator(),
   isArray: new IsArrayValidator(),
@@ -32,7 +32,7 @@ export {
   IsStringValidator,
   IsArrayValidator
 };
-export {ExistsValidator, IsOneOfValidator, IsObjectValidator, IsFunctionValidator} from "./object";
+export {NotNullValidator, IsOneOfValidator, IsObjectValidator, IsFunctionValidator} from "./object";
 export {IsIntValidator, IsNumberValidator,MaxValidator, MinValidator} from "./number";
 export {MaxLengthValidator, MinLengthValidator, Strings, CodePointsValidator} from "./string";
 export {MaxSizeValidator, MinSizeValidator} from "./array";

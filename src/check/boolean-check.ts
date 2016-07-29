@@ -1,5 +1,6 @@
 import {Check} from "./check";
-import {Validators} from "../validator/index";
+
+
 export class BooleanCheck extends Check {
 
   static boolean() {
@@ -8,7 +9,12 @@ export class BooleanCheck extends Check {
   }
 
   isBoolean() {
-    this.add(Validators.isBoolean, Validators.exists)
+    this.restrictions.isBoolean = true
+    return this
+  }
+
+
+  _doInit(): this {
     return this
   }
 }

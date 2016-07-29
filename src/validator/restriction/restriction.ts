@@ -1,43 +1,97 @@
-
-export interface CommonRestrictions {notNull: boolean; values: any}
-export const CommonRestrictionDefaults: CommonRestrictions = {
-  notNull: false,
-  values: null
+export interface RangeLimitRestriction {
+  value: number,
+  inclusive?: boolean
 }
 
-export interface ObjectRestrictions extends CommonRestrictions {}
-export const ObjectRestrictionDefaults:ObjectRestrictions = Object.assign({}, CommonRestrictionDefaults)
+export interface RangeRestriction {
+  min: RangeLimitRestriction,
+  max: RangeLimitRestriction,
+}
 
-export interface BooleanRestrictions extends CommonRestrictions {}
-export const BooleanRestrictionDefaults:BooleanRestrictions = Object.assign({isBoolean: true}, CommonRestrictionDefaults)
+
+export interface CommonRestrictions {
+  isFunction?: boolean
+  isObject?: boolean
+  isBoolean?: boolean
+  notNull?: boolean
+  isOneOf?: any[]
+}
+
+export interface FluentCommonRestrictions {
+  isFunction(): this
+  isObject(): this
+  isBoolean(): this
+  notNull(): this
+  isOneOf(values: any[]): this
+}
+
+
+export const CommonRestrictionDefaults: CommonRestrictions = {
+  isFunction: false,
+  isObject: false,
+  notNull: false,
+  isOneOf: null
+
+}
+
+export interface ObjectRestrictions extends CommonRestrictions {
+}
+export const ObjectRestrictionDefaults: ObjectRestrictions = Object.assign({}, CommonRestrictionDefaults)
+
+export interface BooleanRestrictions extends CommonRestrictions {
+}
+export const BooleanRestrictionDefaults: BooleanRestrictions = Object.assign({isBoolean: true}, CommonRestrictionDefaults)
+
+export interface FluentNumberRestrictions {
+  isNumber(): this
+  isInt(): this
+  min(value: number, inclusive?: boolean): this
+  max(value: number, inclusive?: boolean): this
+}
 
 export interface NumberRestrictions extends CommonRestrictions {
-  isNumber: boolean
-  integral: boolean
-  min: number
-  max: number
+  numeric?: boolean
+  integral?: boolean
+  min?: RangeLimitRestriction
+  max?: RangeLimitRestriction
 }
-export const NumberRestrictionDefaults:NumberRestrictions = Object.assign({
-  isNumber: true,
+let x: NumberRestrictions = {
+  numeric: true,
   integral: false,
-  min: Number.MIN_VALUE,
-  max: Number.MAX_VALUE,
-}, CommonRestrictionDefaults)
+  min: {
+    value: Number.MIN_VALUE,
+    inclusive: false
+  },
+  max: {
+    value: Number.MAX_VALUE,
+    inclusive: false
+  },
+}
+export const NumberRestrictionDefaults: NumberRestrictions = Object.assign(x, CommonRestrictionDefaults)
 
 
-export interface StringRestrictions extends CommonRestrictions{
-  isString: boolean
-  minLength: number
-  maxLength: number
-  allowedCodePoints: number[]
-  matchesRegex: any
-  notMatchesRegex: any
+export interface FluentStringRestrictions {
+  isString(): this
+  minLength(value: number, inclusive?: boolean): this
+  maxLength(value: number, inclusive?: boolean): this
+  allowedCodePoints(values: number[]): this
+  matchesRegex(value: string|RegExp, negate?: boolean): this
+  notMatchesRegex(value: string|RegExp): this
+}
+
+export interface StringRestrictions extends CommonRestrictions {
+  isString?: boolean
+  minLength?: RangeLimitRestriction
+  maxLength?: RangeLimitRestriction
+  allowedCodePoints?: number[]
+  matchesRegex?: any
+  notMatchesRegex?: any
 }
 
 export const StringRestrictionDefaults: StringRestrictions = Object.assign({
   isString: true,
-  minLength: 0,
-  maxLength: 1024,
+  minLength: {value: 0, inclusive:true},
+  maxLength: {value: 1024, inclusive:true},
   allowedCodePoints: [0x9, 0x14, 0x20, 0x7E],
   matchesRegex: null,
   notMatchesRegex: null

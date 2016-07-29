@@ -1,17 +1,17 @@
 import {Validator} from "./validator";
-class ExistsValidator extends Validator {
+export class NotNullValidator extends Validator {
   check(value:any):boolean {
     return !(value === null || value === undefined)
   }
 }
-Object.assign(ExistsValidator.prototype, {
+Object.assign(NotNullValidator.prototype, {
   ordinal: 1,
-  name: 'exists',
-  message: '@restriction.exists'
+  name: 'notNull',
+  message: '@restriction.notNull'
 })
 
 
-class IsOneOfValidator extends Validator {
+export class IsOneOfValidator extends Validator {
   constructor(values:any[]) {
     super({values: values})
   }
@@ -32,7 +32,7 @@ Object.assign(IsOneOfValidator.prototype, {
 })
 
 
-class IsObjectValidator extends Validator {
+export class IsObjectValidator extends Validator {
   constructor() {
     super()
   }
@@ -48,7 +48,7 @@ Object.assign(IsObjectValidator.prototype, {
 })
 
 
-class IsFunctionValidator extends Validator {
+export class IsFunctionValidator extends Validator {
   constructor() {
     super()
   }
@@ -64,4 +64,3 @@ Object.assign(IsFunctionValidator.prototype, {
 })
 
 
-export {ExistsValidator, IsFunctionValidator,IsObjectValidator, IsOneOfValidator}

@@ -5,7 +5,8 @@ Strings = {
   COMMON_UTF_RANGES: {
     ASCII: [0, 127],
     PRINTABLE_ASCII: [0x9, 0x14, 0x20, 0x7E],
-    UTF_PLANE_BMP: [0x00, 0xFFFF],
+    // See https://en.wikibooks.org/wiki/Unicode/Character_reference/D000-DFFF for explanation of middle gap.
+    UTF_PLANE_BMP: [0x00, 0xD800, 0xE000, 0xFFFF],
     UTF_PRINTABLE_LATIN_IPA: null,
     UTF_PRINTABLE_PLANE_BMP: null
   }
@@ -80,6 +81,7 @@ class CodePointsValidator extends Validator {
     for (let i = 0; i < L; i++) {
       result = this.isCharInRange(value.codePointAt(i), this.args.codePointRanges)
       if (!result) {
+        debugger
         break
       }
     }

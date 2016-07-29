@@ -3,10 +3,10 @@ import {EntityForge} from "./index";
 
   let EF = EntityForge
 
-  describe('EntityForge.model', function () {
+  describe('ObjectForge.model', function () {
 
-    let UserContactForge:any
-    let UserForge:any
+    let UserContactForge: any
+    let UserForge: any
 
     beforeEach(function () {
       UserContactForge = EF.obj({
@@ -30,22 +30,33 @@ import {EntityForge} from "./index";
     describe("DataGen", function () {
 
       it("can generate a simple model instance.", function () {
-        UserForge = EF.obj({
-          uuid: EF.string().minLength(20).maxLength(20).notNull(),
-          email: EF.string().minLength(5).maxLength(255).notNull(),
-          name: EF.string().minLength(10).maxLength(25).notNull()
-        })
+        try {
+          UserForge = EF.obj({
+            uuid: EF.string().minLength(20).maxLength(20).notNull(),
+            email: EF.string().minLength(5).maxLength(255).notNull(),
+            name: EF.string().minLength(10).maxLength(25).notNull()
+          })
+        } catch (e) {
+          console.log(e)
+          throw e
+        }
         Math.seedrandom(100)
         for (let i = 0; i < 100; i++) {
-          let user = UserForge.gen()
-          expect(user).toBeDefined("Should create a user.")
-          expect(user.name).toBeDefined("Name field not generated: " + i)
-          expect(user.uuid).toBeDefined("uuid field not generated: " + i)
-          expect(user.email).toBeDefined("Email field not generated: " + i)
-          expect(user.uuid.length).toBe(20)
-          expect(user.name.length).toBeGreaterThan(9)
-          expect(user.name.length).toBeLessThan(26)
+          try {
+            let user = UserForge.gen()
+            expect(user).toBeDefined("Should create a user.")
+            expect(user.name).toBeDefined("Name field not generated: " + i)
+            expect(user.uuid).toBeDefined("uuid field not generated: " + i)
+            expect(user.email).toBeDefined("Email field not generated: " + i)
+            expect(user.uuid.length).toBe(20)
+            expect(user.name.length).toBeGreaterThan(9)
+            expect(user.name.length).toBeLessThan(26)
+          } catch (e) {
+            console.log(i, e)
+            throw e
+          }
         }
+
       })
     })
 
@@ -70,7 +81,7 @@ import {EntityForge} from "./index";
         ).asNewable()
 
         let uc = new UserContact()
-        let e:any = null
+        let e: any = null
         try {
           uc.name = "aa"
         } catch (error) {
@@ -84,7 +95,7 @@ import {EntityForge} from "./index";
       it("validates child objects set using '='", function () {
         let UserContact = UserContactForge.asNewable()
         let contact = new UserContact()
-        let e:any
+        let e: any
         try {
           contact.address = {
             line1: "bob",
@@ -110,8 +121,8 @@ import {EntityForge} from "./index";
             line1: line1Val
           })
         })
-        let e:any
-        let contact:any
+        let e: any
+        let contact: any
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
@@ -141,8 +152,8 @@ import {EntityForge} from "./index";
             line1: line1Val
           })
         })
-        let e:any
-        let contact:any
+        let e: any
+        let contact: any
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
@@ -172,8 +183,8 @@ import {EntityForge} from "./index";
             line1: line1Val
           })
         })
-        let e:any
-        let contact:any
+        let e: any
+        let contact: any
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()

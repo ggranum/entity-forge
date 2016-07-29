@@ -1,13 +1,16 @@
 import {DataGen} from "./data-gen";
-import {StringRestrictionDefaults} from "../validator/restriction/restriction";
+import {StringRestrictionDefaults, StringRestrictions} from "../validator/restriction/restriction";
 
 
 export class StringGen extends DataGen {
-  constructor(cfg:any = null) {
+
+  restrictions:StringRestrictions
+
+  constructor(cfg:StringRestrictions = null) {
     super(cfg, StringRestrictionDefaults)
   }
 
-  allowCodePoints(codePointRanges:number[]) {
+  allowedCodePoints(codePointRanges:number[]) {
     this.restrictions.allowedCodePoints = codePointRanges
     return this
   }
@@ -15,14 +18,29 @@ export class StringGen extends DataGen {
   gen() {
     let data = super.gen()
     if (data !== null) {
-      let range = this.restrictions.maxLength - this.restrictions.minLength
-      let charCount = this.restrictions.minLength + Math.floor(Math.random() * range)
-      data = ""
+      let { start, range} = this._range()
+      let charCount = start + Math.floor(Math.random() * range)
+      data = []
       for (let i = 0; i < charCount; i++) {
-        data += this._generateChar()
+        data[i] = this._generateChar()
       }
+      data = data.join('')
     }
     return data
+  }
+
+  private _range():{start:number, range:number}{
+    let range:number
+    let {value: max, inclusive: maxI} = this.restrictions.maxLength
+    let {value: min, inclusive: minI} = this.restrictions.minLength
+    if(maxI === false){
+      max--
+    }
+    if(minI === false){
+      min++
+    }
+    range = max - min
+    return {start: min, range:range}
   }
 
   _generateChar() {

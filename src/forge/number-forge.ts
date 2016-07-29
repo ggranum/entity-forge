@@ -1,79 +1,51 @@
-
-
-import {Forge} from "./forge";
-import {NumberRestrictionDefaults} from "../validator/restriction/restriction";
-import {Checks} from "../check/index";
+import {Forge, BeforeIgnitionEvent} from "./forge";
+import {FluentNumberRestrictions} from "../validator/restriction/restriction";
 import {NumberCheck} from "../check/number-check";
 import {NumberGen} from "../generate/number-gen";
-export class NumberForge extends Forge {
+export class NumberForge extends Forge implements FluentNumberRestrictions{
 
   _check:NumberCheck
 
-  constructor(defaultValue:number = 0, msg = "@validations.number.number" ) {
-    super(defaultValue, NumberRestrictionDefaults)
-    this.applyCheck(Checks.number())
+  constructor(checkOverride?:NumberCheck) {
+    super(checkOverride || new NumberCheck().autoInit(false))
   }
 
-  /**
-   *
-   * @param defaultValue
-   * @param msg
-   * @returns {NumberForge}
-   */
-  static number(defaultValue = 0, msg = "@validations.number.number") {
-    return new NumberForge(defaultValue, msg)
+  static number(defaultValue:number = 0):NumberForge {
+    return new NumberForge().initTo(defaultValue)
   }
 
-  /**
-   *
-   * @param defaultValue
-   * @param msg
-   * @returns {NumberForge}
-   */
-  static int(defaultValue:number = 0, msg = "@validations.number.int") {
-    let forge = new NumberForge(defaultValue, msg)
-    return forge.integer(msg)
+  static int(defaultValue:number = 0):NumberForge {
+    let forge = new NumberForge().initTo(defaultValue)
+    return forge.isInt()
   }
 
-  /**
-   *
-   * @param msg
-   * @returns {NumberForge}
-   */
-  integer(msg = "@validations.number.int"){
-    this.restrictions.integral = true
-    this.restrictions.min = this.restrictions.min === Number.MIN_VALUE ? Number.MIN_SAFE_INTEGER : this.restrictions.min
-    this.restrictions.max = this.restrictions.max === Number.MAX_VALUE ? Number.MAX_SAFE_INTEGER : this.restrictions.max
+  isNumber():this {
+    this._check.isNumber()
+    return this
+  }
+
+  isInt():this{
     this._check.isInt()
     return this
   }
 
-  /**
-   *
-   * @param min
-   * @param msg
-   * @returns {NumberForge}
-   */
-  min(min:number, msg = "@validations.number.min") {
-    this.restrictions.min = min
-    this._check.min(min)
+  min(value:number, inclusive?:boolean):this {
+    this._check.min(value, inclusive !== false)
     return this
   }
 
   /**
    * @returns {NumberForge}
    */
-  max(max:number, msg = "@validations.number.max") {
-    this.restrictions.max = max
-    this._check.max(max)
+  max(value:number, inclusive?:boolean):this {
+    this._check.max(value, inclusive !== false)
     return this
   }
-
 }
 
 
-Forge.onBeforeIgnition(NumberForge, function (event:any) {
-  let dataGen = new NumberGen(event.forge.restrictions)
+Forge.onBeforeIgnition(NumberForge, function (event:BeforeIgnitionEvent) {
+  let dataGen = new NumberGen(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

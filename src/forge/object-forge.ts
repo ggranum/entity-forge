@@ -1,5 +1,4 @@
-import {Forge} from "./forge";
-import {ObjectRestrictionDefaults} from "../validator/restriction/restriction";
+import {Forge, BeforeIgnitionEvent} from "./forge";
 import {DescendantValidator} from "./descendant-validator";
 import {Validators} from "../validator/index";
 import {EntityType} from "./entity-type";
@@ -39,16 +38,16 @@ import {ObjectGen} from "../generate/object-gen";
  */
 export class ObjectForge extends Forge {
   private entityType:any = null
-  private fieldDefinitions:any
+  fieldDefinitions:any
 
-  constructor(fields:any = {}, defaultValue:any = null, msg = "@validations.object.object", fieldName:string = null) {
-    super(defaultValue, ObjectRestrictionDefaults)
+  constructor(fields:any = {}, fieldName:string = null) {
+    super()
     this.fieldDefinitions = fields || {}
     this.fieldName = fieldName
-    this.applyValidation(new DescendantValidator(this), Validators.exists)
   }
 
   ignite() {
+    this._check.add(new DescendantValidator(this), Validators.notNull)
     if (!this.entityType) {
       this.entityType = this.createTypeDefinition()
     }
@@ -152,25 +151,24 @@ export class ObjectForge extends Forge {
    * Create an ObjectForge. The Object forge contains child Forges as fields, including other Object forges.
    * @param fields
    * @param defaultValue
-   * @param msg
    * @param fieldName
    * @returns {ObjectForge}
    */
-  static obj(fields:any = {}, defaultValue:any = null, msg = "@validations.object.object", fieldName:string = '') {
-    return new ObjectForge(fields, defaultValue, msg, fieldName)
+  static obj(fields:any = {}, defaultValue:any = null, fieldName:string = '') {
+    return new ObjectForge(fields, fieldName).initTo(defaultValue)
   }
 }
 
 
 
-Forge.onBeforeIgnition(ObjectForge, function (event:any) {
-  let forge = event.forge
+Forge.onBeforeIgnition(ObjectForge, function (event:BeforeIgnitionEvent) {
+  let forge:ObjectForge = <ObjectForge>event.forge
   let childFields = {}
   Object.keys(forge.fieldDefinitions).forEach((fieldName)=>{
     let fieldDef = forge.fieldDefinitions[fieldName]
     childFields[fieldName] = fieldDef.dataGen
   })
-  let dataGen = new ObjectGen(forge.restrictions).base(()=> forge.newInstance()).childFields(childFields)
+  let dataGen = new ObjectGen(event.restrictions).base(()=> forge.newInstance()).childFields(childFields)
   forge.dataGen = dataGen
   forge.gen = () => dataGen.gen()
 })

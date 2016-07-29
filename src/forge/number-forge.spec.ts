@@ -3,7 +3,7 @@ import {EntityForge} from "./index";
   let EF = EntityForge
 
 
-  describe('EntityForge.int', function () {
+  describe('NumberForge #int', function () {
     beforeEach(function () {
     });
 
@@ -44,11 +44,12 @@ import {EntityForge} from "./index";
       let disallowed:any = ['1', 1.001, "bob", ((x:any)=> false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
-        expect(result).toBeDefined()
+        expect(result).toBeTruthy("The value '" + disallowed[i] + "' should not be allowed.")
         expect(result.number || result.int).toBeDefined(disallowed[i] + " should not be allowed.")
       }
     });
-    describe('Generation', function () {
+
+    describe('#gen', function () {
 
       it('Generates random integers', function () {
         let forge = EF.int()
@@ -56,7 +57,7 @@ import {EntityForge} from "./index";
         expect(ex).toBeDefined()
       })
 
-      it('Can generate null ints when null values allowed: ', function () {
+      it('Generates null integers when null values allowed: ', function () {
         Math.seedrandom(100)
         let forge = EF.int().min(0).max(3)
         let values = [0, 1, 2, 3, null]

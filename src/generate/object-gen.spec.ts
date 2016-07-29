@@ -25,7 +25,7 @@ import {StringGen} from "./string-gen";
     it("should generate random string children when provided with a string generator as a child field.", function(){
       let gen = new ObjectGen({notNull: true})
       gen.childFields({
-        aString: new StringGen({minLength: 2, maxLength: 5, notNull: true})
+        aString: new StringGen({minLength: {value:2}, maxLength: {value:5}, notNull: true})
       })
       for (let i = 0; i < 1000; i++) {
         let x = gen.gen()

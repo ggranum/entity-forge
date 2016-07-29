@@ -15,7 +15,7 @@ Object.assign(IsNumberValidator.prototype, {
 
 export class IsIntValidator extends Validator {
   check(value:any):boolean {
-    return (value % 1 === 0)
+    return (typeof value === 'number' || value instanceof Number) && (value % 1 === 0)
   }
 }
 Object.assign(IsIntValidator.prototype, {
@@ -25,9 +25,8 @@ Object.assign(IsIntValidator.prototype, {
 })
 
 export class MaxValidator extends Validator {
-  constructor(max = Number.MAX_VALUE, inclusive = false) {
+  constructor(max = Number.MAX_VALUE, inclusive:boolean = false) {
     super({max: max, inclusive: inclusive})
-
   }
 
   check(value:any):boolean {
@@ -46,7 +45,7 @@ Object.assign(MaxValidator.prototype, {
 
 
 export class MinValidator extends Validator {
-  constructor(min = Number.MIN_VALUE, inclusive = true) {
+  constructor(min = Number.MIN_VALUE, inclusive:boolean = true) {
     super({min: min, inclusive: inclusive})
   }
 

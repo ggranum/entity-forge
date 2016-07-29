@@ -1,35 +1,38 @@
-import {CommonRestrictionDefaults} from "../validator/restriction/restriction";
 import {Checks} from "../check/index";
 import {Check} from "../check/check";
 import {ValidateFailedError} from "./validate-failed-error";
-import {ExistsValidator} from "../validator/object";
 import {ConfigurationError} from "./configuration-error";
 import {Validator} from "../validator/validator";
 import {DataGen} from "../generate/data-gen";
+import {CommonRestrictions} from "../validator/restriction/restriction";
 
+
+export interface BeforeIgnitionEvent {
+  key:string
+  forge:Forge
+  restrictions:CommonRestrictions
+}
 
 let beforeIgnitionListeners = {}
 export class Forge {
-  private _defaultValue:any = null
-  private _lit:boolean = false
-  private _immutable:boolean = false
-  private _errorsAsEvents:boolean = false
-  fieldName:string = null
-  private parentFieldName:string = null
-  private _enumerable:boolean = false
-  private _transactional:boolean = false
-  private _version:number = null
-  private _versionFieldName:string = 'version'
-  private dataGen:DataGen
-  restrictions:any
-  _check:Check
+  private _defaultValue: any = null
+  private _lit: boolean = false
+  private _immutable: boolean = false
+  private _errorsAsEvents: boolean = false
+  fieldName: string = null
+  private parentFieldName: string = null
+  private _enumerable: boolean = false
+  private _transactional: boolean = false
+  private _version: number = null
+  private _versionFieldName: string = 'version'
+  dataGen: DataGen
+  _check: Check
 
-  constructor(defaultValue:any = null, restrictions:any = null) {
-    this._defaultValue = defaultValue
-    this.restrictions = Object.assign({}, CommonRestrictionDefaults, restrictions)
+  constructor(checkOverride?:Check) {
+    this._check = checkOverride || new Check().autoInit(false)
   }
 
-  static onBeforeIgnition(targetType:any, listenerFn:Function) {
+  static onBeforeIgnition(targetType: any, listenerFn: Function) {
     let ary = beforeIgnitionListeners['' + targetType] || []
     ary.push({fn: listenerFn})
     beforeIgnitionListeners[targetType] = ary
@@ -38,7 +41,7 @@ export class Forge {
   /**
    * @returns {*}
    */
-  newInstance(defaultOverride:any = null) {
+  newInstance(defaultOverride: any = null) {
     return defaultOverride === null ? this.defaultValue : defaultOverride
   }
 
@@ -47,11 +50,11 @@ export class Forge {
    * @param {Validator[]} preconditions
    * @returns {Forge}
    */
-  applyValidation(validation:Validator, ...preconditions:Validator[]):this {
+  private applyValidation(validation: Validator, ...preconditions: Validator[]): this {
     if (!this._check) {
       this._check = Checks.any()
     }
-    this._check.add(validation, ...preconditions)
+    // this._check.add(validation, ...preconditions)
     return this
   }
 
@@ -59,11 +62,11 @@ export class Forge {
    * @param {Check} check
    * @returns {Forge}
    */
-  applyCheck(check:Check) {
+  private applyCheck(check: Check) {
     if (!this._check) {
       this._check = check
     } else {
-      this._check.addConstraints(check.constraints)
+      // this._check.addConstraints(check)
     }
     return this
   }
@@ -72,13 +75,14 @@ export class Forge {
     return this._defaultValue
   }
 
-  validate(value:any) {
+  validate(value: any) {
+    this._check.init()
     return this._check.validate(value)
   }
 
-  forgeSetter(privateFieldName:string) {
+  forgeSetter(privateFieldName: string) {
     let fieldForge = this
-    return function (value:any) {
+    return function (value: any) {
       let r = fieldForge.validate(value)
       if (r == null) {
         this[privateFieldName] = value
@@ -88,7 +92,7 @@ export class Forge {
     }
   }
 
-  forgeGetter(privateFieldName:string) {
+  forgeGetter(privateFieldName: string) {
     return function () {
       return this[privateFieldName]
     }
@@ -97,7 +101,7 @@ export class Forge {
 
   /* Fluent configuration calls */
 
-  static any(){
+  static any() {
     return new Forge()
   }
 
@@ -108,7 +112,7 @@ export class Forge {
    * @param defaultValue
    * @returns {Forge}
    */
-  initTo(defaultValue:any) {
+  initTo(defaultValue: any):this {
     this._defaultValue = defaultValue;
     return this
   }
@@ -154,12 +158,10 @@ export class Forge {
 
   /**
    * Forged instances/fields-values cannot be set to null or undefined.
-   * @param msg
-   * @returns {*}
    */
-  notNull(msg:string = "@validations.notNull"):this {
-    this.restrictions.notNull = true
-    return this.applyValidation(new ExistsValidator())
+  notNull(): this {
+    this._check.notNull()
+    return this
   }
 
   /*****  Forge directives.  ******/
@@ -188,7 +190,7 @@ export class Forge {
    * @param {boolean} isEnumerable
    * @returns {Forge}
    */
-  enumerable(isEnumerable:boolean = true) {
+  enumerable(isEnumerable: boolean = true) {
     this._enumerable = isEnumerable
     return this
   }
@@ -202,7 +204,7 @@ export class Forge {
    * @param {string} fieldName
    * @returns {Forge}
    */
-  version(version:number = 1, fieldName:string = "version") {
+  version(version: number = 1, fieldName: string = "version") {
     this._version = version
     this._versionFieldName = fieldName
     return this
@@ -214,14 +216,14 @@ export class Forge {
    * entries for and we'll just have to try a few times to get it. For example, 'matchesRegex' could be easier to
    * just keep trying at rather than spending time coding up a perfect generation function.
    */
-  gen(additionalGeneratorConfig:any = null) {
+  gen(additionalGeneratorConfig: any = null) {
     this.ignite()
     if (!this.dataGen) {
       throw new ConfigurationError("DataGen package not loaded.")
     }
     if (additionalGeneratorConfig) {
       // @revisit ggranum: Find a better hack for the field/method collisions inherent in fluent JS.
-      Object.keys(additionalGeneratorConfig).forEach((key)=>{
+      Object.keys(additionalGeneratorConfig).forEach((key)=> {
         this.dataGen['_' + key] = additionalGeneratorConfig[key]
       })
     }
@@ -240,19 +242,26 @@ export class Forge {
    */
   ignite() {
     if (!this._lit) {
-      this.fireEvent(beforeIgnitionListeners, {key: 'beforeIgnition', forge: this})
-      if (this.restrictions.notNull && this.defaultValue == null) {
-        throw new ConfigurationError("Cannot create forge: default value is null but null is not allowed. ")
+      this._applyRestrictions()
+      let event:BeforeIgnitionEvent = {key: 'beforeIgnition', forge: this, restrictions: this._check.restrictions}
+      this.fireEvent(beforeIgnitionListeners, event)
+      if (this._check.restrictions.notNull && this.defaultValue == null) {
+        throw new ConfigurationError(`Cannot create forge for '${this.fieldName || '[unknown]'}': default value is null but null is not allowed. `)
       }
       this._lit = true
       Object.freeze(this)
     }
+
   }
 
-  fireEvent(listeners:any, event:any) {
+  _applyRestrictions() {
+    this._check.init()
+  }
+
+  fireEvent(listeners: any, event: any) {
     let fail = false
-    let listenerAry:any = listeners['' + this.constructor] || []
-    listenerAry.forEach((listener:any)=> {
+    let listenerAry: any = listeners['' + this.constructor] || []
+    listenerAry.forEach((listener: any)=> {
       if (listener.fn(event) === false) {
         fail = true
       }
