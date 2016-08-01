@@ -1,4 +1,4 @@
-import {Validator,} from "../validator/validator";
+import {Validator,} from "@entityforge/validator";
 
 
 let ordinalSortFn = (a:Validator, b:Validator) => {

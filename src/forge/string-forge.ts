@@ -1,8 +1,8 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {Strings} from "../validator/string";
-import {StringCheck} from "../check/string-check";
-import {StringGen} from "../generate/string-gen";
-import {Check} from "../check/check";
+import {Strings} from "@entityforge/validator";
+import {StringCheck, Check} from "@entityforge/check";
+import {StringGen} from "@entityforge/generate";
+
 export class StringForge extends Forge{
 
   _check:StringCheck

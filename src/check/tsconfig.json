@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration":true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "inlineSources": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors":true,
+    "target": "es2015",
+    "outDir": "../../dist/esm/check",
+    "paths": {
+      "@entityforge/validator": ["../../dist/esm/validator"]
+    }
+  },
+  "files":[
+    "index.ts",
+    "check.spec.ts",
+    "../../typings/index.d.ts"
+  ]
+}

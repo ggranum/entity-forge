@@ -1,4 +1,3 @@
-
 import {EntityForge} from "./index";
 (function () {
   let EF = EntityForge

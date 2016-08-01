@@ -1,10 +1,9 @@
-import {Checks} from "../check/index";
-import {Check} from "../check/check";
 import {ValidateFailedError} from "./validate-failed-error";
 import {ConfigurationError} from "./configuration-error";
-import {Validator} from "../validator/validator";
-import {DataGen} from "../generate/data-gen";
-import {CommonRestrictions} from "../validator/restriction/restriction";
+import {Validator, CommonRestrictions} from "@entityforge/validator";
+import {Check, Checks} from "@entityforge/check";
+import {DataGen} from "@entityforge/generate";
+
 
 
 export interface BeforeIgnitionEvent {

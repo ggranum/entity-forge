@@ -99,15 +99,20 @@ var project = {
 
   compile: function (cb) {
     return project.compileStatic(function(){
-      // project.runJspm('dist', function(){
+      project.runJspm('dist', function(){
         project.runJspm('test', function(){
-          var stats = tools.fs.statSync(config.distDir + '/entity-forge-test.js')
-          var size = stats["size"]
-          console.log("Dist build size: ", Math.floor(size/1000) + '.' + (size % 1000 ) + 'kB')
+          project.printSize(config.distDir + '/entity-forge.js')
+          project.printSize(config.distDir + '/entity-forge-test.js')
           cb()
         })
-      // })
+      })
     })
+  },
+
+  printSize(file){
+    var stats = tools.fs.statSync(file)
+    var size = stats["size"]
+    console.log("Dist build size: ", Math.floor(size/1000) + '.' + (size % 1000 ) + 'kB')
   },
 
   compileDist: function (done) {

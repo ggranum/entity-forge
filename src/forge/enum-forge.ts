@@ -1,5 +1,5 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {EnumGen} from "../generate/enum-gen";
+import {EnumGen} from "@entityforge/generate";
 export class EnumForge extends Forge {
 
   constructor() {

@@ -1,5 +1,4 @@
-import {ObjectGen} from "./object-gen";
-import {StringGen} from "./string-gen";
+import {ObjectGen, StringGen} from "./index";
 
 
 (function () {

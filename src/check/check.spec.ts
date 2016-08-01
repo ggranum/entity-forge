@@ -1,17 +1,12 @@
 import {Checks} from "./index";
 
-
-
 (function () {
 
   describe('Check', function () {
-
-
     describe('Checks.notNull', function () {
 
       it('returns true for real values', function () {
         let c = Checks.any().notNull()
-
         let valid:any[] = ["", 1, 1.0, c, {}, ():any=> null, []]
 
         valid.forEach((v:any)=> {

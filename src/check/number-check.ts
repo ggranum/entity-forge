@@ -1,10 +1,6 @@
 import {Check} from "./check";
-import {Validators, MinValidator, MaxValidator} from "../validator/index";
-import {
-  FluentNumberRestrictions,
-  NumberRestrictions,
-  RangeLimitRestriction
-} from "../validator/restriction/restriction";
+import {Validators, MinValidator, MaxValidator, FluentNumberRestrictions,
+  NumberRestrictions} from "@entityforge/validator";
 
 
 export class NumberCheck extends Check implements FluentNumberRestrictions {

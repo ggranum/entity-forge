@@ -1,8 +1,5 @@
-import {Validators, IsOneOfValidator} from "../validator/index";
+import {Validator, Validators, IsOneOfValidator, CommonRestrictions, FluentCommonRestrictions} from "@entityforge/validator";
 import {Constraint} from "./constraint";
-import {Validator} from "../validator/validator";
-import {CommonRestrictions, FluentCommonRestrictions} from "../validator/restriction/restriction";
-import {ConfigurationError} from "../forge/configuration-error";
 
 
 /**

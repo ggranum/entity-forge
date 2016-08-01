@@ -3,11 +3,6 @@ export interface RangeLimitRestriction {
   inclusive?: boolean
 }
 
-export interface RangeRestriction {
-  min: RangeLimitRestriction,
-  max: RangeLimitRestriction,
-}
-
 
 export interface CommonRestrictions {
   isFunction?: boolean
@@ -31,7 +26,6 @@ export const CommonRestrictionDefaults: CommonRestrictions = {
   isObject: false,
   notNull: false,
   isOneOf: null
-
 }
 
 export interface ObjectRestrictions extends CommonRestrictions {

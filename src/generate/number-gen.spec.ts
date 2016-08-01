@@ -1,5 +1,4 @@
-"use strict";
-import {NumberGen} from "./number-gen";
+import {NumberGen} from "./index";
 
 
 (function () {

@@ -1,2 +1,4 @@
-import './forge/index'
+export * from "@entityforge/forge"
+
+
 

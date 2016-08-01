@@ -1,5 +1,4 @@
-import {CommonRestrictionDefaults, FluentCommonRestrictions} from "../validator/restriction/restriction";
-
+import {FluentCommonRestrictions, CommonRestrictionDefaults} from "@entityforge/validator";
 export class DataGen implements FluentCommonRestrictions {
 
 

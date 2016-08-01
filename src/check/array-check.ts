@@ -1,5 +1,5 @@
 import {Check} from "./check";
-import {Validators,MaxSizeValidator, MinSizeValidator} from "../validator/index";
+import {Validators,MaxSizeValidator, MinSizeValidator} from "@entityforge/validator";
 
 export class ArrayCheck extends Check {
 
@@ -18,5 +18,4 @@ export class ArrayCheck extends Check {
     this.add(new MinSizeValidator(min, inclusive), Validators.isArray, Validators.notNull)
     return this
   }
-
 }

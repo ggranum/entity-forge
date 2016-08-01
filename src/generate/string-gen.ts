@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {StringRestrictionDefaults, StringRestrictions} from "../validator/restriction/restriction";
+import {StringRestrictions, StringRestrictionDefaults} from "@entityforge/validator";
 
 
 export class StringGen extends DataGen {

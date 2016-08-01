@@ -1,6 +1,5 @@
 import {DataGen} from "./data-gen";
-import {ObjectRestrictionDefaults} from "../validator/restriction/restriction";
-import {Validators} from "../validator/index";
+import {ObjectRestrictionDefaults, Validators} from "@entityforge/validator";
 
 
 export class ObjectGen extends DataGen {

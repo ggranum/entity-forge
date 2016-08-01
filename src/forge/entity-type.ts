@@ -1,7 +1,3 @@
-
-
-
-
 export class EntityType {
   static defineValidateFn:Function
 
