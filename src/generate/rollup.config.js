@@ -8,12 +8,12 @@ export default {
   moduleName: 'Generate',
   plugins: [ json(), babel() ],
   external: [
-    '@entityforge/validator',
-    '@entityforge/check'
+    'validator/index',
+    'check/index'
   ],
   globals:{
-    '@entityforge/validator': 'Validate',
-    '@entityforge/check': 'Check'
+    'validator/index': 'Validator',
+    'check/index': 'Check'
   }
 
 };

@@ -2,8 +2,8 @@ import {Forge, BeforeIgnitionEvent} from "./forge";
 import {EntityType} from "./entity-type";
 import {DescendantValidator} from "./descendant-validator";
 import {ValidateFailedError} from "./validate-failed-error";
-import {Validators} from "@entityforge/validator";
-import {ObjectGen} from "@entityforge/generate";
+import {Validators} from "validator/index";
+import {ObjectGen} from "generate/index";
 
 
 /**

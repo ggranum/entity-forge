@@ -1,4 +1,4 @@
-import {EnumGen} from "./index";
+import {EnumGen} from "generate/index";
 (function () {
   let someEnumValues = [
     "It is certain",

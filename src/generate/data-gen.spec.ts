@@ -1,4 +1,4 @@
-import {DataGen} from "./index";
+import {DataGen} from "generate/index";
 
 (function () {
   describe("DataGen", function(){

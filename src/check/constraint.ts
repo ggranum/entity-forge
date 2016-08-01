@@ -1,4 +1,4 @@
-import {Validator,} from "@entityforge/validator";
+import {Validator,} from "validator/index";
 
 
 let ordinalSortFn = (a:Validator, b:Validator) => {
@@ -22,14 +22,14 @@ export class Constraint {
     this.preconditions.sort(ordinalSortFn)
   }
 
-  check(value:any):boolean {
+  passes(value:any):boolean {
     return this.validate(value) === null
   }
 
   validate(value:any):any {
     let result:any = null
     let preconditionsPass:boolean = this.preconditions.every((p:Validator)=> {
-      return p.check(value)
+      return p.isValid(value)
     })
     if (preconditionsPass) {
       result = this.primary.validate(value)

@@ -1,5 +1,5 @@
 import {Check} from "./check";
-import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator, StringRestrictions, FluentStringRestrictions} from "@entityforge/validator";
+import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator, StringRestrictions, FluentStringRestrictions} from "validator/index";
 
 
 export class StringCheck extends Check implements FluentStringRestrictions {

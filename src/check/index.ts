@@ -14,3 +14,4 @@ let Checks: {any: (()=>Check); array: (()=>ArrayCheck); boolean: (()=>BooleanChe
 }
 
 export {Checks, Check, ArrayCheck, BooleanCheck, StringCheck, NumberCheck}
+export * from './constraint'

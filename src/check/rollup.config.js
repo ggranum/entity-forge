@@ -1,7 +1,6 @@
 import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
 
-import * as path from 'path';
 export default {
   entry: 'dist/esm/check/index.js',
   dest: 'dist/es3/check/index.js',
@@ -9,9 +8,9 @@ export default {
   moduleName: 'Check',
   plugins: [ json(), babel() ],
   external: [
-    '@entityforge/validator'
+    'validator/index'
   ],
   globals:{
-    '@entityforge/validator': 'Validate'
+    'validator/index': 'Validator'
   }
 };

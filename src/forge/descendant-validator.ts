@@ -1,4 +1,4 @@
-import {Validator} from "@entityforge/validator";
+import {Validator} from "validator/index";
 
 /**
  * Validator that validates child fields.

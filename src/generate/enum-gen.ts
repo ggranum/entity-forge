@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {CommonRestrictions, ObjectRestrictionDefaults} from "@entityforge/validator";
+import {CommonRestrictions, ObjectRestrictionDefaults} from "validator/index";
 
 export class EnumGen extends DataGen {
 

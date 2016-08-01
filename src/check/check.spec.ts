@@ -1,4 +1,4 @@
-import {Checks} from "./index";
+import {Checks} from "check/index";
 
 (function () {
 
@@ -10,7 +10,7 @@ import {Checks} from "./index";
         let valid:any[] = ["", 1, 1.0, c, {}, ():any=> null, []]
 
         valid.forEach((v:any)=> {
-          expect(c.check(v)).toBe(true)
+          expect(c.isValid(v)).toBe(true)
         })
       })
 
@@ -21,7 +21,7 @@ import {Checks} from "./index";
         let invalid = [null, undefined, y, z]
 
         invalid.forEach((v)=> {
-          expect(c.check(v)).toBe(false)
+          expect(c.isValid(v)).toBe(false)
         })
       })
     })

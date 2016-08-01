@@ -1,7 +1,7 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {FluentNumberRestrictions} from "@entityforge/validator";
-import {NumberCheck} from "@entityforge/check";
-import {NumberGen} from "@entityforge/generate";
+import {FluentNumberRestrictions} from "validator/index";
+import {NumberCheck} from "check/index";
+import {NumberGen} from "generate/index";
 
 export class NumberForge extends Forge implements FluentNumberRestrictions{
 

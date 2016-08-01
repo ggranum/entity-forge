@@ -13,16 +13,17 @@
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors":true,
     "target": "es2015",
-    "outDir": "../dist/esm",
-    "paths": {
-      "@entityforge/validator": ["../dist/esm/validator"],
-      "@entityforge/generate": ["../dist/esm/generate"],
-      "@entityforge/check": ["../dist/esm/check"],
-      "@entityforge/forge": ["../dist/esm/forge"]
-    }
+    "outDir": "../dist/esm"
   },
   "files":[
-    "./entity-forge.ts",
+    "validator/index.ts",
+    "check/index.ts",
+    "check/index.spec.ts",
+    "generate/index.ts",
+    "generate/index.spec.ts",
+    "forge/index.ts",
+    "forge/index.spec.ts",
+    "seedrandom.d.ts",
     "../typings/index.d.ts"
   ]
 }

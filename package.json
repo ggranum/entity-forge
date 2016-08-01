@@ -47,12 +47,9 @@
     "typescript": "^1.9.0-dev.20160409"
   },
   "scripts": {
-    "build.ts": "tsc -p ./src/validator && tsc -p ./src/check && tsc -p ./src/generate && tsc -p ./src/forge && tsc -p ./src",
-    "build.roll": "rollup -c ./src/validator/rollup.config.js && rollup -c ./src/check/rollup.config.js && rollup -c ./src/check/rollup.config.spec.js && rollup -c ./src/generate/rollup.config.js && rollup -c ./src/generate/rollup.config.spec.js && rollup -c ./src/forge/rollup.config.js && rollup -c ./src/forge/rollup.config.spec.js",
-    "build.serve": "gulp serve || true",
-    "build.watch": "gulp clean && gulp build && gulp serve || true",
-    "build.test": "gulp clean && gulp build && gulp serve --open=/entity-forge-test.html",
-    "docs": "gulp clean && gulp build && gulp serve --open=/build/docs/index.html"
+    "build.dev": "./build.sh",
+    "serve": "gulp serve",
+    "docs": "echo '(re)implement me.'"
   },
   "dependencies": {
     "es6-shim": ">=0.22.0",

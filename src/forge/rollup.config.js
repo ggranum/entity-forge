@@ -9,13 +9,13 @@ export default {
   moduleName: 'Forge',
   plugins: [ json(), babel() ],
   external: [
-    '@entityforge/validator',
-    '@entityforge/check',
-    '@entityforge/generate'
+    'validator/index',
+    'check/index',
+    'generate/index'
   ],
   globals:{
-    '@entityforge/validator': 'Validate',
-    '@entityforge/check': 'Check',
-    '@entityforge/generate': 'Generate'
+    'validator/index': 'Validator',
+    'check/index': 'Check',
+    'generate/index': 'Generate'
   }
 };

@@ -1,6 +1,6 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {BooleanGen} from "@entityforge/generate";
-import {BooleanCheck} from "@entityforge/check";
+import {BooleanGen} from "generate/index";
+import {BooleanCheck} from "check/index";
 
 /**
  * Forge booleans fields. A boolean field can be true, false or null. Null may be disabled by calling #notNull.

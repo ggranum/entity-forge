@@ -1,12 +1,6 @@
 import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
-import * as path from 'path';
 
-var idxFile = path.resolve( './dist/esm/forge/index.js' )
-var globals = {
-  '@entityforge/validator': 'Validate'
-}
-globals[idxFile] = "Forge"
 export default {
   entry: 'dist/esm/forge/index.spec.js',
   dest: 'dist/es3/forge/index.spec.js',
@@ -14,8 +8,15 @@ export default {
   moduleName: 'ForgeSpec',
   plugins: [ json(), babel() ],
   external: [
-    '@entityforge/validator',
-    idxFile
+    'validator/index',
+    'check/index',
+    'generate/index',
+    'forge/index',
   ],
-  globals: globals
+  globals: {
+    'check/index': 'Check',
+    'validator/index': 'Validator',
+    'generate/index': 'Generate',
+    'forge/index': 'Forge'
+  }
 };

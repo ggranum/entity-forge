@@ -1,4 +1,4 @@
-import {StringGen} from "./index";
+import {StringGen} from "generate/index";
 
 
 (function () {

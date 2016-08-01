@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {FluentNumberRestrictions, NumberRestrictions, NumberRestrictionDefaults} from "@entityforge/validator";
+import {FluentNumberRestrictions, NumberRestrictions, NumberRestrictionDefaults} from "validator/index";
 
 
 export class NumberGen extends DataGen implements FluentNumberRestrictions {

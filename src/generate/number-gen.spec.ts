@@ -1,4 +1,4 @@
-import {NumberGen} from "./index";
+import {NumberGen} from "generate/index";
 
 
 (function () {

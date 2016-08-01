@@ -1,8 +1,8 @@
 import {ValidateFailedError} from "./validate-failed-error";
 import {ConfigurationError} from "./configuration-error";
-import {Validator, CommonRestrictions} from "@entityforge/validator";
-import {Check, Checks} from "@entityforge/check";
-import {DataGen} from "@entityforge/generate";
+import {Validator, CommonRestrictions} from "validator/index";
+import {Check, Checks} from "check/index";
+import {DataGen} from "generate/index";
 
 
 

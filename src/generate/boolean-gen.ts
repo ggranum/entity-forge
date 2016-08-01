@@ -1,5 +1,5 @@
+import {BooleanRestrictionDefaults} from "validator/index";
 import {DataGen} from "./data-gen";
-import {BooleanRestrictionDefaults} from "@entityforge/validator";
 
 export class BooleanGen extends DataGen {
 
