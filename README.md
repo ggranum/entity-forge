@@ -86,7 +86,6 @@ console.log("A randomly generated 'BiggerUser:", biggerUser)
 ```console
 npm install typings --global
 npm install typescript --global
-npm install jspm --global
 npm install
 npm run build.test
 ```

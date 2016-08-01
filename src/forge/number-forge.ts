@@ -1,7 +1,8 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {FluentNumberRestrictions} from "../validator/restriction/restriction";
-import {NumberCheck} from "../check/number-check";
-import {NumberGen} from "../generate/number-gen";
+import {FluentNumberRestrictions} from "validator/index";
+import {NumberCheck} from "check/index";
+import {NumberGen} from "generate/index";
+
 export class NumberForge extends Forge implements FluentNumberRestrictions{
 
   _check:NumberCheck

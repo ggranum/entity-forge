@@ -1,7 +1,6 @@
-
-import {EntityForge} from "./index";
-import {Strings} from "../validator/string";
-import {DataGen} from "../generate/data-gen";
+import {EntityForge} from "forge/index";
+import {Strings} from "validator/index";
+import {DataGen} from "generate/index";
 (function() {
   let EF = EntityForge
 

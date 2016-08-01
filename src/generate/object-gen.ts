@@ -1,6 +1,5 @@
 import {DataGen} from "./data-gen";
-import {ObjectRestrictionDefaults} from "../validator/restriction/restriction";
-import {Validators} from "../validator/index";
+import {ObjectRestrictionDefaults, Validators} from "validator/index";
 
 
 export class ObjectGen extends DataGen {
@@ -42,7 +41,7 @@ export class ObjectGen extends DataGen {
     if(!this.baseObject){
       next = {}
     }
-    else if(Validators.isFunction.check(this.baseObject)){
+    else if(Validators.isFunction.isValid(this.baseObject)){
       next = this.baseObject()
     } else {
       next = Object.assign({}, this.baseObject)

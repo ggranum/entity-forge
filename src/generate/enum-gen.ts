@@ -1,9 +1,5 @@
-
 import {DataGen} from "./data-gen";
-import {
-  ObjectRestrictionDefaults, CommonRestrictions,
-  FluentCommonRestrictions
-} from "../validator/restriction/restriction";
+import {CommonRestrictions, ObjectRestrictionDefaults} from "validator/index";
 
 export class EnumGen extends DataGen {
 

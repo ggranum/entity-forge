@@ -1,6 +1,4 @@
-
 export class Validator {
-
   args:any
   name:string
   message:string
@@ -10,13 +8,13 @@ export class Validator {
     this.args = Object.assign({}, this.args, providedArgs)
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     throw new Error("Not implemented: " + this.name)
   }
 
   validate(value:any):any {
     let r:any = null
-    if (!this.check(value)) {
+    if (!this.isValid(value)) {
       r = this.toError(value)
     }
     return r

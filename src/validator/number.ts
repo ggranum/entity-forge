@@ -2,7 +2,7 @@ import {Validator} from "./validator";
 
 
 export class IsNumberValidator extends Validator {
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return (typeof value === 'number' || value instanceof Number)
   }
 }
@@ -14,7 +14,7 @@ Object.assign(IsNumberValidator.prototype, {
 
 
 export class IsIntValidator extends Validator {
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return (typeof value === 'number' || value instanceof Number) && (value % 1 === 0)
   }
 }
@@ -29,7 +29,7 @@ export class MaxValidator extends Validator {
     super({max: max, inclusive: inclusive})
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return this.args.inclusive ? value <= this.args.max : value < this.args.max
   }
 }
@@ -49,7 +49,7 @@ export class MinValidator extends Validator {
     super({min: min, inclusive: inclusive})
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return this.args.inclusive ? value >= this.args.min : value > this.args.min
   }
 }

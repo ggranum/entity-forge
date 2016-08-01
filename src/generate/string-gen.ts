@@ -1,5 +1,5 @@
 import {DataGen} from "./data-gen";
-import {StringRestrictionDefaults, StringRestrictions} from "../validator/restriction/restriction";
+import {StringRestrictions, StringRestrictionDefaults} from "validator/index";
 
 
 export class StringGen extends DataGen {

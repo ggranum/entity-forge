@@ -1,6 +1,5 @@
 import {Check} from "./check";
 
-
 export class BooleanCheck extends Check {
 
   static boolean() {
@@ -12,7 +11,6 @@ export class BooleanCheck extends Check {
     this.restrictions.isBoolean = true
     return this
   }
-
 
   _doInit(): this {
     return this

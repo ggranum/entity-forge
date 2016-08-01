@@ -1,7 +1,7 @@
 import {Validator} from "./validator";
 
 class IsArrayValidator extends Validator {
-  check(value:any) {
+  isValid(value:any) {
     return (value instanceof Array)
   }
 }
@@ -17,7 +17,7 @@ class MaxSizeValidator extends Validator {
     super({maxLength: maxLength, inclusive: inclusive})
   }
 
-  check(value:any) {
+  isValid(value:any) {
     return this.args.inclusive ? value.length <= this.args.maxLength : value.length < this.args.maxLength
   }
 }
@@ -37,7 +37,7 @@ class MinSizeValidator extends Validator {
     super({minLength: minLength, inclusive: inclusive})
   }
 
-  check(value:any) {
+  isValid(value:any) {
     return this.args.inclusive ? value.length >= this.args.minLength : value.length > this.args.minLength
   }
 }

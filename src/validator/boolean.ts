@@ -1,7 +1,7 @@
 import {Validator} from "./validator";
 
 export class IsBooleanValidator extends Validator {
-  check(value:any) {
+  isValid(value:any) {
     return value === true || value === false
   }
 }

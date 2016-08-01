@@ -3,6 +3,7 @@ import {ArrayCheck} from "./array-check";
 import {BooleanCheck} from "./boolean-check";
 import {StringCheck} from "./string-check";
 import {NumberCheck} from "./number-check";
+
 let Checks: {any: (()=>Check); array: (()=>ArrayCheck); boolean: (()=>BooleanCheck); string: (()=>StringCheck); number: (()=>NumberCheck); int: (()=>NumberCheck)} = {
   any: Check.any,
   array: ArrayCheck.array,
@@ -13,3 +14,4 @@ let Checks: {any: (()=>Check); array: (()=>ArrayCheck); boolean: (()=>BooleanChe
 }
 
 export {Checks, Check, ArrayCheck, BooleanCheck, StringCheck, NumberCheck}
+export * from './constraint'

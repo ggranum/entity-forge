@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration":true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "inlineSources": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors":true,
+    "target": "es2015",
+    "outDir": "../dist/esm"
+  },
+  "files":[
+    "validator/index.ts",
+    "check/index.ts",
+    "check/index.spec.ts",
+    "generate/index.ts",
+    "generate/index.spec.ts",
+    "forge/index.ts",
+    "forge/index.spec.ts",
+    "seedrandom.d.ts",
+    "../typings/index.d.ts"
+  ]
+}

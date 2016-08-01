@@ -1,8 +1,5 @@
 import {DataGen} from "./data-gen";
-import {
-  NumberRestrictionDefaults, FluentNumberRestrictions,
-  NumberRestrictions
-} from "../validator/restriction/restriction";
+import {FluentNumberRestrictions, NumberRestrictions, NumberRestrictionDefaults} from "validator/index";
 
 
 export class NumberGen extends DataGen implements FluentNumberRestrictions {

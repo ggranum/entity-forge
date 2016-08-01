@@ -1,5 +1,4 @@
-
-import {BooleanGen} from "./boolean-gen";
+import {BooleanGen} from "generate/index";
 (function () {
   describe("BooleanGen", function () {
 

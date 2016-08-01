@@ -20,7 +20,7 @@ Object.freeze(Strings.COMMON_UTF_RANGES)
 
 
 class IsStringValidator extends Validator {
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return (typeof value === 'string' || value instanceof String)
   }
 }
@@ -36,7 +36,7 @@ class MaxLengthValidator extends Validator {
     super({maxLength: maxLength, inclusive: inclusive})
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return this.args.inclusive ? value.length <= this.args.maxLength : value.length < this.args.maxLength
   }
 }
@@ -56,7 +56,7 @@ class MinLengthValidator extends Validator {
     super({minLength: minLength, inclusive: inclusive})
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return this.args.inclusive ? value.length >= this.args.minLength : value.length > this.args.minLength
   }
 }
@@ -75,7 +75,7 @@ class CodePointsValidator extends Validator {
     super({codePointRanges: codePointRanges})
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     let result = true
     let L = value.length
     for (let i = 0; i < L; i++) {

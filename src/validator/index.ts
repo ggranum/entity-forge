@@ -6,11 +6,6 @@ import {IsArrayValidator} from "./array";
 import {IsNumberValidator, IsIntValidator} from "./number";
 import {IsFunctionValidator, IsObjectValidator, NotNullValidator} from "./object";
 
-
-
-
-
-
 let Validators = {
   notNull: new NotNullValidator(),
   isObject: new IsObjectValidator(),
@@ -20,10 +15,7 @@ let Validators = {
   isNumber: new IsNumberValidator(),
   isInt: new IsIntValidator(),
   isString: new IsStringValidator()
-
 }
-
-
 
 export {
   Validator,
@@ -36,5 +28,4 @@ export {NotNullValidator, IsOneOfValidator, IsObjectValidator, IsFunctionValidat
 export {IsIntValidator, IsNumberValidator,MaxValidator, MinValidator} from "./number";
 export {MaxLengthValidator, MinLengthValidator, Strings, CodePointsValidator} from "./string";
 export {MaxSizeValidator, MinSizeValidator} from "./array";
-export {StringRestrictionDefaults, CommonRestrictionDefaults, NumberRestrictionDefaults,
-  ObjectRestrictionDefaults, BooleanRestrictionDefaults} from './restriction/restriction'
+export * from './restriction/restriction'

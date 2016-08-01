@@ -1,6 +1,6 @@
 import {Validator} from "./validator";
 export class NotNullValidator extends Validator {
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return !(value === null || value === undefined)
   }
 }
@@ -16,7 +16,7 @@ export class IsOneOfValidator extends Validator {
     super({values: values})
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return this.args.values.some((allowedValue:any)=> {
       return allowedValue === value
     })
@@ -37,7 +37,7 @@ export class IsObjectValidator extends Validator {
     super()
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return (typeof value === 'object' || value.constructor === Object)
   }
 }
@@ -53,7 +53,7 @@ export class IsFunctionValidator extends Validator {
     super()
   }
 
-  check(value:any):boolean {
+  isValid(value:any):boolean {
     return (typeof value === 'function' || value instanceof Function)
   }
 }

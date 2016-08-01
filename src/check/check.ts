@@ -1,8 +1,5 @@
-import {Validators, IsOneOfValidator} from "../validator/index";
+import {Validator, Validators, IsOneOfValidator, CommonRestrictions, FluentCommonRestrictions} from "validator/index";
 import {Constraint} from "./constraint";
-import {Validator} from "../validator/validator";
-import {CommonRestrictions, FluentCommonRestrictions} from "../validator/restriction/restriction";
-import {ConfigurationError} from "../forge/configuration-error";
 
 
 /**
@@ -57,7 +54,7 @@ export class Check implements FluentCommonRestrictions {
     this.constraints.push(check.constraints)
   }
 
-  check(value: any) {
+  isValid(value: any) {
     return this.validate(value) === null
   }
 

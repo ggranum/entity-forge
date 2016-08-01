@@ -1,6 +1,5 @@
 import {Check} from "./check";
-import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator} from "../validator/index";
-import {StringRestrictions, FluentStringRestrictions} from "../validator/restriction/restriction";
+import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator, StringRestrictions, FluentStringRestrictions} from "validator/index";
 
 
 export class StringCheck extends Check implements FluentStringRestrictions {

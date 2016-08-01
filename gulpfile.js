@@ -69,60 +69,10 @@ var project = {
     cb()
   },
 
-  compileStatic: function (cb) {
-    gulp.src('./src/**/*.{js,css,eot,svg,ttf,woff,woff2,png}').pipe(gulp.dest(config.buildDir)).on('finish', function(){
-      tools.gitRev.short(function (rev) {
-        gulp.src([config.srcDir + '/**/*.html'])
-          .pipe(tools.replace(/\$\{build.revision\}/, rev))
-          .pipe(tools.replace(/\$\{build.date\}/, new Date().toISOString()))
-          .pipe(gulp.dest(config.buildDir)).on('finish', cb);
-      })
-    });
-  },
-
-  compileTsc: function(cb){
-    tools.exec('npm run tsc', function (err, stdout, stderr) {
-      // Ignoring non-zero exit code errors, as tsc will provide non-zero exit codes on warnings.
-      console.log(stdout);
-      cb();
-    })
-  },
-
-  runJspm: function(target, cb){
-    console.log("project", "runJspm", target)
-    tools.exec('npm run jspm.' + target, function (err, stdout, stderr) {
-      // Ignoring non-zero exit code errors.
-      console.log(stdout);
-      cb();
-    })
-  },
-
-  compile: function (cb) {
-    return project.compileStatic(function(){
-      // project.runJspm('dist', function(){
-        project.runJspm('test', function(){
-          var stats = tools.fs.statSync(config.distDir + '/entity-forge-test.js')
-          var size = stats["size"]
-          console.log("Dist build size: ", Math.floor(size/1000) + '.' + (size % 1000 ) + 'kB')
-          cb()
-        })
-      // })
-    })
-  },
-
-  compileDist: function (done) {
-    return done()
-  },
-
   catchError: function (msg) {
     return function (e) {
       console.log(msg || "Error: ", e)
     }
-  },
-
-  watch: function (compileTarget) {
-    gulp.watch('./src/**/*.html', ['compile-static']).on('error', project.catchError("Error watching HTML files"))
-    return gulp.watch('./src/**/*.{js,ts}', [compileTarget || 'compile']).on('error', project.catchError("Error watching JS files"))
   },
 
 
@@ -184,31 +134,9 @@ gulp.task('start-server', function (done) {
   done()
 })
 
-gulp.task('compile-static', [], function (done) {
-  project.compileStatic(done)
-})
 
-gulp.task('compileTsc', [], function (done) {
-  project.compileTsc(done)
-});
-
-gulp.task('compile', ['compileTsc'], function (done) {
-  project.compile(done)
-})
-
-gulp.task('watch', ['compile-static'], function () {
-  return project.watch()
-});
-
-gulp.task('serve', ['start-server', 'watch'], function (done) {
+gulp.task('serve', ['start-server'], function (done) {
   // if 'done' is not passed in this task will not block.
-})
-
-gulp.task('clean', [], function (done) {
-  project.clean(done)
-})
-
-gulp.task('build', ['compile'], function () {
 })
 
 gulp.task('default', function (done) {

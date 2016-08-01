@@ -1,4 +1,5 @@
-import './entity-forge'
+import 'entityforge'
+
 import './check/check.spec'
 import './generate/data-gen.spec'
 import './generate/boolean-gen.spec'
