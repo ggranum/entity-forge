@@ -13,14 +13,16 @@
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors":true,
     "target": "es2015",
-    "outDir": "../../dist/esm/check",
+    "outDir": "../dist/esm",
     "paths": {
-      "@entityforge/validator": ["../../dist/esm/validator"]
+      "@entityforge/validator": ["./dist/esm/validator"],
+      "@entityforge/generate": ["./dist/esm/generate"],
+      "@entityforge/check": ["./dist/esm/check"],
+      "@entityforge/forge": ["./dist/esm/forge"]
     }
   },
   "files":[
-    "index.ts",
-    "index.spec.ts",
-    "../../typings/index.d.ts"
+    "./src/entity-forge.ts",
+    "./typings/index.d.ts"
   ]
 }

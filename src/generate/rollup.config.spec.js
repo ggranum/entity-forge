@@ -11,7 +11,6 @@ export default {
   format: 'iife',
   plugins: [ json(), babel() ],
   external: [
-    '@entityforge/validator',
     idxFile
   ],
   globals: globals

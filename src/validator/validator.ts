@@ -1,6 +1,4 @@
-
 export class Validator {
-
   args:any
   name:string
   message:string

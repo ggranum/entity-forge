@@ -16,12 +16,14 @@
     "outDir": "../../dist/esm/forge",
     "paths": {
       "@entityforge/validator": ["../../dist/esm/validator"],
-      "@entityforge/generate": ["../../dist/esm/generate"],
-      "@entityforge/check": ["../../dist/esm/check"]
+      "@entityforge/check": ["../../dist/esm/check"],
+      "@entityforge/generate": ["../../dist/esm/generate"]
     }
   },
   "files":[
     "index.ts",
+    "index.spec.ts",
+    "../seedrandom.d.ts",
     "../../typings/index.d.ts"
   ]
 }

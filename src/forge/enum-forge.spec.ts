@@ -1,5 +1,4 @@
-import {EntityForge} from "./index";
-import {EnumForge} from "./enum-forge";
+import {EntityForge, EnumForge} from "./index";
 
 (function () {
   let EF = EntityForge
