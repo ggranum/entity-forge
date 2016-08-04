@@ -6,7 +6,16 @@ import {StringForge} from "./string-forge";
 import {ObjectForge} from "./object-forge";
 
 
-export let EntityForge = {
+let EntityForge: {
+  any: (()=>Forge);
+  bool: ((defaultValue?: boolean)=>BooleanForge);
+  enumeration: ((defaultValue?: any)=>EnumForge);
+  number: ((defaultValue?: number)=>NumberForge);
+  int: ((defaultValue?: number)=>NumberForge);
+  string: ((defaultValue?: string)=>StringForge);
+  obj: ((fields?: any, defaultValue?: any, fieldName?: string)=>ObjectForge)
+};
+EntityForge = {
   any: Forge.any,
   bool: BooleanForge.bool,
   enumeration: EnumForge.enumeration,
@@ -14,7 +23,7 @@ export let EntityForge = {
   int: NumberForge.int,
   string: StringForge.string,
   obj: ObjectForge.obj
-}
+};
 
-export {Forge, BooleanForge, EnumForge, NumberForge, StringForge, ObjectForge}
+export {Forge, BooleanForge, EnumForge, NumberForge, StringForge, ObjectForge, EntityForge}
 

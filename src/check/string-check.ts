@@ -1,5 +1,7 @@
 import {Check} from "./check";
 import {Validators, MinLengthValidator, MaxLengthValidator, Strings, CodePointsValidator, StringRestrictions, FluentStringRestrictions} from "validator/index";
+import {ConfigurationError} from "../forge/configuration-error";
+import {AllowedCharactersValidator} from "../validator/string";
 
 
 export class StringCheck extends Check implements FluentStringRestrictions {
@@ -17,16 +19,21 @@ export class StringCheck extends Check implements FluentStringRestrictions {
 
   isString(): this {
     this.restrictions.isString = true
-    return this
+    return this._init()
   }
 
   matchesRegex(value: string|RegExp, negate?: boolean): this {
-    this.restrictions.matchesRegex = {value:value, negate:negate === true}
-    return this
+    let R = this.restrictions
+    R.matchesRegex = R.matchesRegex || []
+    R.matchesRegex.push({value:value, negate:negate === true})
+    return this._init()
   }
 
-  notMatchesRegex(value: string|RegExp): this {
-    return this.matchesRegex(value, true)
+  notMatchesRegex(value: string|RegExp, negate?: boolean): this {
+    let R = this.restrictions
+    R.notMatchesRegex = R.notMatchesRegex || []
+    R.notMatchesRegex.push({value:value, negate:negate === true})
+    return this._init()
   }
 
   minLength(value:number, inclusive:boolean = true):this {
@@ -34,7 +41,7 @@ export class StringCheck extends Check implements FluentStringRestrictions {
       value:value,
       inclusive: inclusive !== false
     }
-    return this
+    return this._init()
   }
 
   maxLength(value:number, inclusive:boolean = true):this {
@@ -42,12 +49,18 @@ export class StringCheck extends Check implements FluentStringRestrictions {
       value:value,
       inclusive: inclusive !== false
     }
-    return this
+    return this._init()
+  }
+
+
+  allowedChars(values: string[]): this {
+    this.restrictions.allowedChars = values
+    return this._init()
   }
 
   allowedCodePoints(values:number[] = Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP):this{
     this.restrictions.allowedCodePoints = values
-    return this
+    return this._init()
   }
 
 
@@ -58,8 +71,15 @@ export class StringCheck extends Check implements FluentStringRestrictions {
       this.add(Validators.isString, Validators.notNull);
     }
 
+    if(restrict.allowedCodePoints && restrict.allowedChars) {
+      throw new ConfigurationError("the alloweCodePoints and allowedChars restrictions cannot be used together.")
+    }
     if(restrict.allowedCodePoints) {
       this.add(new CodePointsValidator(restrict.allowedCodePoints), Validators.isString, Validators.notNull)
+    }
+
+    if(restrict.allowedChars) {
+      this.add(new AllowedCharactersValidator(restrict.allowedChars), Validators.isString, Validators.notNull)
     }
 
     if(restrict.maxLength){

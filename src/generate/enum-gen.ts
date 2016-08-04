@@ -1,12 +1,12 @@
 import {DataGen} from "./data-gen";
-import {CommonRestrictions, ObjectRestrictionDefaults} from "validator/index";
+import {CommonRestrictions} from "validator/index";
 
 export class EnumGen extends DataGen {
 
   restrictions:CommonRestrictions
 
-  constructor(cfg:any = null) {
-    super(cfg, ObjectRestrictionDefaults)
+  constructor() {
+    super()
   }
 
   values(values:any[]):this{

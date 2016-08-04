@@ -24,7 +24,7 @@ export class BooleanForge extends Forge {
 
 
 Forge.onBeforeIgnition(BooleanForge, function (event:BeforeIgnitionEvent) {
-  let dataGen = new BooleanGen(event.restrictions)
+  let dataGen = new BooleanGen().applyRestrictions(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

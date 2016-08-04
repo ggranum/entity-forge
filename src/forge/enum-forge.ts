@@ -26,7 +26,7 @@ export class EnumForge extends Forge {
 
 
 Forge.onBeforeIgnition(EnumForge, function (event: BeforeIgnitionEvent) {
-  let dataGen = new EnumGen(event.restrictions)
+  let dataGen = new EnumGen().applyRestrictions(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

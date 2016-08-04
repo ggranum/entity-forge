@@ -47,7 +47,7 @@ export class NumberCheck extends Check implements FluentNumberRestrictions {
       this.add(Validators.isNumber, Validators.notNull)
     }
     if (this.restrictions.min) {
-      this.add(new MinValidator(this.restrictions.min.value, this.restrictions.min.inclusive), Validators.isNumber, Validators.notNull)
+      this.add(new MinValidator().min(this.restrictions.min), Validators.isNumber, Validators.notNull)
     }
     if (this.restrictions.max) {
       this.add(new MaxValidator(this.restrictions.max.value, this.restrictions.max.inclusive), Validators.isNumber, Validators.notNull)

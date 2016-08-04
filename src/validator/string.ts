@@ -1,6 +1,6 @@
 import {Validator} from "./validator";
 
-let Strings:{COMMON_UTF_RANGES:{ASCII:number[]; PRINTABLE_ASCII:number[]; UTF_PLANE_BMP:number[]; UTF_PRINTABLE_LATIN_IPA:any; UTF_PRINTABLE_PLANE_BMP:any}};
+export let Strings:{COMMON_UTF_RANGES:{ASCII:number[]; PRINTABLE_ASCII:number[]; UTF_PLANE_BMP:number[]; UTF_PRINTABLE_LATIN_IPA:any; UTF_PRINTABLE_PLANE_BMP:any}};
 Strings = {
   COMMON_UTF_RANGES: {
     ASCII: [0, 127],
@@ -10,16 +10,16 @@ Strings = {
     UTF_PRINTABLE_LATIN_IPA: null,
     UTF_PRINTABLE_PLANE_BMP: null
   }
-};
+}
 
 Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_LATIN_IPA = Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII.concat([0xA1, 0x24F])
-Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP = Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_LATIN_IPA.concat([0x25F, 0XFFFF])
+Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP = Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_LATIN_IPA.concat([0x25F, 0xD800, 0xE000, 0XFFFF])
 
 Object.freeze(Strings.COMMON_UTF_RANGES)
 
 
 
-class IsStringValidator extends Validator {
+export class IsStringValidator extends Validator {
   isValid(value:any):boolean {
     return (typeof value === 'string' || value instanceof String)
   }
@@ -31,13 +31,13 @@ Object.assign(IsStringValidator.prototype, {
 })
 
 
-class MaxLengthValidator extends Validator {
+export class MaxLengthValidator extends Validator {
   constructor(maxLength:number, inclusive:boolean = true) {
     super({maxLength: maxLength, inclusive: inclusive})
   }
 
   isValid(value:any):boolean {
-    return this.args.inclusive ? value.length <= this.args.maxLength : value.length < this.args.maxLength
+    return this.restrictions.inclusive ? value.length <= this.restrictions.maxLength : value.length < this.restrictions.maxLength
   }
 }
 Object.assign(MaxLengthValidator.prototype, {
@@ -51,13 +51,13 @@ Object.assign(MaxLengthValidator.prototype, {
 })
 
 
-class MinLengthValidator extends Validator {
+export class MinLengthValidator extends Validator {
   constructor(minLength:number, inclusive:boolean = true) {
     super({minLength: minLength, inclusive: inclusive})
   }
 
   isValid(value:any):boolean {
-    return this.args.inclusive ? value.length >= this.args.minLength : value.length > this.args.minLength
+    return this.restrictions.inclusive ? value.length >= this.restrictions.minLength : value.length > this.restrictions.minLength
   }
 }
 Object.assign(MinLengthValidator.prototype, {
@@ -70,7 +70,30 @@ Object.assign(MinLengthValidator.prototype, {
   message: '@restriction.minLength'
 })
 
-class CodePointsValidator extends Validator {
+export class AllowedCharactersValidator extends Validator {
+  constructor(allowedChars:string[]) {
+    super({allowedChars: allowedChars})
+  }
+
+  isValid(value: any): boolean {
+    let result = true
+    let L = value.length
+    for (let i = 0; i < L; i++) {
+      result = this.isCharInRange(value.charAt(i), this.restrictions.allowedChars)
+      if (!result) {
+        break
+      }
+    }
+    return result
+  }
+
+  //noinspection JSMethodCanBeStatic
+  isCharInRange(char:string, allowed:string[]) {
+    return allowed.indexOf(char) >= 0
+  }
+}
+
+export class CodePointsValidator extends Validator {
   constructor(codePointRanges = Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP) {
     super({codePointRanges: codePointRanges})
   }
@@ -79,9 +102,8 @@ class CodePointsValidator extends Validator {
     let result = true
     let L = value.length
     for (let i = 0; i < L; i++) {
-      result = this.isCharInRange(value.codePointAt(i), this.args.codePointRanges)
+      result = this.isCharInRange(value.codePointAt(i), this.restrictions.codePointRanges)
       if (!result) {
-        debugger
         break
       }
     }
@@ -118,7 +140,6 @@ Object.assign(CodePointsValidator.prototype, {
   }
 })
 
-export {CodePointsValidator, IsStringValidator, MaxLengthValidator, MinLengthValidator, Validator, Strings}
 
 
 

@@ -18,7 +18,7 @@ class MaxSizeValidator extends Validator {
   }
 
   isValid(value:any) {
-    return this.args.inclusive ? value.length <= this.args.maxLength : value.length < this.args.maxLength
+    return this.restrictions.inclusive ? value.length <= this.restrictions.maxLength : value.length < this.restrictions.maxLength
   }
 }
 Object.assign(MaxSizeValidator.prototype, {
@@ -38,7 +38,7 @@ class MinSizeValidator extends Validator {
   }
 
   isValid(value:any) {
-    return this.args.inclusive ? value.length >= this.args.minLength : value.length > this.args.minLength
+    return this.restrictions.inclusive ? value.length >= this.restrictions.minLength : value.length > this.restrictions.minLength
   }
 }
 Object.assign(MinSizeValidator.prototype, {

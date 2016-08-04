@@ -46,7 +46,7 @@ export class NumberForge extends Forge implements FluentNumberRestrictions{
 
 
 Forge.onBeforeIgnition(NumberForge, function (event:BeforeIgnitionEvent) {
-  let dataGen = new NumberGen(event.restrictions)
+  let dataGen = new NumberGen().applyRestrictions(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

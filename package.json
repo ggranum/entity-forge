@@ -47,8 +47,11 @@
     "typescript": "^1.9.0-dev.20160409"
   },
   "scripts": {
-    "build.dev": "./build.sh",
+    "build.prod": "./build.sh",
+    "build.dev": "tsc -p ./src/tsconfig-system.json -w",
     "serve": "gulp serve",
+    "serve.test": "gulp serve --open=/entity-forge-test.dev.html",
+    "serve.docs": "gulp serve --open=/build/system/docs/index.html",
     "docs": "echo '(re)implement me.'"
   },
   "dependencies": {

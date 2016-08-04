@@ -17,7 +17,7 @@ export class IsOneOfValidator extends Validator {
   }
 
   isValid(value:any):boolean {
-    return this.args.values.some((allowedValue:any)=> {
+    return this.restrictions.values.some((allowedValue:any)=> {
       return allowedValue === value
     })
   }

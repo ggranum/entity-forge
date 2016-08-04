@@ -159,8 +159,6 @@ export class ObjectForge extends Forge {
   }
 }
 
-
-
 Forge.onBeforeIgnition(ObjectForge, function (event:BeforeIgnitionEvent) {
   let forge:ObjectForge = <ObjectForge>event.forge
   let childFields = {}
@@ -168,7 +166,7 @@ Forge.onBeforeIgnition(ObjectForge, function (event:BeforeIgnitionEvent) {
     let fieldDef = forge.fieldDefinitions[fieldName]
     childFields[fieldName] = fieldDef.dataGen
   })
-  let dataGen = new ObjectGen(event.restrictions).base(()=> forge.newInstance()).childFields(childFields)
+  let dataGen = new ObjectGen().applyRestrictions(event.restrictions).base(()=> forge.newInstance()).childFields(childFields)
   forge.dataGen = dataGen
   forge.gen = () => dataGen.gen()
 })

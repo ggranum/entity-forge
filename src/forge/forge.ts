@@ -44,32 +44,6 @@ export class Forge {
     return defaultOverride === null ? this.defaultValue : defaultOverride
   }
 
-  /**
-   * @param {Validator} validation
-   * @param {Validator[]} preconditions
-   * @returns {Forge}
-   */
-  private applyValidation(validation: Validator, ...preconditions: Validator[]): this {
-    if (!this._check) {
-      this._check = Checks.any()
-    }
-    // this._check.add(validation, ...preconditions)
-    return this
-  }
-
-  /**
-   * @param {Check} check
-   * @returns {Forge}
-   */
-  private applyCheck(check: Check) {
-    if (!this._check) {
-      this._check = check
-    } else {
-      // this._check.addConstraints(check)
-    }
-    return this
-  }
-
   get defaultValue() {
     return this._defaultValue
   }
@@ -97,6 +71,9 @@ export class Forge {
     }
   }
 
+  generatedBy(generator:DataGen){
+    this.dataGen = generator
+  }
 
   /* Fluent configuration calls */
 
@@ -218,7 +195,7 @@ export class Forge {
   gen(additionalGeneratorConfig: any = null) {
     this.ignite()
     if (!this.dataGen) {
-      throw new ConfigurationError("DataGen package not loaded.")
+      throw new ConfigurationError("No generator for type: " + this)
     }
     if (additionalGeneratorConfig) {
       // @revisit ggranum: Find a better hack for the field/method collisions inherent in fluent JS.

@@ -1,4 +1,8 @@
-import {Validator} from "./validator";
+import {Validator, ValidatorIF, ValidatorError} from "./validator";
+import {
+  FluentNumberRestrictions, MinRestrictionFn, RangeLimitRestriction,
+  MinRestriction
+} from "./restriction/restriction";
 
 
 export class IsNumberValidator extends Validator {
@@ -30,7 +34,7 @@ export class MaxValidator extends Validator {
   }
 
   isValid(value:any):boolean {
-    return this.args.inclusive ? value <= this.args.max : value < this.args.max
+    return this.restrictions.inclusive ? value <= this.restrictions.max : value < this.restrictions.max
   }
 }
 Object.assign(MaxValidator.prototype, {
@@ -44,24 +48,35 @@ Object.assign(MaxValidator.prototype, {
 })
 
 
-export class MinValidator extends Validator {
-  constructor(min = Number.MIN_VALUE, inclusive:boolean = true) {
-    super({min: min, inclusive: inclusive})
+
+export class MinValidator extends Validator implements MinRestrictionFn {
+
+  name ='min'
+  ordinal = 100
+  message ='@restriction.min'
+
+  constructor(value?: RangeLimitRestriction) {
+    super()
+    this.min(value)
   }
 
-  isValid(value:any):boolean {
-    return this.args.inclusive ? value >= this.args.min : value > this.args.min
+  min(value: RangeLimitRestriction): this {
+    this.restrictions.min = Object.assign({}, this.restrictions.min, value)
+    return this
+  }
+
+  isValid(value:any){
+    return this.doValidate(value, this.restrictions) !== null
+  }
+
+  validate(value:any):ValidatorError {
+    return this.doValidate(value, this.restrictions)
+  }
+
+  doValidate(value:any, restrictions:MinRestriction):ValidatorError {
+    let isValid = restrictions.min.inclusive ? value >= restrictions.min.value : value > restrictions.min.value
+    return isValid ? null : this.generateError(value, null)
   }
 }
-Object.assign(MinValidator.prototype, {
-  ordinal: 100,
-  name: 'min',
-  args: {
-    min: Number.MIN_VALUE,
-    inclusive: true
-  },
-  message: '@restriction.min'
-})
-
 
 

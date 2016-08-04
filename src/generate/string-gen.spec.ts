@@ -23,7 +23,7 @@ import {StringGen} from "generate/index";
      */
     it("Should generate a string exactly 20 characters long.", function(){
       let cfg = {minLength: {value:20}, maxLength:{value:20}, notNull: true}
-      let gen = new StringGen(cfg)
+      let gen = new StringGen().applyRestrictions(cfg)
       let s = gen.gen()
       expect(s).toBeDefined()
       expect(s.length).toEqual(20)

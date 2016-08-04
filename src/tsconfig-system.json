@@ -5,7 +5,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "inlineSources": true,
-    "module": "es2015",
+    "module": "system",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -13,10 +13,11 @@
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors":true,
     "target": "es2015",
-    "outDir": "../dist/esm"
+    "outDir": "../build/system"
   },
   "files":[
     "validator/index.ts",
+    "validator/index.spec.ts",
     "check/index.ts",
     "check/index.spec.ts",
     "generate/index.ts",
@@ -24,8 +25,6 @@
     "forge/index.ts",
     "forge/index.spec.ts",
     "seedrandom.d.ts",
-    "docs/examples/potentiate-model.local",
-
     "../typings/index.d.ts"
   ]
 }

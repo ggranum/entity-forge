@@ -96,6 +96,12 @@ export class Check implements FluentCommonRestrictions {
     return this._init()
   }
 
+  isNoneOf(values: any[]): this {
+    this.restrictions.isNoneOf = values
+    return this._init()
+  }
+
+
   /**
    * Internal method. See source for use.
    * @returns {Check}

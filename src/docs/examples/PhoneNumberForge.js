@@ -1,6 +1,6 @@
 
 // 1) Subclass the base Forge
-class PhoneNumberForge extends Forge{
+class PhoneNumberForge extends Forge {
 
   // 2) Define a constructor that calls super:
   constructor(defaultValue = null) {
