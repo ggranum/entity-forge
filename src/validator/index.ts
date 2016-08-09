@@ -1,12 +1,10 @@
-import {Validator} from "./validator";
-import {IsBooleanValidator} from "./boolean";
-
-import {IsStringValidator} from "./string";
 import {IsArrayValidator} from "./array";
-import {IsNumberValidator, IsIntValidator} from "./number";
-import {IsFunctionValidator, IsObjectValidator, NotNullValidator} from "./object";
+import {IsNumberValidator, IsIntValidator} from "./number-validator";
+import {NotNullValidator} from "./base-validator";
+import {IsObjectValidator, IsFunctionValidator, IsBooleanValidator} from "./common-validator";
+import {IsStringValidator} from "./string/is-string-validator";
 
-let Validators = {
+export const Validators = {
   notNull: new NotNullValidator(),
   isObject: new IsObjectValidator(),
   isFunction: new IsFunctionValidator(),
@@ -17,15 +15,11 @@ let Validators = {
   isString: new IsStringValidator()
 }
 
-export {
-  Validator,
-  Validators,
-  IsBooleanValidator,
-  IsStringValidator,
-  IsArrayValidator
-};
-export {NotNullValidator, IsOneOfValidator, IsObjectValidator, IsFunctionValidator} from "./object";
-export {IsIntValidator, IsNumberValidator,MaxValidator, MinValidator} from "./number";
-export {MaxLengthValidator, MinLengthValidator, Strings, CodePointsValidator} from "./string";
-export {MaxSizeValidator, MinSizeValidator} from "./array";
-export * from './restriction/restriction'
+export * from "./validator";
+export * from "./base-validator";
+export * from "./common-validator";
+export * from "./composite-validator";
+export * from "./number-validator";
+export * from "./string/string-validator";
+export * from "./array";
+export * from "./identifier";

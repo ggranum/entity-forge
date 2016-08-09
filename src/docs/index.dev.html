@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>EntityForge Docs</title>
+  <meta name="description" content="Entities are cool.">
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <script src="/node_modules/seedrandom/seedrandom.min.js"></script>
+  <script src="/node_modules/systemjs/dist/system.js"></script>
+
+</head>
+
+
+<body>
+<h1> Open the debug console.</h1>
+
+<script type="application/javascript">
+  System.config({
+    packages: {
+      'validator': {
+        format: 'register',
+        defaultExtension: 'js'
+      },
+      'check': {
+        format: 'register',
+        defaultExtension: 'js'
+      },
+      'generate': {
+        format: 'register',
+        defaultExtension: 'js'
+      },
+      'forge': {
+        format: 'register',
+        defaultExtension: 'js'
+      }
+    },
+    map: {
+      'validator': '/build/system/validator',
+      'check': '/build/system/check',
+      'generate': '/build/system/generate',
+      'forge': '/build/system/forge'
+    }
+  });
+
+  Promise.all([
+    System.import('/build/system/check/index.js'),
+    System.import('/build/system/generate/index.js'),
+    System.import('/build/system/forge/index.js'),
+    System.import('/build/system/docs/examples/PhoneNumberForge.js'),
+  ]).then(function (p) {
+
+  });
+</script>
+</body>
+</html>

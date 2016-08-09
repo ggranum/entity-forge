@@ -1,54 +1,85 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {Strings} from "validator/index";
-import {StringCheck, Check} from "check/index";
+import {Strings, StringValidator, StringRestrictions, StringRestrictionsFluent} from "validator/index";
 import {StringGen} from "generate/index";
+import {BaseForge} from "./base-forge";
 
-export class StringForge extends Forge{
+export class StringForge extends BaseForge implements StringRestrictionsFluent{
 
-  _check:StringCheck
+  restrictions: StringRestrictions
 
-  constructor(checkOverride?:Check) {
-    super(checkOverride || new StringCheck().autoInit(false))
+  constructor() {
+    super()
+    this.validatedBy(StringValidator.instance())
     this.allowedCodePoints(Strings.COMMON_UTF_RANGES.UTF_PLANE_BMP)
   }
 
-  static string(defaultValue:string = null) {
+  static string(defaultValue: string = null) {
     return new StringForge().initTo(defaultValue)
   }
 
-
-  notNull():this {
-    if(this.defaultValue == null){
+  notNull(value?:boolean): this {
+    if (this.defaultValue == null) {
       this.initTo("")
     }
-    super.notNull()
+    super.notNull(value)
     return this
   }
 
-  ascii(){
+  ascii() {
     this.allowedCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
     return this
   }
 
-  minLength(value:number):this {
-    this._check.minLength(value, true)
+  isString(value?:boolean): this {
+    this.restrictions.isString = value !== false
     return this
   }
 
-  maxLength(max:number):this {
-    this._check.maxLength(max)
+  matchesRegex(value: string|RegExp, negate?: boolean): this {
+    let R = this.restrictions
+    R.matchesRegex = R.matchesRegex || []
+    R.matchesRegex.push({value:value, negate:negate === true})
     return this
   }
 
-  allowedCodePoints(codePointRanges?:number[]) {
-    this._check.allowedCodePoints(codePointRanges)
+  notMatchesRegex(value: string|RegExp, negate?: boolean): this {
+    let R = this.restrictions
+    R.notMatchesRegex = R.notMatchesRegex || []
+    R.notMatchesRegex.push({value:value, negate:negate === true})
+    return this
+  }
+
+  minLength(value:number, inclusive:boolean = true):this {
+    this.restrictions.minLength = {
+      value:value,
+      inclusive: inclusive !== false
+    }
+    return this
+  }
+
+  maxLength(value:number, inclusive:boolean = true):this {
+    this.restrictions.maxLength = {
+      value:value,
+      inclusive: inclusive !== false
+    }
+    return this
+  }
+
+
+  allowedChars(values: string[]): this {
+    this.restrictions.allowedChars = values
+    return this
+  }
+
+  allowedCodePoints(values:number[] = Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP):this{
+    this.restrictions.allowedCodePoints = values
     return this
   }
 }
 
 
-Forge.onBeforeIgnition(StringForge, function (event:BeforeIgnitionEvent) {
-  let dataGen = new StringGen(event.restrictions)
+Forge.onBeforeIgnition(StringForge, function (event: BeforeIgnitionEvent) {
+  let dataGen = new StringGen().applyRestrictions(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

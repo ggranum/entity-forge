@@ -25,7 +25,7 @@ try {
     example.uuid = example.uuid.substring(0, 10)
 } catch (e) {
     console.log("I'm sorry dave....") // Nope, not allowed.
-    console.log("Validation errors provide a cause", e.cause) // cause: { minLength: { value: theBadVal, message: aMessageKey, args: theValidationArgs} }
+    console.log("Validation errors provide a cause", e.cause) // cause: { minLength: { value: theBadVal, message: aMessageKey, restrictions: theValidationArgs} }
     console.log("To be clear, the messaging system needs some work. The cause message is: ", e.cause.minLength.message) // @restriction.minLength
 }
 console.log("UUID wasn't modified by the attempt to set it to illegal value:", example.uuid) // "-JhLeOlGIEjaIOFHR0xd" --- value not modified if invalid.

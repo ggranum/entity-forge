@@ -1,17 +1,23 @@
 import {Validator} from "validator/index";
+import {ValidatorErrorInfo} from "../validator/validator";
+import {Restriction} from "../validator/base-validator";
+
 
 /**
  * Validator that validates child fields.
  */
 export class DescendantValidator extends Validator {
+
+  restrictions:any
+
   constructor(fieldForge:any) {
     super({fieldForge: fieldForge})
   }
 
-  validate(value:any):any {
+  doValidate(value:any, R:Restriction):any {
     let errors:any = null
-    Object.keys(this.args.fieldForge.fieldDefinitions).forEach((key)=> {
-      let fieldDef = this.args.fieldForge.fieldDefinitions[key]
+    Object.keys(this.restrictions.fieldForge.fieldDefinitions).forEach((key)=> {
+      let fieldDef = this.restrictions.fieldForge.fieldDefinitions[key]
       let result = fieldDef.validate(value[key], key)
       if (result) {
         errors = errors || {}
@@ -20,14 +26,14 @@ export class DescendantValidator extends Validator {
     })
     let result:any = null
     if (errors) {
-      result = this.toError(value, errors)
+      result = new ValidatorErrorInfo("DescendantValidator", "@forge.descendantValidationFailed", value, errors)
     }
     return result
   }
 
   toError(value:any, childErrors:any) {
     let response = {}
-    response[this.args.fieldForge.fieldName || 'instance'] = {
+    response[this.restrictions.fieldForge.fieldName || 'instance'] = {
       message: this.message,
       value: value,
       causedBy: childErrors,

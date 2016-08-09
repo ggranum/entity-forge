@@ -1,6 +1,10 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
 import {EnumGen} from "generate/index";
-export class EnumForge extends Forge {
+import {BaseForge} from "./base-forge";
+
+
+
+export class EnumForge extends BaseForge {
 
   constructor() {
     super()
@@ -12,21 +16,21 @@ export class EnumForge extends Forge {
 
 
   ignite() {
-    if (this._check.restrictions.notNull && this.defaultValue === undefined ) {
-      this.initTo(this._check.restrictions.isOneOf[0])
+    if (this.restrictions.notNull && this.defaultValue === undefined ) {
+      this.initTo(this.restrictions.isOneOf[0])
     }
     super.ignite()
   }
 
   values(values: any[]) {
-    this._check.isOneOf(values)
+    this.restrictions.isOneOf = values
     return this
   }
 }
 
 
 Forge.onBeforeIgnition(EnumForge, function (event: BeforeIgnitionEvent) {
-  let dataGen = new EnumGen(event.restrictions)
+  let dataGen = new EnumGen().applyRestrictions(event.restrictions)
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

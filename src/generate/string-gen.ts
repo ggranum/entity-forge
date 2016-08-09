@@ -1,38 +1,121 @@
 import {DataGen} from "./data-gen";
-import {StringRestrictions, StringRestrictionDefaults} from "validator/index";
+import {Strings, StringRestrictionsFluent, StringRestrictions} from "validator/index";
 
 
-export class StringGen extends DataGen {
+export class StringGen extends DataGen implements StringRestrictionsFluent{
+
 
   restrictions:StringRestrictions
 
-  constructor(cfg:StringRestrictions = null) {
-    super(cfg, StringRestrictionDefaults)
+  constructor() {
+    super()
   }
 
-  allowedCodePoints(codePointRanges:number[]) {
-    this.restrictions.allowedCodePoints = codePointRanges
+  getDefaults():StringRestrictions {
+    return {
+      isString: true,
+      minLength: {value: 0, inclusive:true},
+      maxLength: {value: 1024, inclusive:true},
+      allowedChars: null,
+      allowedCodePoints: Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP,
+      matchesRegex: null,
+      notMatchesRegex: null
+    }
+  }
+
+
+  notNull(value?:boolean): this {
+    this.restrictions.notNull = value !== false
     return this
   }
 
-  gen() {
+  isString(value?:boolean): this {
+    this.restrictions.isString = value !== false
+    return this
+  }
+
+  allowedChars(values: string[]): this {
+    this.restrictions.allowedChars = values
+    return this
+  }
+
+  allowedCodePoints(values:number[]):this{
+    this.restrictions.allowedCodePoints = values
+    return this
+  }
+
+  minLength(value: number, inclusive?: boolean): this {
+    this.restrictions.minLength = { value:value, inclusive:inclusive !== false  }
+    return this
+  }
+
+  maxLength(value: number, inclusive?: boolean): this {
+    this.restrictions.maxLength = { value:value, inclusive:inclusive !== false  }
+    return this
+  }
+
+  matchesRegex(value: string|RegExp, negate?: boolean): this {
+    let R = this.restrictions
+    R.matchesRegex = R.matchesRegex || []
+    R.matchesRegex.push({value:value, negate:negate === true})
+    return this
+  }
+
+  notMatchesRegex(value: string|RegExp, negate?: boolean): this {
+    let R = this.restrictions
+    R.notMatchesRegex = R.notMatchesRegex || []
+    R.notMatchesRegex.push({value:value, negate:negate === true})
+    return this
+  }
+
+
+  gen():any {
+    let R = this.restrictions
     let data = super.gen()
     if (data !== null) {
-      let { start, range} = this._range()
+      let { start, range} = StringGen._range(R)
       let charCount = start + Math.floor(Math.random() * range)
-      data = []
-      for (let i = 0; i < charCount; i++) {
-        data[i] = this._generateChar()
+      if(R.allowedChars){
+        data = StringGen.generateStringFromChars(charCount, R.allowedChars);
+      } else {
+        data = StringGen.generateStringFromCodePoints(charCount, R.allowedCodePoints, R);
       }
-      data = data.join('')
     }
     return data
   }
 
-  private _range():{start:number, range:number}{
+
+  static generateStringFromChars(charCount: number, allowedChars:string[]) {
+    let data:string[] = new Array(charCount)
+    for (let i = 0; i < charCount; i++) {
+      data[i] = StringGen._generateChar(allowedChars)
+    }
+    return data.join('')
+  }
+
+  static generateStringFromCodePoints(charCount: number, allowedCodePoints:number[], R?:StringRestrictions) {
+    let str = ""
+    let maxNextLen = charCount
+    do {
+      let ch = StringGen._generateCodePoint(allowedCodePoints)
+      if(ch.length <= maxNextLen) {
+        maxNextLen = maxNextLen - ch.length // decrement by the 'string' length of ch - usually 1, sometimes 2
+        str = str + ch
+      }
+    } while (str.length < charCount)
+    return str
+  }
+
+  private static _generateChar(allowed: string[]) {
+    let L = allowed.length
+    let randomIndex = Math.floor(Math.random() * L)
+    return allowed[randomIndex]
+  }
+
+  private static _range(R:StringRestrictions):{start:number, range:number}{
     let range:number
-    let {value: max, inclusive: maxI} = this.restrictions.maxLength
-    let {value: min, inclusive: minI} = this.restrictions.minLength
+    let {value: max, inclusive: maxI} = R.maxLength
+    let {value: min, inclusive: minI} = R.minLength
     if(maxI === false){
       max--
     }
@@ -43,29 +126,13 @@ export class StringGen extends DataGen {
     return {start: min, range:range}
   }
 
-  _generateChar() {
+  private static _generateCodePoint(allowedCodePoints : number[]) {
     let rand = Math.random()
-    let allowedCount = 0
-    let L = this.restrictions.allowedCodePoints.length
-    let pointers:number[] = []
-    for (let i = 0; i < L; i += 2) {
-      allowedCount += this.restrictions.allowedCodePoints[i + 1] - this.restrictions.allowedCodePoints[i] + 1
-      pointers.push(allowedCount)
-    }
-    let choiceIndex = Math.floor(rand * allowedCount)
-    let randomCodePoint:number
-    for (let i = 0; i < pointers.length; i++) {
-      if (choiceIndex < pointers[i]) {
-        let randomRangeMin = this.restrictions.allowedCodePoints[i * 2]
-        let correction = i > 0 ? pointers[i - 1] : 0
-        randomCodePoint = choiceIndex - correction + randomRangeMin
-        break
-      }
-    }
-    return String.fromCodePoint(randomCodePoint)
+    let choiceIndex = Math.floor(rand * allowedCodePoints.length)
+    return String.fromCodePoint(allowedCodePoints[choiceIndex])
   }
 }
-Object.assign(StringGen.prototype, StringRestrictionDefaults)
+
 
 
 

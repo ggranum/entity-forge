@@ -16,7 +16,6 @@ var gulp = require('gulp')
 tools.concat = require('gulp-concat')
 tools.rename = require('gulp-rename')
 tools.replace = require('gulp-replace')
-tools.sourcemaps = require('gulp-sourcemaps')
 tools.minimist = require('minimist')
 tools.open = require('open');
 tools.proxy = require('proxy-middleware')
@@ -31,7 +30,7 @@ var config = {
   proxyProtocol: 'http',
   proxyHostname: 'localhost',
   proxyPort: 8080,
-  buildDir: './build',
+  buildDir: './build/system',
   distDir: __dirname + '/dist',
   srcDir: './src',
   buildTarget: 'dev'
@@ -69,10 +68,32 @@ var project = {
     cb()
   },
 
+  compileStatic: function (cb) {
+    gulp.src('./src/**/*.{html,js,css,eot,svg,ttf,woff,woff2,png}').pipe(gulp.dest(config.buildDir)).on('finish', cb)
+  },
+
+  compile: function (cb) {
+    return project.compileStatic(cb)
+  },
+
+  printSize(file){
+    var stats = tools.fs.statSync(file)
+    var size = stats["size"]
+    console.log("Dist build size: ", Math.floor(size/1000) + '.' + (size % 1000 ) + 'kB')
+  },
+
+  compileDist: function (done) {
+    return done()
+  },
+
   catchError: function (msg) {
     return function (e) {
       console.log(msg || "Error: ", e)
     }
+  },
+
+  watch: function () {
+    return gulp.watch('./src/**/*.{js,html}', ['compile-static']).on('error', project.catchError("Error watching HTML files"))
   },
 
 
@@ -112,7 +133,7 @@ var project = {
       console.log('Started connect web server on ' + config.appHost)
       if (config.args.open) {
         var openTo = config.args.open === true ? '/index-dev.html' : config.args.open
-        console.log('Opening default browser to ' + openTo)
+        console.log('Opening default browser to ' + config.appHost  + openTo)
         tools.open(config.appHost + openTo)
       }
       else {
@@ -134,9 +155,27 @@ gulp.task('start-server', function (done) {
   done()
 })
 
+gulp.task('compile-static', [], function (done) {
+  project.compileStatic(done)
+})
 
-gulp.task('serve', ['start-server'], function (done) {
+gulp.task('compile', ['compileTsc'], function (done) {
+  project.compile(done)
+})
+
+gulp.task('watch', ['compile-static'], function () {
+  return project.watch()
+});
+
+gulp.task('serve', ['start-server', 'watch'], function (done) {
   // if 'done' is not passed in this task will not block.
+})
+
+gulp.task('clean', [], function (done) {
+  project.clean(done)
+})
+
+gulp.task('build', ['compile'], function () {
 })
 
 gulp.task('default', function (done) {

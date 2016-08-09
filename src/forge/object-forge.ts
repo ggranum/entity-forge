@@ -2,8 +2,8 @@ import {Forge, BeforeIgnitionEvent} from "./forge";
 import {EntityType} from "./entity-type";
 import {DescendantValidator} from "./descendant-validator";
 import {ValidateFailedError} from "./validate-failed-error";
-import {Validators} from "validator/index";
 import {ObjectGen} from "generate/index";
+import {BaseForge} from "./base-forge";
 
 
 /**
@@ -36,7 +36,7 @@ import {ObjectGen} from "generate/index";
  *     - set {value} is called
  *     - -
  */
-export class ObjectForge extends Forge {
+export class ObjectForge extends BaseForge {
   private entityType:any = null
   fieldDefinitions:any
 
@@ -44,10 +44,11 @@ export class ObjectForge extends Forge {
     super()
     this.fieldDefinitions = fields || {}
     this.fieldName = fieldName
+    super.validatedBy(new DescendantValidator(this))
   }
 
   ignite() {
-    this._check.add(new DescendantValidator(this), Validators.notNull)
+    // this.restrictions.add(new DescendantValidator(this), Validators.notNull)
     if (!this.entityType) {
       this.entityType = this.createTypeDefinition()
     }
@@ -140,7 +141,7 @@ export class ObjectForge extends Forge {
       if (r == null) {
         this[privateFieldName] = value
       } else {
-        throw new ValidateFailedError(r.message, r)
+        throw new ValidateFailedError(r[privateFieldName].message, r)
       }
     }
   }
@@ -159,8 +160,6 @@ export class ObjectForge extends Forge {
   }
 }
 
-
-
 Forge.onBeforeIgnition(ObjectForge, function (event:BeforeIgnitionEvent) {
   let forge:ObjectForge = <ObjectForge>event.forge
   let childFields = {}
@@ -168,7 +167,7 @@ Forge.onBeforeIgnition(ObjectForge, function (event:BeforeIgnitionEvent) {
     let fieldDef = forge.fieldDefinitions[fieldName]
     childFields[fieldName] = fieldDef.dataGen
   })
-  let dataGen = new ObjectGen(event.restrictions).base(()=> forge.newInstance()).childFields(childFields)
+  let dataGen = new ObjectGen().applyRestrictions(event.restrictions).base(()=> forge.newInstance()).childFields(childFields)
   forge.dataGen = dataGen
   forge.gen = () => dataGen.gen()
 })

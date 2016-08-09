@@ -1,12 +1,12 @@
-import {DataGen} from "./data-gen";
-import {CommonRestrictions, ObjectRestrictionDefaults} from "validator/index";
+import {BaseRestrictions} from "validator/index";
+import {BaseGen} from "./base-gen";
 
-export class EnumGen extends DataGen {
+export class EnumGen extends BaseGen {
 
-  restrictions:CommonRestrictions
+  restrictions:BaseRestrictions
 
-  constructor(cfg:any = null) {
-    super(cfg, ObjectRestrictionDefaults)
+  constructor() {
+    super()
   }
 
   values(values:any[]):this{

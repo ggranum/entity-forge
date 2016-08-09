@@ -1,12 +1,17 @@
 import {DataGen} from "./data-gen";
-import {ObjectRestrictionDefaults, Validators} from "validator/index";
+import {Validators} from "validator/index";
 
 
 export class ObjectGen extends DataGen {
   private fields:any = {}
   private baseObject:any = null
-  constructor(cfg:any = null) {
-    super(cfg , ObjectRestrictionDefaults)
+
+  constructor() {
+    super()
+  }
+
+  getDefaults():any{
+    return super.getDefaults()
   }
 
   childFields(fields:any) {
