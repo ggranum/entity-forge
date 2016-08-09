@@ -1,4 +1,4 @@
-import {NotNullValidator} from "validator/base-validator";
+import {NotNullValidator} from "validator/index";
 
 interface TestCase {
   inputs: any[],

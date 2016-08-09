@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/ggranum/entity-forge/issues"
   },
-  "main": "entity-forge.js",
+  "main": "dist/es3/forge/index.js",
   "keywords": [
     "utilities",
     "types",
@@ -40,6 +40,7 @@
     "minimist": "^1.1.1",
     "open": "0.0.5",
     "proxy-middleware": "^0.x.x",
+    "rollup": "^0.34.7",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-json": "^2.0.1",
     "serve-index": "^1.6.3",
@@ -51,6 +52,7 @@
     "build.dev": "tsc -p ./src/tsconfig-system.json -w",
     "serve": "gulp serve",
     "serve.test": "gulp serve --open=/entity-forge-test.dev.html",
+    "serve.prod": "gulp serve --open=/entity-forge-test.html",
     "serve.docs": "gulp serve --open=/build/system/docs/index.html",
     "docs": "echo '(re)implement me.'"
   },
