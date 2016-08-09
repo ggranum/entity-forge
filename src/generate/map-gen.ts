@@ -56,7 +56,7 @@ export class MapGen extends DataGen {
 
   gen() {
     let data: any = null
-    if (!this._provideNull()) {
+    if (!this.provideNull()) {
       let R = this.restrictions
       let elementCount = NumberGen.nextInt(R.minLength.value, R.maxLength.value, R.minLength.inclusive, R.maxLength.inclusive)
 

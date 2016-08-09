@@ -1,6 +1,5 @@
 import {DataGen} from "./data-gen";
 import {Validators} from "validator/index";
-import {ObjectRestrictions} from "../validator/restriction/restriction";
 
 
 export class ObjectGen extends DataGen {
@@ -11,7 +10,7 @@ export class ObjectGen extends DataGen {
     super()
   }
 
-  getDefaults():ObjectRestrictions{
+  getDefaults():any{
     return super.getDefaults()
   }
 

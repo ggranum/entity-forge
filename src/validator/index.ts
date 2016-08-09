@@ -1,8 +1,8 @@
-import {IsBooleanValidator} from "./boolean";
-import {IsStringValidator} from "./string";
 import {IsArrayValidator} from "./array";
-import {IsNumberValidator, IsIntValidator} from "./number";
-import {IsFunctionValidator, IsObjectValidator, NotNullValidator} from "./object";
+import {IsNumberValidator, IsIntValidator} from "./number-validator";
+import {NotNullValidator} from "./base-validator";
+import {IsObjectValidator, IsFunctionValidator, IsBooleanValidator} from "./common-validator";
+import {IsStringValidator} from "./string/is-string-validator";
 
 export const Validators = {
   notNull: new NotNullValidator(),
@@ -16,9 +16,10 @@ export const Validators = {
 }
 
 export * from "./validator";
-export * from "./object";
-export * from "./number";
-export * from "./string";
+export * from "./base-validator";
+export * from "./common-validator";
+export * from "./composite-validator";
+export * from "./number-validator";
+export * from "./string/string-validator";
 export * from "./array";
 export * from "./identifier";
-export * from './restriction/restriction'

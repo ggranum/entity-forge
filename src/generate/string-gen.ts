@@ -1,10 +1,8 @@
 import {DataGen} from "./data-gen";
-import {StringRestrictions} from "validator/index";
-import {FluentStringRestrictions} from "../validator/restriction/restriction";
-import {Strings} from "../validator/string";
+import {Strings, StringRestrictionsFluent, StringRestrictions} from "validator/index";
 
 
-export class StringGen extends DataGen implements FluentStringRestrictions{
+export class StringGen extends DataGen implements StringRestrictionsFluent{
 
 
   restrictions:StringRestrictions
@@ -18,12 +16,33 @@ export class StringGen extends DataGen implements FluentStringRestrictions{
       isString: true,
       minLength: {value: 0, inclusive:true},
       maxLength: {value: 1024, inclusive:true},
-      allowedCodePoints: [0x9, 0x14, 0x20, 0x7E],
+      allowedChars: null,
+      allowedCodePoints: Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP,
       matchesRegex: null,
       notMatchesRegex: null
     }
   }
 
+
+  notNull(value?:boolean): this {
+    this.restrictions.notNull = value !== false
+    return this
+  }
+
+  isString(value?:boolean): this {
+    this.restrictions.isString = value !== false
+    return this
+  }
+
+  allowedChars(values: string[]): this {
+    this.restrictions.allowedChars = values
+    return this
+  }
+
+  allowedCodePoints(values:number[]):this{
+    this.restrictions.allowedCodePoints = values
+    return this
+  }
 
   minLength(value: number, inclusive?: boolean): this {
     this.restrictions.minLength = { value:value, inclusive:inclusive !== false  }
@@ -49,26 +68,17 @@ export class StringGen extends DataGen implements FluentStringRestrictions{
     return this
   }
 
-  allowedCodePoints(codePointRanges:number[]) {
-    this.restrictions.allowedCodePoints = codePointRanges
-    return this
-  }
-
-  allowedChars(values: string[]): this {
-    this.restrictions.allowedChars = values
-    return this
-  }
-
 
   gen():any {
+    let R = this.restrictions
     let data = super.gen()
     if (data !== null) {
-      let { start, range} = this._range()
+      let { start, range} = StringGen._range(R)
       let charCount = start + Math.floor(Math.random() * range)
-      if(this.restrictions.allowedChars){
-        data = StringGen.generateStringFromChars(charCount, this.restrictions.allowedChars);
+      if(R.allowedChars){
+        data = StringGen.generateStringFromChars(charCount, R.allowedChars);
       } else {
-        data = StringGen.generateStringFromCodePoints(charCount, this.restrictions.allowedCodePoints);
+        data = StringGen.generateStringFromCodePoints(charCount, R.allowedCodePoints, R);
       }
     }
     return data
@@ -83,12 +93,17 @@ export class StringGen extends DataGen implements FluentStringRestrictions{
     return data.join('')
   }
 
-  static generateStringFromCodePoints(charCount: number, allowedCodePoints?:number[]) {
-    let data:string[] = new Array(charCount)
-    for (let i = 0; i < charCount; i++) {
-      data[i] = StringGen._generateCodePoint(allowedCodePoints || Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP)
-    }
-    return data.join('')
+  static generateStringFromCodePoints(charCount: number, allowedCodePoints:number[], R?:StringRestrictions) {
+    let str = ""
+    let maxNextLen = charCount
+    do {
+      let ch = StringGen._generateCodePoint(allowedCodePoints)
+      if(ch.length <= maxNextLen) {
+        maxNextLen = maxNextLen - ch.length // decrement by the 'string' length of ch - usually 1, sometimes 2
+        str = str + ch
+      }
+    } while (str.length < charCount)
+    return str
   }
 
   private static _generateChar(allowed: string[]) {
@@ -97,10 +112,10 @@ export class StringGen extends DataGen implements FluentStringRestrictions{
     return allowed[randomIndex]
   }
 
-  private _range():{start:number, range:number}{
+  private static _range(R:StringRestrictions):{start:number, range:number}{
     let range:number
-    let {value: max, inclusive: maxI} = this.restrictions.maxLength
-    let {value: min, inclusive: minI} = this.restrictions.minLength
+    let {value: max, inclusive: maxI} = R.maxLength
+    let {value: min, inclusive: minI} = R.minLength
     if(maxI === false){
       max--
     }
@@ -111,26 +126,10 @@ export class StringGen extends DataGen implements FluentStringRestrictions{
     return {start: min, range:range}
   }
 
-  private static _generateCodePoint(allowedCodePoints: number[]) {
+  private static _generateCodePoint(allowedCodePoints : number[]) {
     let rand = Math.random()
-    let allowedPairs = 0
-    let L = allowedCodePoints.length
-    let pointers:number[] = []
-    for (let i = 0; i < L; i += 2) {
-      allowedPairs += allowedCodePoints[i + 1] - allowedCodePoints[i] + 1
-      pointers.push(allowedPairs)
-    }
-    let choiceIndex = Math.floor(rand * allowedPairs)
-    let randomCodePoint:number
-    for (let i = 0; i < pointers.length; i++) {
-      if (choiceIndex < pointers[i]) {
-        let randomRangeMin = allowedCodePoints[i * 2]
-        let correction = i > 0 ? pointers[i - 1] : 0
-        randomCodePoint = choiceIndex - correction + randomRangeMin
-        break
-      }
-    }
-    return String.fromCodePoint(randomCodePoint)
+    let choiceIndex = Math.floor(rand * allowedCodePoints.length)
+    return String.fromCodePoint(allowedCodePoints[choiceIndex])
   }
 }
 

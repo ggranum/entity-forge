@@ -1,9 +1,9 @@
-import {DataGen} from "./data-gen";
-import {CommonRestrictions} from "validator/index";
+import {BaseRestrictions} from "validator/index";
+import {BaseGen} from "./base-gen";
 
-export class EnumGen extends DataGen {
+export class EnumGen extends BaseGen {
 
-  restrictions:CommonRestrictions
+  restrictions:BaseRestrictions
 
   constructor() {
     super()

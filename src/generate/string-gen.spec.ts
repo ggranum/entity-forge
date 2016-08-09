@@ -1,12 +1,12 @@
 import {StringGen} from "generate/index";
 
 
-(function () {
+describe("Data Generation", function(){
   describe("StringGen", function () {
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
 
-      let seed = 4
+      let seed = 5
       Math.seedrandom(seed)
       let gen = new StringGen()
       let count = 0
@@ -16,7 +16,7 @@ import {StringGen} from "generate/index";
           count++
         }
       }
-      expect(count).toBe(8)
+      expect(count).toBe(11)
     })
 
     /**
@@ -29,4 +29,4 @@ import {StringGen} from "generate/index";
       expect(s.length).toEqual(20)
     })
   })
-})()
+})

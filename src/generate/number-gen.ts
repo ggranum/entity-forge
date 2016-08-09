@@ -1,8 +1,8 @@
-import {DataGen} from "./data-gen";
-import {FluentNumberRestrictions, NumberRestrictions} from "validator/index";
+import {NumberRestrictionsFluent, NumberRestrictions} from "validator/index";
+import {BaseGen} from "./base-gen";
 
 
-export class NumberGen extends DataGen implements FluentNumberRestrictions {
+export class NumberGen extends BaseGen implements NumberRestrictionsFluent {
 
   restrictions: NumberRestrictions
 
@@ -12,9 +12,8 @@ export class NumberGen extends DataGen implements FluentNumberRestrictions {
 
   getDefaults():NumberRestrictions {
     return {
-
-      numeric: true,
-      integral: false,
+      isNumber: true,
+      isInt: false,
       min: {
         value: Number.MIN_VALUE,
         inclusive: false
@@ -26,13 +25,13 @@ export class NumberGen extends DataGen implements FluentNumberRestrictions {
     }
   }
 
-  isInt(): this {
-    this.restrictions.integral = true
+  isInt(value?:boolean): this {
+    this.restrictions.isInt = value !== false
     return this
   }
 
-  isNumber(): this {
-    this.restrictions.numeric = true
+  isNumber(value?:boolean): this {
+    this.restrictions.isNumber = value !== false
     return this
   }
 
@@ -41,7 +40,7 @@ export class NumberGen extends DataGen implements FluentNumberRestrictions {
     return this
   }
 
-  max(value: number, inclusive?: boolean): this {
+  max(value:number, inclusive?: boolean): this {
     this.restrictions.max = {value: value, inclusive: inclusive !== false}
     return this
   }
@@ -69,7 +68,7 @@ export class NumberGen extends DataGen implements FluentNumberRestrictions {
     let max = restrictions.max.value
     let min = restrictions.min.value
     let delta: number
-    if (restrictions.integral) {
+    if (restrictions.isInt) {
       data = NumberGen.nextInt(
         min > Number.MIN_SAFE_INTEGER ? min : Number.MAX_SAFE_INTEGER,
         max < Number.MAX_SAFE_INTEGER ? max : Number.MAX_SAFE_INTEGER,

@@ -1,6 +1,7 @@
 
+import {Strings} from "./string/string-validator";
 export let UNICODE = {
-  ID_Start: [
+  ID_Start: Strings.rangePairsToFlatList([
     0x24, 0x24,
     0x5F, 0x5F,
     0x41, 0x5a,
@@ -573,9 +574,8 @@ export let UNICODE = {
     0x2a700, 0x2b734,
     0x2b740, 0x2b81d,
     0x2b820, 0x2cea1,
-    0x2f800, 0x2fa1d]
-  ,
-  ID_Continue: [
+    0x2f800, 0x2fa1d]).sort(),
+  ID_Continue: Strings.rangePairsToFlatList([
     0x24, 0x24,
     0x30, 0x39,
     0x41, 0x5a,
@@ -1252,5 +1252,5 @@ export let UNICODE = {
     0x2b740, 0x2b81d,
     0x2b820, 0x2cea1,
     0x2f800, 0x2fa1d,
-    0xe0100, 0xe01ef]
+    0xe0100, 0xe01ef]).sort()
 }

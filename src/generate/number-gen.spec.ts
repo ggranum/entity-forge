@@ -1,8 +1,8 @@
 import {NumberGen} from "generate/index";
 
 
-(function () {
-  describe("NumberGen", function () {
+describe("Data Generation", function(){
+  describe("Number", function () {
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
       let seed = 4
@@ -45,4 +45,4 @@ import {NumberGen} from "generate/index";
 
     })
   })
-})()
+})

@@ -1,9 +1,9 @@
 import {EntityForge} from "forge/index";
-(function () {
 
-  let EF = EntityForge
+let EF = EntityForge
 
-  describe('ObjectForge.model', function () {
+describe('Forge', function () {
+  describe('ObjectForge', function () {
 
     let UserContactForge: any
     let UserForge: any
@@ -27,7 +27,7 @@ import {EntityForge} from "forge/index";
     })
 
 
-    describe("DataGen", function () {
+    describe("Generate", function () {
 
       it("can generate a simple model instance.", function () {
         try {
@@ -202,4 +202,4 @@ import {EntityForge} from "forge/index";
       })
     })
   })
-})()
+})

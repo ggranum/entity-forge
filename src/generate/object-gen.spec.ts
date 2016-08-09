@@ -1,8 +1,8 @@
 import {ObjectGen, StringGen} from "generate/index";
 
 
-(function () {
-  describe("ObjectGen", function () {
+describe("Data Generation", function(){
+  describe("Object", function () {
 
     beforeEach(function () {
       let seed = 4
@@ -35,4 +35,4 @@ import {ObjectGen, StringGen} from "generate/index";
       }
     })
   })
-})()
+})

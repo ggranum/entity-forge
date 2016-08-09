@@ -4,10 +4,11 @@ import {EnumForge} from "./enum-forge";
 import {NumberForge} from "./number-forge";
 import {StringForge} from "./string-forge";
 import {ObjectForge} from "./object-forge";
+import {BaseForge} from "./base-forge";
 
 
 let EntityForge: {
-  any: (()=>Forge);
+  any: ((defaultValue?:any)=>BaseForge);
   bool: ((defaultValue?: boolean)=>BooleanForge);
   enumeration: ((defaultValue?: any)=>EnumForge);
   number: ((defaultValue?: number)=>NumberForge);
@@ -15,8 +16,11 @@ let EntityForge: {
   string: ((defaultValue?: string)=>StringForge);
   obj: ((fields?: any, defaultValue?: any, fieldName?: string)=>ObjectForge)
 };
+
+
+
 EntityForge = {
-  any: Forge.any,
+  any: BaseForge.any,
   bool: BooleanForge.bool,
   enumeration: EnumForge.enumeration,
   number: NumberForge.number,

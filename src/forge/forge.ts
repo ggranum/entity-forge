@@ -1,7 +1,6 @@
 import {ValidateFailedError} from "./validate-failed-error";
 import {ConfigurationError} from "./configuration-error";
-import {Validator, CommonRestrictions} from "validator/index";
-import {Check, Checks} from "check/index";
+import {Restriction, ValidatorIF, ValidatorErrorsIF, Validator, CommonRestrictions} from "validator/index";
 import {DataGen} from "generate/index";
 
 
@@ -24,11 +23,12 @@ export class Forge {
   private _transactional: boolean = false
   private _version: number = null
   private _versionFieldName: string = 'version'
+  private _validator:ValidatorIF
   dataGen: DataGen
-  _check: Check
+  restrictions: Restriction
 
-  constructor(checkOverride?:Check) {
-    this._check = checkOverride || new Check().autoInit(false)
+  constructor() {
+    this.restrictions = {}
   }
 
   static onBeforeIgnition(targetType: any, listenerFn: Function) {
@@ -48,9 +48,16 @@ export class Forge {
     return this._defaultValue
   }
 
-  validate(value: any) {
-    this._check.init()
-    return this._check.validate(value)
+  validatedBy(validator:ValidatorIF){
+    this._validator = validator
+  }
+
+  getValidator():ValidatorIF{
+    return this._validator
+  }
+
+  validate(value: any):ValidatorErrorsIF {
+    return this.getValidator().validate(value, this.restrictions)
   }
 
   forgeSetter(privateFieldName: string) {
@@ -60,7 +67,7 @@ export class Forge {
       if (r == null) {
         this[privateFieldName] = value
       } else {
-        throw new ValidateFailedError(r.message, r)
+        throw new ValidateFailedError("Validation Failed", r)
       }
     }
   }
@@ -76,10 +83,6 @@ export class Forge {
   }
 
   /* Fluent configuration calls */
-
-  static any() {
-    return new Forge()
-  }
 
   /**
    * Initialize Forged instances/fields-values to the provided value.
@@ -131,14 +134,6 @@ export class Forge {
     return this
   }
 
-
-  /**
-   * Forged instances/fields-values cannot be set to null or undefined.
-   */
-  notNull(): this {
-    this._check.notNull()
-    return this
-  }
 
   /*****  Forge directives.  ******/
 
@@ -218,20 +213,14 @@ export class Forge {
    */
   ignite() {
     if (!this._lit) {
-      this._applyRestrictions()
-      let event:BeforeIgnitionEvent = {key: 'beforeIgnition', forge: this, restrictions: this._check.restrictions}
+      let event:BeforeIgnitionEvent = {key: 'beforeIgnition', forge: this, restrictions: this.restrictions}
       this.fireEvent(beforeIgnitionListeners, event)
-      if (this._check.restrictions.notNull && this.defaultValue == null) {
-        throw new ConfigurationError(`Cannot create forge for '${this.fieldName || '[unknown]'}': default value is null but null is not allowed. `)
-      }
+      // if (this.restrictions.restrictions.notNull && this.defaultValue == null) {
+      //   throw new ConfigurationError(`Cannot create forge for '${this.fieldName || '[unknown]'}': default value is null but null is not allowed. `)
+      // }
       this._lit = true
       Object.freeze(this)
     }
-
-  }
-
-  _applyRestrictions() {
-    this._check.init()
   }
 
   fireEvent(listeners: any, event: any) {

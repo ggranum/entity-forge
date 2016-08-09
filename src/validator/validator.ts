@@ -1,56 +1,137 @@
+import {Restriction} from "./base-validator";
+import any = jasmine.any;
 
 
-import {Restriction} from "./restriction/restriction";
-export interface ValidatorError {
-  [key:string]: {
-    restrictions:any,
-    message:string,
-    value:any,
-  }
+export interface ValidatorErrorIF {
+  key: string,
+  restrictions: any,
+  message: string,
+  value: any,
+}
+export interface ValidatorErrorsIF {
+  [key: string]: ValidatorErrorIF
 }
 
 export interface ValidatorIF {
-  restrictions:any
-  name:string
-  message:string
-  ordinal:number
+  restrictions: Restriction
+  key: string
+  message: string
 
-  isValid(value:any):boolean
-  validate(value:any):any
+  getPreconditions(): ValidatorIF[]
+  isValid(value: any, preconditionsTriggerFailure?: boolean): boolean
+  validate(value: any, restrictions?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF
+  doValidate(value: any, restrictions?: Restriction): ValidatorErrorsIF
 }
 
- export class Validator implements ValidatorIF {
-  restrictions:any
-  name:string
-  message:string
-  ordinal:number = 1
 
-  constructor(providedArgs?:any) {
+export class ValidatorErrorInfo implements ValidatorErrorIF {
+
+  constructor(public key: string,
+              public message: string,
+              public restrictions: Restriction,
+              public value: any,
+              public childErrors?: any) {
+  }
+
+  toComposite(applyTo?: ValidatorErrorsIF): ValidatorErrorsIF {
+    let temp = {}
+    temp[this.key] = this
+    if (this.childErrors) {
+      Object.assign(temp[this.key], this.childErrors)
+    }
+    return Object.assign(applyTo || {}, temp)
+  }
+
+  static fromValidator(validator: ValidatorIF, value: any, childErrors?: any): ValidatorErrorInfo {
+    return new ValidatorErrorInfo(validator.key,
+      validator.message,
+      validator.restrictions,
+      value,
+      childErrors
+    )
+  }
+}
+
+export class Validator implements ValidatorIF {
+  restrictions: Restriction
+  key: string
+  message: string
+
+  constructor(providedArgs?: any) {
     this.restrictions = Object.assign({}, this.restrictions, providedArgs)
   }
 
-  isValid(value:any):boolean {
-    throw new Error("Not implemented: " + this.name)
+  static instance():ValidatorIF {
+    if(!this['INSTANCE']){
+      this['INSTANCE'] = new this()
+    }
+    return this['INSTANCE']
   }
 
-  validate(value:any):ValidatorError {
-    let r:any = null
-    if (!this.isValid(value)) {
-      r = this.generateError(value)
-    }
-    return r
+  getPreconditions(): ValidatorIF[] {
+    return []
   }
 
-  generateError(value:any, childErrors?:any, alternateMessage?:string):ValidatorError {
-    let response:ValidatorError = {}
-    response[this.name] = {
-      restrictions: this.restrictions,
-      message: alternateMessage || this.message,
-      value: value,
-    }
-    if (childErrors) {
-      Object.assign(response[this.name], childErrors)
-    }
-    return response
+
+  isValid(value: any, preconditionsTriggerFailure?: boolean): boolean {
+    return this.validate(value, this.restrictions, preconditionsTriggerFailure) === null
   }
+
+  validate(value: any, restrictionOverrides?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF {
+    let R = restrictionOverrides ? restrictionOverrides : this.restrictions
+    let results: ValidatorErrorsIF = null
+    let preResults = this.testPreconditions(value, R)
+
+    if (preResults === null) {
+      results = this.doValidate(value, R)
+    } else if (preconditionsTriggerFailure === true) {
+      results = preResults
+    }
+    return results
+  }
+
+
+  testPreconditions(value: any, R?: Restriction): ValidatorErrorsIF {
+    let preconditions = this.getPreconditions()
+    let preResult: ValidatorErrorsIF = null
+    for (let i = 0; i < preconditions.length; i++) {
+      preResult = preconditions[i].validate(value, null, true)
+      if (preResult !== null) {
+        break
+      }
+    }
+    return preResult
+  }
+
+
+  /**
+   * Subclasses should implement this method. It will be called by the parent classes 'validate' method,
+   * after 'testPreconditions' has executed successfully.
+   *
+   * Implementations should use the restrictions provided and not pull from the instance object.
+   *
+   * @param value
+   * @param restrictions
+   */
+  doValidate(value: any, restrictions?: Restriction): ValidatorErrorsIF {
+    throw new Error("Not implemented. Either provide a static 'doValidate' function or override the validate method.")
+  }
+}
+
+
+export class CompositeValidator extends Validator {
+
+
+  //noinspection JSMethodCanBeStatic
+  doValidateComposite(value: string, R: Restriction, validations: ValidatorIF[]): ValidatorErrorsIF {
+    let result: ValidatorErrorsIF = null
+    for (let i = 0; i < validations.length; i++) {
+      result = validations[i].validate(value, R)
+      if (result !== null) {
+        break
+      }
+    }
+    return result
+  }
+
 }

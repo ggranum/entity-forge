@@ -17,8 +17,6 @@
   },
   "files":[
     "validator/index.ts",
-    "check/index.ts",
-    "check/index.spec.ts",
     "generate/index.ts",
     "generate/index.spec.ts",
     "forge/index.ts",

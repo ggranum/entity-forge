@@ -1,17 +1,17 @@
 import {DataGen} from "./data-gen";
-import {UIDRestrictions} from "../validator/restriction/restriction";
 import {generatePushID} from "./firebase-generate-push-id";
+import {NotNullRestriction} from "../validator/base-validator";
 
 
 export class UIDGen extends DataGen {
 
-  restrictions:UIDRestrictions
+  restrictions:NotNullRestriction
 
   constructor() {
     super()
   }
 
-  getDefaults():UIDRestrictions {
+  getDefaults():NotNullRestriction {
     return {
       notNull: true
     }

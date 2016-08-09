@@ -1,6 +1,5 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {Strings} from "validator/index";
-import {StringCheck, Check} from "check/index";
+import {Strings, StringRestrictions} from "validator/index";
 import {StringGen} from "generate/index";
 import {StringForge} from "./string-forge";
 
@@ -16,10 +15,10 @@ import {StringForge} from "./string-forge";
  */
 export class KeyForge extends StringForge {
 
-  _check: StringCheck
+  restrictions: StringRestrictions
 
-  constructor(checkOverride?: Check) {
-    super(checkOverride || new StringCheck().autoInit(false))
+  constructor() {
+    super()
     this.allowedCodePoints(Strings.COMMON_UTF_RANGES.UTF_PLANE_BMP)
   }
 
@@ -39,7 +38,8 @@ export class KeyForge extends StringForge {
 
 
 Forge.onBeforeIgnition(KeyForge, function (event: BeforeIgnitionEvent) {
-  let dataGen = new StringGen(event.restrictions)
+  let dataGen = new StringGen()
+  dataGen.restrictions = <StringRestrictions>event.restrictions
   event.forge.dataGen = dataGen
   event.forge.gen = () => dataGen.gen()
 })

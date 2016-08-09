@@ -1,24 +1,33 @@
-import {RefRestrictions, FluentRefRestrictions} from "../validator/restriction/restriction";
 import {NumberGen} from "./number-gen";
 import {StringGen} from "./string-gen";
-import {ConfigurationError} from "../forge/configuration-error";
-import {Strings} from "validator/index";
-import {IsIdentifierValidator} from "../validator/identifier";
+import {IsIdentifierValidator, IdentifierRestrictions, IdentifierValidatorFluent, Strings} from "validator/index";
+import {StringRestrictions} from "../validator/string/string-validator";
+import {UNICODE} from "../validator/identifier_constants";
+
+
+export interface IdentifierGenRestrictions extends IdentifierRestrictions, StringRestrictions {
+  unique?: boolean;
+  incremental?: boolean;
+}
+
+export interface IdentifierGenFluent extends IdentifierValidatorFluent {
+  unique(value?: boolean): this
+  incremental(value?: boolean): this
+}
+
 
 /**
  * Many thanks to https://mathiasbynens.be/notes/javascript-properties
  *
  */
-export class IdentifierGen extends StringGen implements FluentRefRestrictions {
-
-  restrictions: RefRestrictions
+export class IdentifierGen extends StringGen implements IdentifierGenFluent {
+  restrictions: IdentifierGenRestrictions
   private _instanceData: {previous: number|string, used?: {[key: string]: boolean}}
   maxAttempts = 10;
 
   constructor() {
     super()
     this.reset()
-    this.allowedCodePoints(Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_LATIN_IPA)
     this.validatedBy(new IsIdentifierValidator())
   }
 
@@ -29,16 +38,33 @@ export class IdentifierGen extends StringGen implements FluentRefRestrictions {
     }
   }
 
-  getDefaults(): RefRestrictions {
+  getDefaults(): IdentifierGenRestrictions {
     return {
+      allowedChars: null,
+      allowedCodePoints: UNICODE.ID_Start,
       notNull: true,
       arrayIndex: null,
       quoted: null,
       incremental: null,
       unique: null,
-      minLength: {value: 1, inclusive:true},
-      maxLength: {value: 25, inclusive:true},
+      minLength: {value: 1, inclusive: true},
+      maxLength: {value: 20, inclusive: true},
     }
+  }
+
+  isIdentifier(value?: boolean): this {
+    this.restrictions.isIdentifier = value !== false
+    return this
+  }
+
+  objectKey(value?: boolean): this {
+    this.restrictions.objectKey = value !== false
+    return this
+  }
+
+  quoted(value?: boolean): this {
+    this.restrictions.quoted = value !== false
+    return this
   }
 
   incremental(): this {
@@ -63,12 +89,11 @@ export class IdentifierGen extends StringGen implements FluentRefRestrictions {
   }
 
   gen(): any {
-    let data:any = null
-    if (!super._provideNull()) {
-      let R = this.restrictions
-      let v:any
+    let R = this.restrictions
+    let data: any = null
+    if (!super.provideNull()) {
+      let v: any
       let attempts = this.maxAttempts
-      this._validator.restrictions = this.restrictions
       do {
         if (R.arrayIndex) {
           v = IdentifierGen.nextArrayIndex(R.incremental, <number>this._instanceData.previous);
@@ -76,9 +101,9 @@ export class IdentifierGen extends StringGen implements FluentRefRestrictions {
           v = super.gen()
           // v = RefGen.nextValidStringIdentifier(super, R.quoted, <string>this._instanceData.previous)
         }
-      } while (!this._validator.isValid(v) || (R.unique && (this._instanceData.used[v] == true && --attempts )  ))
-      if(attempts === 0){
-        throw new ConfigurationError("Could not generate valid identifier values within the constraints provided.")
+      } while (--attempts && (!this.validator.isValid(v) || (R.unique && (this._instanceData.used[v] == true ) )))
+      if (attempts === 0) {
+        throw new Error("Could not generate valid identifier values within the constraints provided.")
       }
       this._instanceData.used[v] = true
       this._instanceData.previous = v
@@ -88,7 +113,7 @@ export class IdentifierGen extends StringGen implements FluentRefRestrictions {
   }
 
   static nextArrayIndex(incremental: boolean, previous: number) {
-    let v:number
+    let v: number
     if (incremental) {
       v = previous + 1
     } else {

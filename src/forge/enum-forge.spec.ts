@@ -1,26 +1,24 @@
 import {EntityForge, EnumForge} from "forge/index";
 
-(function () {
-  let EF = EntityForge
+let EF = EntityForge
 
 
+describe('Forge', function () {
   describe('EnumForge.enumeration', function () {
-    beforeEach(function () {
-    });
 
     it('Allows null values by default', function () {
-      let Model = EF.obj({
-        foo: EF.enumeration().values(["100", "Bob", "Sally"])
-      }).asNewable()
-      let m = new Model()
-      let error: any = null
-      try {
-        m.foo = null
-      } catch (e) {
-        error = e
-      }
-      expect(error).toBeNull()
-      expect(m.foo).toBe(null, "Null should be valid.")
+        let Model = EF.obj({
+          foo: EF.enumeration().values(["100", "Bob", "Sally"])
+        }).asNewable()
+        let m = new Model()
+        let error: any = null
+        try {
+          m.foo = null
+        } catch (e) {
+          error = e
+        }
+        expect(error).toBeNull("Null value should be valid.")
+        expect(m.foo).toBe(null, "Null value should be valid.")
     });
 
     it('Does not allow null values when notNull set', function () {
@@ -62,7 +60,7 @@ import {EntityForge, EnumForge} from "forge/index";
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
         expect(result).toBeTruthy("The value '" + disallowed[i] + "' should not be allowed.")
-        expect(result.isOneOf).toBeDefined()
+        expect(result['isOneOf']).toBeDefined()
       }
     });
     describe('Generation', function () {
@@ -111,4 +109,4 @@ import {EntityForge, EnumForge} from "forge/index";
   })
 
 
-})()
+})

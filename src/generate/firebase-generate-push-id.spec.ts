@@ -1,7 +1,7 @@
 import {generatePushID} from "./firebase-generate-push-id";
 
+describe("Data Generation", function () {
 
-(function () {
   describe("generatePushID", function () {
 
 
@@ -22,4 +22,4 @@ import {generatePushID} from "./firebase-generate-push-id";
     // })
 
   })
-})()
+})
