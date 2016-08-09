@@ -26,6 +26,9 @@
   "contributors": [
     "Geoff M. Granum <geoff.granum@gmail.com>"
   ],
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "babel-preset-es2015-rollup": "^1.1.1",
     "connect": "^3.4.1",
@@ -58,7 +61,6 @@
   },
   "dependencies": {
     "es6-shim": ">=0.22.0",
-    "seedrandom": "^2.4.2",
-    "systemjs": "^0.19.32"
+    "seedrandom": "^2.4.2"
   }
 }
