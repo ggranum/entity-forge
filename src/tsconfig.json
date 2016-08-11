@@ -23,7 +23,10 @@
     "forge/index.ts",
     "forge/index.spec.ts",
     "seedrandom.d.ts",
-
+    "extra/validator/index.ts",
+    "extra/validator/index.spec.ts",
+    "extra/generate/index.ts",
+    "extra/generate/index.spec.ts",
     "../typings/index.d.ts"
   ]
 }

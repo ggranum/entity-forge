@@ -18,10 +18,6 @@
         format: 'register',
         defaultExtension: 'js'
       },
-      'check': {
-        format: 'register',
-        defaultExtension: 'js'
-      },
       'generate': {
         format: 'register',
         defaultExtension: 'js'
@@ -29,13 +25,22 @@
       'forge': {
         format: 'register',
         defaultExtension: 'js'
-      }
+      },
+      'extra/validator': {
+        format: 'register',
+        defaultExtension: 'js'
+      },
+      'extra/generate': {
+        format: 'register',
+        defaultExtension: 'js'
+      },
     },
     map: {
       'validator': './build/system/validator',
-      'check': './build/system/check',
       'generate': './build/system/generate',
-      'forge': './build/system/forge'
+      'forge': './build/system/forge',
+      'extra/validator': './build/system/extra/validator',
+      'extra/generate': './build/system/extra/generate',
     }
   });
 
@@ -43,6 +48,8 @@
     System.import('./build/system/validator/index.spec.js'),
     System.import('./build/system/generate/index.spec.js'),
     System.import('./build/system/forge/index.spec.js'),
+    System.import('./build/system/extra/validator/index.spec.js'),
+    System.import('./build/system/extra/generate/index.spec.js'),
 ]).then(function (p) {
     console.log("Page loaded", "Executing tests...")
     window.onload(p)

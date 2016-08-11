@@ -56,7 +56,7 @@
     "serve": "gulp serve",
     "serve.test": "gulp serve --open=/entity-forge-test.dev.html",
     "serve.prod": "gulp serve --open=/entity-forge-test.html",
-    "serve.docs": "gulp serve --open=/build/system/docs/index.html",
+    "serve.docs": "gulp serve --open=/src/docs/index.html",
     "docs": "echo '(re)implement me.'"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import {IsIdentifierValidator} from "validator/index";
+import {IsIdentifierValidator} from "extra/validator/index";
 
 describe("Validators", function () {
 

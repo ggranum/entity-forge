@@ -29,5 +29,5 @@ EntityForge = {
   obj: ObjectForge.obj
 };
 
-export {Forge, BooleanForge, EnumForge, NumberForge, StringForge, ObjectForge, EntityForge}
+export {EntityForge, Forge, BooleanForge, EnumForge, NumberForge, StringForge, ObjectForge}
 

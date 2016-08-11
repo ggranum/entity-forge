@@ -1,9 +1,13 @@
-import {Validator, ValidatorErrorsIF, ValidatorErrorInfo} from "./validator";
+import {
+  Restriction,
+  Validators,
+  Validator,
+  ValidatorErrorsIF,
+  ValidatorErrorInfo,
+  AllowedCodePointsValidator,
+  Strings
+} from "validator/index";
 import {UNICODE} from "./identifier_constants";
-import {Validators} from "./index";
-import {Restriction} from "./base-validator";
-import {AllowedCodePointsValidator} from "./string/allowed-codepoints-validator";
-import {Strings} from "./string/string-validator";
 
 export const RESERVED = {
   KEYWORDS: [
@@ -112,16 +116,24 @@ export class IsIdentifierValidator extends Validator implements IdentifierValida
       msg = V.isNotNull(value)
       if (!msg && restrictions.arrayIndex) {
         msg = V.isValidArrayIndex(value)
-      } else if(!msg) {
+      } else if (!msg) {
         msg = V.isString(value)
-        if(!msg) { msg = V.isAtLeastOneCharLong(value) }
-        if(!msg) { msg = V.startsWithValidCodePoint(value) }
-        if(!msg) { msg = V.containsOnlyValidCodePoints(value) }
+        if (!msg) {
+          msg = V.isAtLeastOneCharLong(value)
+        }
+        if (!msg) {
+          msg = V.startsWithValidCodePoint(value)
+        }
+        if (!msg) {
+          msg = V.containsOnlyValidCodePoints(value)
+        }
       }
-      if( restrictions.objectKey){
+      if (restrictions.objectKey) {
         msg = V.isValidObjectKey(value, msg === null, restrictions.quoted)
       } else {
-        if(!msg){ msg = V.isNotReserved(value) }
+        if (!msg) {
+          msg = V.isNotReserved(value)
+        }
       }
     } catch (e) {
       msg = "@identifier.unknownError"
@@ -169,10 +181,10 @@ export class IsIdentifierValidator extends Validator implements IdentifierValida
   }
 
   private static containsOnlyValidCodePoints(value: string) {
-    let isValid:any = null
+    let isValid: any = null
     if (value.length >= 1) {
       let L = Strings.isHighSurrogate(value.charCodeAt(0)) ? 2 : 1
-      if(value.length >= L){
+      if (value.length >= L) {
         isValid = continueValidator.validate(value.substring(L))
       }
     }

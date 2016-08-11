@@ -6,7 +6,7 @@ export default {
   entry: 'dist/esm/forge/index.js',
   dest: 'dist/es3/forge/index.js',
   format: 'iife',
-  moduleName: 'Forge',
+  moduleName: 'EntityForge',
   plugins: [ json(), babel() ],
   external: [
     'validator/index',

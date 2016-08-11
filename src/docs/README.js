@@ -1,8 +1,5 @@
-
-// Define a model to match reality:
-
 // ```javascript
-let EF = EntityForge
+let EF = EntityForge.EntityForge
 let UserForge = EF.obj({
     uuid: EF.string().minLength(20).maxLength(20).ascii(),
     email: EF.string().minLength(5).maxLength(255),

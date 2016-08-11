@@ -1,8 +1,13 @@
-import {NumberGen} from "./number-gen";
-import {StringGen} from "./string-gen";
-import {IsIdentifierValidator, IdentifierRestrictions, IdentifierValidatorFluent, Strings} from "validator/index";
-import {StringRestrictions} from "../validator/string/string-validator";
-import {UNICODE} from "../validator/identifier_constants";
+import {NumberGen, StringGen} from "generate/index";
+import {
+  StringRestrictions,
+} from "validator/index";
+import {UNICODE} from "extra/validator/index"
+import {
+  IdentifierRestrictions,
+  IdentifierValidatorFluent,
+  IsIdentifierValidator,
+} from "extra/validator/identifier/identifier";
 
 
 export interface IdentifierGenRestrictions extends IdentifierRestrictions, StringRestrictions {
@@ -126,7 +131,3 @@ export class IdentifierGen extends StringGen implements IdentifierGenFluent {
     return generator.gen()
   }
 }
-
-
-
-
