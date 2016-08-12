@@ -32,9 +32,9 @@ describe('Forge', function () {
       it("can generate a simple model instance.", function () {
         try {
           UserForge = EF.obj({
-            uuid: EF.string().minLength(20).maxLength(20).notNull(),
-            email: EF.string().minLength(5).maxLength(255).notNull(),
-            name: EF.string().minLength(10).maxLength(25).notNull()
+            uid: EF.uid(),
+            email: EF.string().minLength(5).maxLength(255).ascii().notNull(),
+            name: EF.string().minLength(10).maxLength(25).ascii().notNull()
           })
         } catch (e) {
           console.log(e)
@@ -46,11 +46,12 @@ describe('Forge', function () {
             let user = UserForge.gen()
             expect(user).toBeDefined("Should create a user.")
             expect(user.name).toBeDefined("Name field not generated: " + i)
-            expect(user.uuid).toBeDefined("uuid field not generated: " + i)
+            expect(user.uid).toBeDefined("uid field not generated: " + i)
             expect(user.email).toBeDefined("Email field not generated: " + i)
-            expect(user.uuid.length).toBe(20)
+            expect(user.uid.length).toBe(20)
             expect(user.name.length).toBeGreaterThan(9)
             expect(user.name.length).toBeLessThan(26)
+            console.log("user:", user)
           } catch (e) {
             console.log(i, e)
             throw e

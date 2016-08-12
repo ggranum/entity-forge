@@ -4,15 +4,17 @@ import {Restriction, ValidatorIF, ValidatorErrorsIF, Validator, CommonRestrictio
 import {DataGen} from "generate/index";
 
 
-
 export interface BeforeIgnitionEvent {
-  key:string
-  forge:Forge
-  restrictions:CommonRestrictions
+  key: string
+  forge: Forge
+  restrictions: CommonRestrictions
 }
 
 let beforeIgnitionListeners = {}
 export class Forge {
+
+  static GENERATED_BY: Object
+
   private _defaultValue: any = null
   private _lit: boolean = false
   private _immutable: boolean = false
@@ -23,12 +25,16 @@ export class Forge {
   private _transactional: boolean = false
   private _version: number = null
   private _versionFieldName: string = 'version'
-  private _validator:ValidatorIF
-  dataGen: DataGen
+  private _validator: ValidatorIF
+  _generatedBy: DataGen
   restrictions: Restriction
 
   constructor() {
     this.restrictions = {}
+  }
+
+  static generatedByType(type: Object) {
+    this.GENERATED_BY = type
   }
 
   static onBeforeIgnition(targetType: any, listenerFn: Function) {
@@ -48,16 +54,17 @@ export class Forge {
     return this._defaultValue
   }
 
-  validatedBy(validator:ValidatorIF){
+  validatedBy(validator: ValidatorIF) {
     this._validator = validator
   }
 
-  getValidator():ValidatorIF{
+  getValidator(): ValidatorIF {
     return this._validator
   }
 
-  validate(value: any):ValidatorErrorsIF {
-    return this.getValidator().validate(value, this.restrictions)
+  validate(value: any): ValidatorErrorsIF {
+    let R = Object.assign({}, this.getValidator().restrictions, this.restrictions)
+    return this.getValidator().validate(value, R)
   }
 
   forgeSetter(privateFieldName: string) {
@@ -78,8 +85,8 @@ export class Forge {
     }
   }
 
-  generatedBy(generator:DataGen){
-    this.dataGen = generator
+  generatedBy(generator: DataGen) {
+    this._generatedBy = generator
   }
 
   /* Fluent configuration calls */
@@ -91,27 +98,13 @@ export class Forge {
    * @param defaultValue
    * @returns {Forge}
    */
-  initTo(defaultValue: any):this {
+  initTo(defaultValue: any): this {
     this._defaultValue = defaultValue;
     return this
   }
 
   /*****  Validations /  constraints.  ******/
 
-
-  /**
-   * Forged instances/fields-values will always be valid.
-   * This forces newly constructed instances to check their validity state after any default and configuration values
-   * are applied.
-   *
-   * Immutable implies neverInvalid.
-   * @param msg
-   * @returns {Forge}
-   * @todo ggranum: Implement
-   */
-  neverInvalid(msg = "@validations.neverInvalid") {
-    return this
-  }
 
   /**
    * Child instances can only be created by passing a valid config object into either the #newInstance method or
@@ -121,9 +114,6 @@ export class Forge {
    * let MyModel = EF.obj({ x: EF.int() } ).immutable().asNewable()
    * let myInstance = new MyModel( { x: 100 } )
    * ```
-   *
-   * 'Immutable' implies 'neverInvalid'.
-   *
    *
    * @param msg
    * @returns {Forge}
@@ -183,22 +173,16 @@ export class Forge {
 
   /**
    * Generate a new valid instance of this type.
-   * @todo ggranum: Retry on invalid. Some validations will be very difficult or impossible to generate random
-   * entries for and we'll just have to try a few times to get it. For example, 'matchesRegex' could be easier to
-   * just keep trying at rather than spending time coding up a perfect generation function.
    */
   gen(additionalGeneratorConfig: any = null) {
     this.ignite()
-    if (!this.dataGen) {
-      throw new ConfigurationError("No generator for type: " + this)
-    }
     if (additionalGeneratorConfig) {
       // @revisit ggranum: Find a better hack for the field/method collisions inherent in fluent JS.
       Object.keys(additionalGeneratorConfig).forEach((key)=> {
-        this.dataGen['_' + key] = additionalGeneratorConfig[key]
+        this._generatedBy['_' + key] = additionalGeneratorConfig[key]
       })
     }
-    return this.dataGen.gen()
+    return this._generatedBy.gen(this.restrictions)
   }
 
   /**
@@ -213,7 +197,14 @@ export class Forge {
    */
   ignite() {
     if (!this._lit) {
-      let event:BeforeIgnitionEvent = {key: 'beforeIgnition', forge: this, restrictions: this.restrictions}
+      if (!this._generatedBy) {
+        if (this.constructor['GENERATED_BY']) {
+          this._generatedBy = this.constructor['GENERATED_BY'].instance()
+        } else {
+          throw new ConfigurationError("No generator for type: " + this)
+        }
+      }
+      let event: BeforeIgnitionEvent = {key: 'beforeIgnition', forge: this, restrictions: this.restrictions}
       this.fireEvent(beforeIgnitionListeners, event)
       // if (this.restrictions.restrictions.notNull && this.defaultValue == null) {
       //   throw new ConfigurationError(`Cannot create forge for '${this.fieldName || '[unknown]'}': default value is null but null is not allowed. `)

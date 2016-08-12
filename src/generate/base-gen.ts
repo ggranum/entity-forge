@@ -1,9 +1,8 @@
-import {ValidatorIF, BaseRestrictionsFluent, BaseRestrictions} from "validator/index";
-import {} from "../validator/base-validator";
+import {BaseRestrictionsFluent, BaseRestrictions} from "validator/index";
 import {DataGen} from "./data-gen";
 
 
-export class BaseGen extends DataGen implements BaseRestrictionsFluent{
+export class BaseGen extends DataGen implements BaseRestrictionsFluent {
 
   constructor() {
     super()
@@ -24,6 +23,18 @@ export class BaseGen extends DataGen implements BaseRestrictionsFluent{
   isOneOf(values: any[]): this {
     this.restrictions.isOneOf = values
     return this
+  }
+
+  doGen(R:BaseRestrictions):any{
+    let data:any = null
+    if(R.isOneOf){
+      if (R.isOneOf.length == 0) {
+        throw new Error("No valid values - add items via 'isOneOf'.")
+      }
+      let randomIndex = Math.floor(Math.random() * R.isOneOf.length)
+      data = R.isOneOf[randomIndex]
+    }
+    return data
   }
 
 }

@@ -53,6 +53,7 @@ export class ValidatorErrorInfo implements ValidatorErrorIF {
 }
 
 export class Validator implements ValidatorIF {
+  static INSTANCE:Validator
   restrictions: Restriction
   key: string
   message: string
@@ -62,10 +63,10 @@ export class Validator implements ValidatorIF {
   }
 
   static instance():ValidatorIF {
-    if(!this['INSTANCE']){
-      this['INSTANCE'] = new this()
+    if(!this.INSTANCE || this.INSTANCE.constructor !== this){
+      this.INSTANCE = new this()
     }
-    return this['INSTANCE']
+    return this.INSTANCE
   }
 
   getPreconditions(): ValidatorIF[] {

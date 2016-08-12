@@ -22,8 +22,8 @@ describe("Data Generation", function(){
     })
 
     it("should generate random string children when provided with a string generator as a child field.", function(){
-      let gen = new ObjectGen().applyRestrictions({notNull: true})
-      gen.childFields({
+      let gen = new ObjectGen().notNull()
+      gen.fields({
         aString: new StringGen().applyRestrictions({minLength: {value:2}, maxLength: {value:5}, notNull: true})
       })
       for (let i = 0; i < 1000; i++) {

@@ -1,4 +1,3 @@
-import {Forge, BeforeIgnitionEvent} from "./forge";
 import {Strings, StringValidator, StringRestrictions, StringRestrictionsFluent} from "validator/index";
 import {StringGen} from "generate/index";
 import {BaseForge} from "./base-forge";
@@ -77,10 +76,4 @@ export class StringForge extends BaseForge implements StringRestrictionsFluent{
   }
 }
 
-
-Forge.onBeforeIgnition(StringForge, function (event: BeforeIgnitionEvent) {
-  let dataGen = new StringGen().applyRestrictions(event.restrictions)
-  event.forge.dataGen = dataGen
-  event.forge.gen = () => dataGen.gen()
-})
-
+StringForge.generatedByType(StringGen)

@@ -51,24 +51,27 @@ describe('EntityForge.boolean', function () {
   describe('#generate', function () {
 
     it('Generates random booleans', function () {
-      let forge = EF.bool()
-      let ex = forge.gen()
-      expect(ex).toBeDefined()
+      try {
+        let forge = EF.bool()
+        let ex = forge.gen()
+        expect(ex).toBeDefined()
+      } catch (e) {
+        debugger
+      }
     })
 
     it('Can generate null booleans when null values allowed: ', function () {
-      let forge = EF.bool()
-      let found = {'true': 0, 'false': 0, 'null': 0}
-      let tries = 10
-      while (tries--) {
-        let x = forge.gen({nullChance: 1 / 3})
-        found[x + '']++
-      }
-      let find = [true, false, null]
-      find.forEach((v)=> {
-        expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
-      })
-
+        let forge = EF.bool()
+        let found = {'true': 0, 'false': 0, 'null': 0}
+        let tries = 10
+        while (tries--) {
+          let x = forge.gen({nullChance: 1 / 3})
+          found[x + '']++
+        }
+        let find = [true, false, null]
+        find.forEach((v)=> {
+          expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
+        })
     })
 
     it('Does not generate null booleans when null values are not allowed: ', function () {

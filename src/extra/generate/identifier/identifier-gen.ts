@@ -5,7 +5,7 @@ import {
 import {UNICODE} from "extra/validator/index"
 import {
   IdentifierRestrictions,
-  IdentifierValidatorFluent,
+  IdentifierFluent,
   IsIdentifierValidator,
 } from "extra/validator/identifier/identifier";
 
@@ -15,7 +15,7 @@ export interface IdentifierGenRestrictions extends IdentifierRestrictions, Strin
   incremental?: boolean;
 }
 
-export interface IdentifierGenFluent extends IdentifierValidatorFluent {
+export interface IdentifierGenFluent extends IdentifierFluent {
   unique(value?: boolean): this
   incremental(value?: boolean): this
 }
@@ -93,27 +93,23 @@ export class IdentifierGen extends StringGen implements IdentifierGenFluent {
     return this
   }
 
-  gen(): any {
-    let R = this.restrictions
-    let data: any = null
-    if (!super.provideNull()) {
-      let v: any
-      let attempts = this.maxAttempts
-      do {
-        if (R.arrayIndex) {
-          v = IdentifierGen.nextArrayIndex(R.incremental, <number>this._instanceData.previous);
-        } else {
-          v = super.gen()
-          // v = RefGen.nextValidStringIdentifier(super, R.quoted, <string>this._instanceData.previous)
-        }
-      } while (--attempts && (!this.validator.isValid(v) || (R.unique && (this._instanceData.used[v] == true ) )))
-      if (attempts === 0) {
-        throw new Error("Could not generate valid identifier values within the constraints provided.")
+  doGen(R?: IdentifierGenRestrictions): string {
+    let data: any
+    let attempts = this.maxAttempts
+    do {
+      if (R.arrayIndex) {
+        data = IdentifierGen.nextArrayIndex(R.incremental, <number>this._instanceData.previous);
+      } else {
+        data = super.doGen(R)
+        // v = RefGen.nextValidStringIdentifier(super, R.quoted, <string>this._instanceData.previous)
       }
-      this._instanceData.used[v] = true
-      this._instanceData.previous = v
-      data = v
+    } while (--attempts && (!this.validator.isValid(data) || (R.unique && (this._instanceData.used[data] == true ) )))
+    if (attempts === 0) {
+      throw new Error("Could not generate valid identifier values within the constraints provided.")
     }
+    this._instanceData.used[data] = true
+    this._instanceData.previous = data
+
     return data
   }
 

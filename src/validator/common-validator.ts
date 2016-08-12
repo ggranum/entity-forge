@@ -139,9 +139,10 @@ export class IsFunctionValidator extends Validator implements IsFunctionRestrict
 
   constructor() {
     super()
+    this.isFunction()
   }
 
-  isFunction(value: boolean): this {
+  isFunction(value?: boolean): this {
     this.restrictions.isFunction = value !== false
     return this
   }

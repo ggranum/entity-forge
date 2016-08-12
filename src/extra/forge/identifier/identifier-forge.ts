@@ -1,7 +1,7 @@
-import {Forge, BeforeIgnitionEvent} from "./forge";
-import {Strings, StringRestrictions} from "validator/index";
+import {Forge, BaseForge, BeforeIgnitionEvent} from "forge/index";
 import {StringGen} from "generate/index";
-import {StringForge} from "./string-forge";
+import {IdentifierGenRestrictions} from "extra/generate/index";
+import {IdentifierRestrictions, IdentifierFluent} from "extra/validator/index";
 
 
 /**
@@ -13,34 +13,58 @@ import {StringForge} from "./string-forge";
  * For the specification, see: http://www.ecma-international.org/ecma-262/6.0/index.html#sec-names-and-keywords
  *
  */
-export class KeyForge extends StringForge {
+export class IdentifierForge extends BaseForge implements IdentifierFluent {
 
-  restrictions: StringRestrictions
+  restrictions: IdentifierRestrictions
 
   constructor() {
     super()
-    this.allowedCodePoints(Strings.COMMON_UTF_RANGES.UTF_PLANE_BMP)
   }
 
   static key(defaultValue: string) {
-    let kf = new KeyForge()
+    return  new IdentifierForge()
       .initTo(defaultValue === undefined ? "" : defaultValue)
       .notNull()
       .minLength(1)
       .maxLength(100)
-      .allowedCodePoints()
-
-    return kf
   }
 
+  minLength(value: number, inclusive?: boolean): this {
+    this.restrictions.minLength = {value: value, inclusive: inclusive !== false}
+    return this
+  }
 
+  maxLength(value: number, inclusive?: boolean): this {
+    this.restrictions.maxLength = {value: value, inclusive: inclusive !== false}
+    return this
+  }
+
+  isIdentifier(value?: boolean): this {
+    this.restrictions.isIdentifier = value !== false
+    return this
+  }
+
+  objectKey(value?: boolean): this {
+    this.restrictions.objectKey = value !== false
+    return this
+  }
+
+  quoted(value?: boolean): this {
+    this.restrictions.quoted = value !== false
+    return this
+  }
+
+  arrayIndex(value?: boolean): this {
+    this.restrictions.arrayIndex = value !== false
+    return this
+  }
 }
 
 
-Forge.onBeforeIgnition(KeyForge, function (event: BeforeIgnitionEvent) {
+Forge.onBeforeIgnition(IdentifierForge, function (event: BeforeIgnitionEvent) {
   let dataGen = new StringGen()
-  dataGen.restrictions = <StringRestrictions>event.restrictions
-  event.forge.dataGen = dataGen
+  dataGen.restrictions = <IdentifierGenRestrictions>event.restrictions
+  event.forge._generatedBy = dataGen
   event.forge.gen = () => dataGen.gen()
 })
 
