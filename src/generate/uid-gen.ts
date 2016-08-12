@@ -5,29 +5,21 @@ import {NotNullRestriction} from "../validator/base-validator";
 
 export class UIDGen extends DataGen {
 
-  restrictions:NotNullRestriction
+  restrictions: NotNullRestriction
 
   constructor() {
     super()
   }
 
-  getDefaults():NotNullRestriction {
+  getDefaults(): NotNullRestriction {
     return {
       notNull: true
     }
   }
 
-  gen():any {
-    let data = super.gen()
-    if (data !== null) {
-      data = generatePushID()
-    }
-    return data
+  doGen(R?: NotNullRestriction): any {
+    return generatePushID()
   }
 }
 
 export let uidGen = new UIDGen();
-
-
-
-

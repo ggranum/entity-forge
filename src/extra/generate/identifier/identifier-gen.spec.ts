@@ -1,5 +1,5 @@
-import {IdentifierGen} from "generate/index";
-import {IsIdentifierValidator} from "validator/index";
+import {IdentifierGen} from "extra/generate/index";
+import {IsIdentifierValidator} from "extra/validator/index";
 
 describe("Data Generation", function () {
   describe("Identifier", function () {

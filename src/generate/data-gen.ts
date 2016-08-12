@@ -9,6 +9,7 @@ import {ValidatorIF, Restriction} from "validator/index";
  *
  */
 export interface DataGenerator {
+  clone():this
   gen():any
   reset():any
   /**
@@ -22,6 +23,8 @@ export interface DataGenerator {
 
 export class DataGen implements DataGenerator {
 
+
+  static INSTANCE:DataGen
   private _nullChance:number = 1 / 1000
 
   validator:ValidatorIF
@@ -29,6 +32,24 @@ export class DataGen implements DataGenerator {
 
   constructor() {
     this.restrictions = this.getDefaults()
+  }
+
+  static instance():DataGen{
+    // 'this' being the ctor...
+    if(!this.INSTANCE || this.INSTANCE.constructor !== this){
+      this.INSTANCE = new this()
+    }
+    return this.INSTANCE
+  }
+
+  clone():this{
+    let instance = this
+    let ctor:any = instance.constructor
+    let copy = new ctor()
+    copy.validator = instance.validator
+    copy._nullChance = instance._nullChance
+    copy.restrictions = JSON.parse(JSON.stringify(instance.restrictions))
+    return copy
   }
 
   reset(){}
@@ -52,16 +73,24 @@ export class DataGen implements DataGenerator {
     return this
   }
 
-  gen():any {
+  gen(R?:Restriction):any {
+    R = R ? R : this.restrictions
+    R = Object.assign({}, this.getDefaults(), R)
     let data:any
-    if (this.provideNull()) {
+    if (this.provideNull(R)) {
       data = null
+    } else {
+      data = this.doGen(R)
     }
     return data
   }
 
-  provideNull():boolean {
-    return !this.restrictions.notNull && Math.random() < this._nullChance
+  doGen(R:Restriction):any{
+      throw new Error("Override doGen")
+  }
+
+  provideNull(R:any):boolean {
+    return !R.notNull && Math.random() < this._nullChance
   }
 }
 

@@ -104,9 +104,7 @@ var project = {
     console.log("startServer ")
 
 
-    var proxyBasePaths = [
-      'html',
-    ]
+    var proxyBasePaths = [ ]
 
     var app = tools.connect();
     // proxy API requests to the node server
@@ -124,7 +122,9 @@ var project = {
         }
       })
     })
-    app.use(tools.serveStatic('./'))
+    app.use(tools.serveStatic('./'), {
+      cacheControl: false
+    })
     app.use(tools.serveIndex('./'))
 
     project.server = tools.http.createServer(app);

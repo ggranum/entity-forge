@@ -27,12 +27,4 @@ export class EnumForge extends BaseForge {
     return this
   }
 }
-
-
-Forge.onBeforeIgnition(EnumForge, function (event: BeforeIgnitionEvent) {
-  let dataGen = new EnumGen().applyRestrictions(event.restrictions)
-  event.forge.dataGen = dataGen
-  event.forge.gen = () => dataGen.gen()
-})
-
-
+EnumForge.generatedByType(EnumGen)

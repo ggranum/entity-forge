@@ -1,4 +1,5 @@
 import {DataGen} from "./data-gen";
+import {Restriction} from "../validator/base-validator";
 
 export class BooleanGen extends DataGen {
 
@@ -6,12 +7,8 @@ export class BooleanGen extends DataGen {
     super()
   }
 
-  gen() {
-    let data = super.gen()
-    if (data !== null) {
-      data = Math.random() < 0.5
-    }
-    return data
+  doGen(R?: Restriction): boolean {
+    return Math.random() < 0.5
   }
 }
 

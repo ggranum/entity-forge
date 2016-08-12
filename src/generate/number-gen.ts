@@ -55,30 +55,22 @@ export class NumberGen extends BaseGen implements NumberRestrictionsFluent {
     return this
   }
 
-  gen(): number {
-    let data = super.gen()
-    if (data !== null) {
-      data = NumberGen._doGen(this.restrictions)
-    }
-    return data
-  }
-
-  static _doGen(restrictions: NumberRestrictions): number {
+  doGen(R: NumberRestrictions): number {
     let data: number
-    let max = restrictions.max.value
-    let min = restrictions.min.value
+    let max = R.max.value
+    let min = R.min.value
     let delta: number
-    if (restrictions.isInt) {
+    if (R.isInt) {
       data = NumberGen.nextInt(
         min > Number.MIN_SAFE_INTEGER ? min : Number.MAX_SAFE_INTEGER,
         max < Number.MAX_SAFE_INTEGER ? max : Number.MAX_SAFE_INTEGER,
-        restrictions.min.inclusive,
-        restrictions.max.inclusive
+        R.min.inclusive,
+        R.max.inclusive
       )
     } else {
       delta = Number.EPSILON
-      max = restrictions.max.inclusive ? max : max - delta
-      min = restrictions.min.inclusive ? min : min + delta
+      max = R.max.inclusive ? max : max - delta
+      min = R.min.inclusive ? min : min + delta
       data = Math.random() * (max - min) + min;
     }
     return data

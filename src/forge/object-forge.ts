@@ -1,9 +1,9 @@
-import {Forge, BeforeIgnitionEvent} from "./forge";
 import {EntityType} from "./entity-type";
 import {DescendantValidator} from "./descendant-validator";
 import {ValidateFailedError} from "./validate-failed-error";
 import {ObjectGen} from "generate/index";
 import {BaseForge} from "./base-forge";
+import {ObjectGenRestrictions} from "../generate/object-gen";
 
 
 /**
@@ -37,10 +37,13 @@ import {BaseForge} from "./base-forge";
  *     - -
  */
 export class ObjectForge extends BaseForge {
-  private entityType:any = null
-  fieldDefinitions:any
 
-  constructor(fields:any = {}, fieldName:string = null) {
+  restrictions:ObjectGenRestrictions
+
+  private entityType: any = null
+  fieldDefinitions: any
+
+  constructor(fields: any = {}, fieldName: string = null) {
     super()
     this.fieldDefinitions = fields || {}
     this.fieldName = fieldName
@@ -62,11 +65,12 @@ export class ObjectForge extends BaseForge {
   asNewable() {
     return this._getEntityType()
   }
+
   /**
    * Creates a new instance of the data type.
    * @returns {any}
    */
-  newInstance(defaultOverride:any = null) {
+  newInstance(defaultOverride: any = null) {
     return new (this.asNewable())(defaultOverride)
   }
 
@@ -76,7 +80,7 @@ export class ObjectForge extends BaseForge {
   }
 
   createTypeDefinition() {
-    let theCtor = function(cfg = {}) {
+    let theCtor = function (cfg = {}) {
       Object.assign(this, cfg)
     }
     // @todo ggranum: revisit - not just this, but all uses of Object.assign on prototypes.
@@ -88,7 +92,7 @@ export class ObjectForge extends BaseForge {
     return theCtor
   }
 
-  _initMemberFields(theInstanceType:any, defaults:any) {
+  _initMemberFields(theInstanceType: any, defaults: any) {
     let fieldDefs = this.fieldDefinitions
     Object.keys(fieldDefs).forEach((key)=> {
       let fieldForge = fieldDefs[key]
@@ -108,9 +112,9 @@ export class ObjectForge extends BaseForge {
    * @param defaultOverride
    * @returns {*}
    */
-  _defineProperty(fieldForge:any, entityInstance:any, fieldName:string, defaultOverride:any = null) {
+  _defineProperty(fieldForge: any, entityInstance: any, fieldName: string, defaultOverride: any = null) {
     fieldForge.fieldName = fieldName
-    if(fieldForge.defaultValue === null){
+    if (fieldForge.defaultValue === null) {
       fieldForge.initTo(defaultOverride)
     }
     fieldForge.ignite()
@@ -125,16 +129,16 @@ export class ObjectForge extends BaseForge {
         set: fieldForge.forgeSetter(privateFieldName),
         get: fieldForge.forgeGetter(privateFieldName)
       })
-    } catch(e){
+    } catch (e) {
       debugger
       throw e
     }
   }
 
-  forgeSetter(privateFieldName:string){
+  forgeSetter(privateFieldName: string) {
     let fieldForge = this
-    return function (value:any) {
-      if(value && !value._forge){
+    return function (value: any) {
+      if (value && !value._forge) {
         value = fieldForge.newInstance(value)
       }
       let r = fieldForge.validate(value)
@@ -146,6 +150,19 @@ export class ObjectForge extends BaseForge {
     }
   }
 
+  gen(): any {
+    this.ignite()
+    let childFields = {}
+    let value = this._generatedBy.gen(this.restrictions)
+    if (value) {
+      Object.keys(this.fieldDefinitions).forEach((fieldName)=> {
+        let childForge = this.fieldDefinitions[fieldName]
+        value[fieldName] = childForge.gen()
+      })
+    }
+    return value
+  }
+
   /**********************   Fluent config methods.  **********************/
 
   /**
@@ -155,20 +172,10 @@ export class ObjectForge extends BaseForge {
    * @param fieldName
    * @returns {ObjectForge}
    */
-  static obj(fields:any = {}, defaultValue:any = null, fieldName:string = '') {
+  static obj(fields: any = {}, defaultValue: any = null, fieldName: string = '') {
     return new ObjectForge(fields, fieldName).initTo(defaultValue)
   }
 }
 
-Forge.onBeforeIgnition(ObjectForge, function (event:BeforeIgnitionEvent) {
-  let forge:ObjectForge = <ObjectForge>event.forge
-  let childFields = {}
-  Object.keys(forge.fieldDefinitions).forEach((fieldName)=>{
-    let fieldDef = forge.fieldDefinitions[fieldName]
-    childFields[fieldName] = fieldDef.dataGen
-  })
-  let dataGen = new ObjectGen().applyRestrictions(event.restrictions).base(()=> forge.newInstance()).childFields(childFields)
-  forge.dataGen = dataGen
-  forge.gen = () => dataGen.gen()
-})
+ObjectForge.generatedByType(ObjectGen)
 

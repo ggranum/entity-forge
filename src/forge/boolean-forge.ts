@@ -1,4 +1,3 @@
-import {Forge, BeforeIgnitionEvent} from "./forge";
 import {BooleanGen} from "generate/index";
 import {BaseForge} from "./base-forge";
 
@@ -23,9 +22,4 @@ export class BooleanForge extends BaseForge {
   }
 }
 
-
-Forge.onBeforeIgnition(BooleanForge, function (event: BeforeIgnitionEvent) {
-  let dataGen = new BooleanGen().applyRestrictions(event.restrictions)
-  event.forge.dataGen = dataGen
-  event.forge.gen = () => dataGen.gen()
-})
+BooleanForge.generatedByType(BooleanGen)

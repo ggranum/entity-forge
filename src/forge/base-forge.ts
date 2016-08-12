@@ -1,6 +1,7 @@
-import {Forge, BeforeIgnitionEvent} from "./forge";
-import {NumberGen} from "generate/index";
+import {Forge} from "./forge";
+import {BaseGen} from "generate/index";
 import {BaseRestrictions, BaseRestrictionsFluent, BaseValidator} from "validator/index";
+
 
 export class BaseForge extends Forge implements BaseRestrictionsFluent{
 
@@ -25,12 +26,8 @@ export class BaseForge extends Forge implements BaseRestrictionsFluent{
     return this
   }
 }
-
-
-Forge.onBeforeIgnition(BaseForge, function (event:BeforeIgnitionEvent) {
-  let dataGen = new NumberGen().applyRestrictions(event.restrictions)
-  event.forge.dataGen = dataGen
-  event.forge.gen = () => dataGen.gen()
-})
-
-
+/**
+ * @todo ggranum: At some point this registration should be moved into an 'entityForge-with-generation.ts' file,
+ * so we can ship without requiring Generators (which are only meant for use in testing environments)
+ */
+BaseForge.generatedByType(BaseGen)

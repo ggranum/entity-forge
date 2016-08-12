@@ -1,9 +1,18 @@
-import {Validator, ValidatorErrorsIF, ValidatorErrorInfo} from "./validator";
+import {
+  Restriction,
+  Validators,
+  Validator,
+  ValidatorErrorsIF,
+  ValidatorErrorInfo,
+  AllowedCodePointsValidator,
+  Strings
+} from "validator/index";
 import {UNICODE} from "./identifier_constants";
-import {Validators} from "./index";
-import {Restriction} from "./base-validator";
-import {AllowedCodePointsValidator} from "./string/allowed-codepoints-validator";
-import {Strings} from "./string/string-validator";
+import {
+  MinLengthRestrictionFluent, MaxLengthRestrictionFluent,
+  MinLengthRestriction, MaxLengthRestriction
+} from "../../../validator/common-validator";
+import {StringValidator} from "../../../validator/string/string-validator";
 
 export const RESERVED = {
   KEYWORDS: [
@@ -49,14 +58,17 @@ export const RESERVED = {
 }
 
 
-export interface IdentifierRestrictions extends Restriction {
+export interface IdentifierRestrictions extends Restriction, MinLengthRestriction, MaxLengthRestriction {
   isIdentifier?: boolean
   arrayIndex?: boolean
   objectKey?: boolean
   quoted?: boolean,
 }
 
-export interface IdentifierValidatorFluent {
+export interface IdentifierFluent extends
+  MinLengthRestrictionFluent,
+  MaxLengthRestrictionFluent
+{
   isIdentifier(value?: boolean): this
   arrayIndex(value?: boolean): this
   objectKey(value?: boolean): this
@@ -67,7 +79,8 @@ let allReserved = [].concat(RESERVED.KEYWORDS, RESERVED.FUTURE, RESERVED.STRICT_
 let startValidator = new AllowedCodePointsValidator(UNICODE.ID_Start)
 let continueValidator = new AllowedCodePointsValidator(UNICODE.ID_Continue)
 
-export class IsIdentifierValidator extends Validator implements IdentifierValidatorFluent {
+export class IsIdentifierValidator extends Validator implements IdentifierFluent {
+
 
   restrictions: IdentifierRestrictions
 
@@ -80,6 +93,15 @@ export class IsIdentifierValidator extends Validator implements IdentifierValida
     this.isIdentifier()
   }
 
+  minLength(value: number, inclusive?: boolean): this {
+    this.restrictions.minLength = {value: value, inclusive: inclusive !== false}
+    return this
+  }
+
+  maxLength(value: number, inclusive?: boolean): this {
+    this.restrictions.maxLength = {value: value, inclusive: inclusive !== false}
+    return this
+  }
 
   isIdentifier(value?: boolean): this {
     this.restrictions.isIdentifier = value !== false
@@ -101,27 +123,39 @@ export class IsIdentifierValidator extends Validator implements IdentifierValida
     return this
   }
 
-  doValidate(value: any, restrictions: IdentifierRestrictions): ValidatorErrorsIF {
+  doValidate(value: any, R: IdentifierRestrictions): ValidatorErrorsIF {
     let r: ValidatorErrorsIF = null
     let msg: string = null
     try {
       let V = IsIdentifierValidator
-      if (restrictions.quoted) {
+      if (R.quoted) {
         value = '' + value
       }
       msg = V.isNotNull(value)
-      if (!msg && restrictions.arrayIndex) {
+      if (!msg && R.arrayIndex) {
         msg = V.isValidArrayIndex(value)
-      } else if(!msg) {
+      } else if (!msg) {
         msg = V.isString(value)
-        if(!msg) { msg = V.isAtLeastOneCharLong(value) }
-        if(!msg) { msg = V.startsWithValidCodePoint(value) }
-        if(!msg) { msg = V.containsOnlyValidCodePoints(value) }
+        if (!msg) {
+          msg = V.isAtLeastOneCharLong(value)
+        }
+        if (!msg) {
+          msg = V.startsWithValidCodePoint(value)
+        }
+        if (!msg) {
+          msg = V.containsOnlyValidCodePoints(value)
+        }
+        if (!msg) {
+          let strValidate = StringValidator.instance().validate(value, R)
+          msg = strValidate !== null ? strValidate.toString() : null
+        }
       }
-      if( restrictions.objectKey){
-        msg = V.isValidObjectKey(value, msg === null, restrictions.quoted)
+      if (R.objectKey) {
+        msg = V.isValidObjectKey(value, msg === null, R.quoted)
       } else {
-        if(!msg){ msg = V.isNotReserved(value) }
+        if (!msg) {
+          msg = V.isNotReserved(value)
+        }
       }
     } catch (e) {
       msg = "@identifier.unknownError"
@@ -129,7 +163,7 @@ export class IsIdentifierValidator extends Validator implements IdentifierValida
     }
 
     if (msg != null) {
-      r = new ValidatorErrorInfo(IsIdentifierValidator.key, msg, restrictions, value).toComposite()
+      r = new ValidatorErrorInfo(IsIdentifierValidator.key, msg, R, value).toComposite()
     }
     return r
   }
@@ -169,10 +203,10 @@ export class IsIdentifierValidator extends Validator implements IdentifierValida
   }
 
   private static containsOnlyValidCodePoints(value: string) {
-    let isValid:any = null
+    let isValid: any = null
     if (value.length >= 1) {
       let L = Strings.isHighSurrogate(value.charCodeAt(0)) ? 2 : 1
-      if(value.length >= L){
+      if (value.length >= L) {
         isValid = continueValidator.validate(value.substring(L))
       }
     }

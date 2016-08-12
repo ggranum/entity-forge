@@ -7,6 +7,7 @@ describe("Data Generation", function () {
     /**
      */
     it("Should generate true and false values.", function () {
+
       let gen = new BooleanGen().nullChance(1 / 3)
       let seed = 1
       Math.seedrandom(seed)

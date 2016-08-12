@@ -17,6 +17,7 @@ export interface ValidatorIF {
   key: string
   message: string
 
+  clone():this
   getPreconditions(): ValidatorIF[]
   isValid(value: any, preconditionsTriggerFailure?: boolean): boolean
   validate(value: any, restrictions?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF
@@ -53,6 +54,7 @@ export class ValidatorErrorInfo implements ValidatorErrorIF {
 }
 
 export class Validator implements ValidatorIF {
+  static INSTANCE:Validator
   restrictions: Restriction
   key: string
   message: string
@@ -62,10 +64,21 @@ export class Validator implements ValidatorIF {
   }
 
   static instance():ValidatorIF {
-    if(!this['INSTANCE']){
-      this['INSTANCE'] = new this()
+    if(!this.INSTANCE || this.INSTANCE.constructor !== this){
+      this.INSTANCE = new this()
     }
-    return this['INSTANCE']
+    return this.INSTANCE
+  }
+
+  clone():this{
+    let instance = this
+    let ctor:any = instance.constructor
+    let copy = new ctor()
+    copy.key = instance.key
+    copy.message = instance.message
+    copy.restrictions = JSON.parse(JSON.stringify(instance.restrictions))
+
+    return copy
   }
 
   getPreconditions(): ValidatorIF[] {

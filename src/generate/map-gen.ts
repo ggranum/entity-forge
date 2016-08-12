@@ -1,15 +1,25 @@
 import {DataGen} from "./data-gen";
 import {uidGen} from "./uid-gen";
 import {NumberGen} from "./number-gen";
+import {Restriction, MaxLengthRestriction, MinLengthRestriction} from "validator/index";
+import {NotNullRestriction} from "../validator/base-validator";
 
+
+export interface MapRestrictions extends Restriction, NotNullRestriction, MinLengthRestriction, MaxLengthRestriction {
+  of: DataGen
+  keyedBy: DataGen
+  arrayLike:boolean
+}
 
 export class MapGen extends DataGen {
+
+  restrictions: MapRestrictions
 
   constructor() {
     super()
   }
 
-  getDefaults(): any {
+  getDefaults(): MapRestrictions {
     return {
       notNull: false,
       arrayLike: false,
@@ -44,26 +54,21 @@ export class MapGen extends DataGen {
 
 
   minLength(value: number, inclusive?: boolean): this {
-    this.restrictions.minLength = { value:value, inclusive:inclusive !== false  }
+    this.restrictions.minLength = {value: value, inclusive: inclusive !== false}
     return this
   }
 
   maxLength(value: number, inclusive?: boolean): this {
-    this.restrictions.maxLength = { value:value, inclusive:inclusive !== false  }
+    this.restrictions.maxLength = {value: value, inclusive: inclusive !== false}
     return this
   }
 
-
-  gen() {
+  doGen(R?: MapRestrictions) {
     let data: any = null
-    if (!this.provideNull()) {
-      let R = this.restrictions
-      let elementCount = NumberGen.nextInt(R.minLength.value, R.maxLength.value, R.minLength.inclusive, R.maxLength.inclusive)
-
-      data = {}
-      for (let i = 0; i < elementCount; i++) {
-        data[R.keyedBy.gen()] = R.of.gen()
-      }
+    let elementCount = NumberGen.nextInt(R.minLength.value, R.maxLength.value, R.minLength.inclusive, R.maxLength.inclusive)
+    data = {}
+    for (let i = 0; i < elementCount; i++) {
+      data[R.keyedBy.gen()] = R.of.gen()
     }
     return data
   }

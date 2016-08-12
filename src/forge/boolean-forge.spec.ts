@@ -51,32 +51,44 @@ describe('EntityForge.boolean', function () {
   describe('#generate', function () {
 
     it('Generates random booleans', function () {
-      let forge = EF.bool()
-      let ex = forge.gen()
-      expect(ex).toBeDefined()
+      try {
+        let forge = EF.bool()
+        let ex = forge.gen()
+        expect(ex).toBeDefined()
+      } catch (e) {
+        debugger
+      }
     })
 
     it('Can generate null booleans when null values allowed: ', function () {
-      let forge = EF.bool()
-      let found = {'true': 0, 'false': 0, 'null': 0}
-      let tries = 10
-      while (tries--) {
-        let x = forge.gen({nullChance: 1 / 3})
-        found[x + '']++
+      try {
+        let forge = EF.bool()
+        let found = {'true': 0, 'false': 0, 'null': 0}
+        let tries = 10
+        forge.ignite()
+        forge._generatedBy.nullChance(1 / 3)
+        while (tries--) {
+          let x = forge.gen()
+          found[x + '']++
+        }
+        let find = [true, false, null]
+        find.forEach((v)=> {
+          expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
+        })
+      } catch (e) {
+        console.log(e)
+        debugger
       }
-      let find = [true, false, null]
-      find.forEach((v)=> {
-        expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
-      })
-
     })
 
     it('Does not generate null booleans when null values are not allowed: ', function () {
       let forge = EF.bool().notNull()
       let found = {'true': 0, 'false': 0, 'null': 0}
       let tries = 10
+      forge.ignite()
+      forge._generatedBy.nullChance(1 / 3)
       while (tries--) {
-        let x = forge.gen({nullChance: 1 / 3})
+        let x = forge.gen()
         found[x + '']++
       }
       expect(found['null']).toBe(0, "Should not generate null values.")
