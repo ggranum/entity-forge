@@ -8,3 +8,4 @@ export * from "./string-gen";
 export * from "./map-gen";
 export * from "./firebase-generate-push-id"
 export * from "./uid-gen"
+export * from "./date-gen"

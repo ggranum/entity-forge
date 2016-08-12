@@ -24,4 +24,8 @@ export * from "./string/allowed-characters-validator";
 export * from "./string/allowed-codepoints-validator";
 export * from "./string/is-string-validator";
 export * from "./string/string-validator";
+export * from "./date/is-date-validator";
+export * from "./date/before-validator";
+export * from "./date/after-validator";
+export * from "./date/date-validator";
 export * from "./array";

@@ -29,13 +29,18 @@ describe('Forge', function () {
 
     describe("Generate", function () {
 
+      let HOUR = 1000*60*60
+      let DAY = 24*HOUR
+
       it("can generate a simple model instance.", function () {
+        let now = Date.now()
         try {
           UserForge = EF.obj({
             uid: EF.uid(),
             email: EF.string().minLength(5).maxLength(255).ascii().notNull(),
-            name: EF.string().minLength(10).maxLength(25).ascii().notNull()
-          })
+            name: EF.string().minLength(10).maxLength(25).ascii().notNull(),
+            created: EF.date().before(now + 10*DAY).after(now - 10*DAY ).notNull()
+          }).notNull()
         } catch (e) {
           console.log(e)
           throw e
@@ -51,7 +56,8 @@ describe('Forge', function () {
             expect(user.uid.length).toBe(20)
             expect(user.name.length).toBeGreaterThan(9)
             expect(user.name.length).toBeLessThan(26)
-            console.log("user:", user)
+            expect(user.created).toBeLessThan(now + 10*DAY)
+            expect(user.created).toBeGreaterThan(now - 10*DAY)
           } catch (e) {
             console.log(i, e)
             throw e

@@ -17,6 +17,7 @@ export interface ValidatorIF {
   key: string
   message: string
 
+  clone():this
   getPreconditions(): ValidatorIF[]
   isValid(value: any, preconditionsTriggerFailure?: boolean): boolean
   validate(value: any, restrictions?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF
@@ -67,6 +68,17 @@ export class Validator implements ValidatorIF {
       this.INSTANCE = new this()
     }
     return this.INSTANCE
+  }
+
+  clone():this{
+    let instance = this
+    let ctor:any = instance.constructor
+    let copy = new ctor()
+    copy.key = instance.key
+    copy.message = instance.message
+    copy.restrictions = JSON.parse(JSON.stringify(instance.restrictions))
+
+    return copy
   }
 
   getPreconditions(): ValidatorIF[] {

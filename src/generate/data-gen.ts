@@ -9,6 +9,7 @@ import {ValidatorIF, Restriction} from "validator/index";
  *
  */
 export interface DataGenerator {
+  clone():this
   gen():any
   reset():any
   /**
@@ -26,7 +27,6 @@ export class DataGen implements DataGenerator {
   static INSTANCE:DataGen
   private _nullChance:number = 1 / 1000
 
-
   validator:ValidatorIF
   restrictions:any
 
@@ -40,6 +40,16 @@ export class DataGen implements DataGenerator {
       this.INSTANCE = new this()
     }
     return this.INSTANCE
+  }
+
+  clone():this{
+    let instance = this
+    let ctor:any = instance.constructor
+    let copy = new ctor()
+    copy.validator = instance.validator
+    copy._nullChance = instance._nullChance
+    copy.restrictions = JSON.parse(JSON.stringify(instance.restrictions))
+    return copy
   }
 
   reset(){}

@@ -17,16 +17,11 @@ export class Forge {
 
   private _defaultValue: any = null
   private _lit: boolean = false
-  private _immutable: boolean = false
-  private _errorsAsEvents: boolean = false
-  fieldName: string = null
-  private parentFieldName: string = null
-  private _enumerable: boolean = false
-  private _transactional: boolean = false
   private _version: number = null
   private _versionFieldName: string = 'version'
   private _validator: ValidatorIF
   _generatedBy: DataGen
+  fieldName: string = null
   restrictions: Restriction
 
   constructor() {
@@ -43,11 +38,19 @@ export class Forge {
     beforeIgnitionListeners[targetType] = ary
   }
 
-  /**
-   * @returns {*}
-   */
-  newInstance(defaultOverride: any = null) {
-    return defaultOverride === null ? this.defaultValue : defaultOverride
+  clone(): this {
+    let instance = this
+    let ctor:any = instance.constructor
+    let copy = new ctor()
+    copy.defaultValue(instance.defaultValue)
+    copy.validatedBy(instance.getValidator().clone())
+    copy.generatedBy(instance.getGenerator().clone())
+    copy._version = instance._version
+    copy._versionFieldName = instance._versionFieldName
+    copy.fieldName = instance.fieldName
+    copy.restrictions = JSON.parse(JSON.stringify(instance.restrictions))
+    copy._lit = false
+    return copy
   }
 
   get defaultValue() {
@@ -62,9 +65,12 @@ export class Forge {
     return this._validator
   }
 
-  validate(value: any): ValidatorErrorsIF {
-    let R = Object.assign({}, this.getValidator().restrictions, this.restrictions)
-    return this.getValidator().validate(value, R)
+  generatedBy(generator: DataGen) {
+    this._generatedBy = generator
+  }
+
+  getGenerator(): DataGen {
+    return this._generatedBy
   }
 
   forgeSetter(privateFieldName: string) {
@@ -85,9 +91,27 @@ export class Forge {
     }
   }
 
-  generatedBy(generator: DataGen) {
-    this._generatedBy = generator
+  validate(value: any): ValidatorErrorsIF {
+    let R = Object.assign({}, this.getValidator().restrictions, this.restrictions)
+    return this.getValidator().validate(value, R)
   }
+
+
+  /**
+   * Generate a new valid instance of this type.
+   */
+  gen() {
+    this.ignite()
+    return this._generatedBy.gen(this.restrictions)
+  }
+
+  /**
+   * @returns {*}
+   */
+  newInstance(defaultOverride: any = null) {
+    return defaultOverride === null ? this.defaultValue : defaultOverride
+  }
+
 
   /* Fluent configuration calls */
 
@@ -105,57 +129,6 @@ export class Forge {
 
   /*****  Validations /  constraints.  ******/
 
-
-  /**
-   * Child instances can only be created by passing a valid config object into either the #newInstance method or
-   * into the constructor of a Type created from a call to #asNewable.
-   *
-   * ```
-   * let MyModel = EF.obj({ x: EF.int() } ).immutable().asNewable()
-   * let myInstance = new MyModel( { x: 100 } )
-   * ```
-   *
-   * @param msg
-   * @returns {Forge}
-   * @todo ggranum: Implement
-   */
-  immutable(msg = "@validations.immutable") {
-    this._immutable = true
-    return this
-  }
-
-
-  /*****  Forge directives.  ******/
-
-
-  /**
-   * Enable transactions.
-   *
-   * Forge instances/values will have three methods: txnStart, txnCommit and txnAbort.
-   *
-   * Validations will be performed on commit. We use the term 'abort' and not 'rollback' because no modification
-   * is exposed prior to the execution of commit. The transaction is simply aborted in place.
-   *
-   * @returns {Forge}
-   * @todo ggranum: Implement
-   */
-  transactional() {
-    this._transactional = true
-    return this
-  }
-
-  /**
-   * Used for field definitions in a parent model, setting this to false will cause the field to be 'hidden',
-   * meaning the field will not show up when calling `for...in` loops, or calls made to Parent#getOwnPropertyNames.
-   *
-   * @param {boolean} isEnumerable
-   * @returns {Forge}
-   */
-  enumerable(isEnumerable: boolean = true) {
-    this._enumerable = isEnumerable
-    return this
-  }
-
   /**
    * Sets a version number for your Forge. Instances created with the forge will also have a 'version' field.
    * The name of the version field can be set, but must be consistent between versions if you wish to use the
@@ -171,19 +144,6 @@ export class Forge {
     return this
   }
 
-  /**
-   * Generate a new valid instance of this type.
-   */
-  gen(additionalGeneratorConfig: any = null) {
-    this.ignite()
-    if (additionalGeneratorConfig) {
-      // @revisit ggranum: Find a better hack for the field/method collisions inherent in fluent JS.
-      Object.keys(additionalGeneratorConfig).forEach((key)=> {
-        this._generatedBy['_' + key] = additionalGeneratorConfig[key]
-      })
-    }
-    return this._generatedBy.gen(this.restrictions)
-  }
 
   /**
    * Light the forge. Initialize all values, sanity check default values against constraints, ensure applied

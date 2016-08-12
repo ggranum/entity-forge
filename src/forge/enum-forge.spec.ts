@@ -81,8 +81,10 @@ describe('Forge', function () {
           found[value] = 0
         })
         let tries = values.length * 5
+        forge.ignite()
+        forge._generatedBy.nullChance(1 / (values.length))
         while (tries--) {
-          let x = forge.gen({nullChance: 1 / (values.length)})
+          let x = forge.gen()
           found[x + '']++
         }
         Object.keys(found).forEach((v)=> {

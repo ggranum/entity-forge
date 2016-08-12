@@ -68,9 +68,10 @@ describe('Forge', function () {
           found[value + ''] = 0
         })
         let tries = values.length * 5
-        let nullChance = 1 / (values.length)
+        forge.ignite()
+        forge._generatedBy.nullChance(1 / (values.length))
         while (tries--) {
-          let x = forge.gen({nullChance: nullChance})
+          let x = forge.gen()
           found[x + '']++
         }
         console.log("found", found)

@@ -5,6 +5,7 @@ import {NumberForge} from "./number-forge";
 import {StringForge} from "./string-forge";
 import {ObjectForge} from "./object-forge";
 import {UidForge} from "./uid-forge";
+import {DateForge} from "./date-forge";
 
 
 export let EntityForge: {
@@ -14,6 +15,7 @@ export let EntityForge: {
   number: ((defaultValue?: number)=>NumberForge);
   int: ((defaultValue?: number)=>NumberForge);
   string: ((defaultValue?: string)=>StringForge);
+  date: ((defaultValue?: number)=>DateForge);
   uid: ((defaultValue?: string)=>UidForge);
   obj: ((fields?: any, defaultValue?: any, fieldName?: string)=>ObjectForge)
 };
@@ -27,6 +29,7 @@ EntityForge = {
   number: NumberForge.number,
   int: NumberForge.int,
   string: StringForge.string,
+  date: DateForge.date,
   uid: UidForge.uid,
   obj: ObjectForge.obj
 };

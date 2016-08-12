@@ -1,5 +1,4 @@
 import {Strings, StringValidator, NotNullRestriction} from "validator/index";
-import {UIDGen} from "generate/index";
 import {BaseForge} from "./base-forge";
 
 export class UidForge extends BaseForge {
@@ -12,15 +11,19 @@ export class UidForge extends BaseForge {
       new StringValidator()
         .allowedCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
         .minLength(20)
-        .maxLength(20)
-        .notNull())
+        .maxLength(20))
+  }
+
+  notNull(value?: boolean): this {
+    let v:StringValidator = <StringValidator>this.getValidator()
+    v.notNull(value)
+    return super.notNull(value);
   }
 
   static uid(defaultValue?:string) {
     return new UidForge().initTo(defaultValue)
   }
-
-
 }
 
+import {UIDGen} from "generate/index";
 UidForge.generatedByType(UIDGen)
