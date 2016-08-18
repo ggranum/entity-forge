@@ -9,7 +9,8 @@ export interface ValidatorErrorIF {
   value: any,
 }
 export interface ValidatorErrorsIF {
-  [key: string]: ValidatorErrorIF
+  [key: string]: ValidatorErrorIF | any
+  toString():string
 }
 
 export interface ValidatorIF {
@@ -25,13 +26,42 @@ export interface ValidatorIF {
 }
 
 
+export class ValidatorErrors implements ValidatorErrorsIF {
+
+  _all:ValidatorErrorInfo[]
+  [key: string]: ValidatorErrorIF|any
+
+
+  constructor(infos:ValidatorErrorInfo[]) {
+    infos.forEach((info)=>{
+      this[info.key] = info
+    })
+    this._all = infos
+  }
+
+  toString():string{
+    let s = ''
+    s += this._all.map((info)=> `${info.key}: ${info.toString()}` ).join('\n')
+    return s
+  }
+
+
+}
 export class ValidatorErrorInfo implements ValidatorErrorIF {
 
   constructor(public key: string,
               public message: string,
               public restrictions: Restriction,
               public value: any,
-              public childErrors?: any) {
+              public childErrors?: ValidatorErrorsIF) {
+  }
+
+  toString(){
+    let s = this.message
+    if(this.childErrors){
+      s += ' { ' + this.childErrors.toString() + ' }'
+    }
+    return this.message
   }
 
   toComposite(applyTo?: ValidatorErrorsIF): ValidatorErrorsIF {
@@ -40,7 +70,7 @@ export class ValidatorErrorInfo implements ValidatorErrorIF {
     if (this.childErrors) {
       Object.assign(temp[this.key], this.childErrors)
     }
-    return Object.assign(applyTo || {}, temp)
+    return new ValidatorErrors([this])
   }
 
   static fromValidator(validator: ValidatorIF, value: any, childErrors?: any): ValidatorErrorInfo {

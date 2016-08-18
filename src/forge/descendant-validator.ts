@@ -16,8 +16,8 @@ export class DescendantValidator extends Validator {
 
   doValidate(value:any, R:Restriction):any {
     let errors:any = null
-    Object.keys(this.restrictions.fieldForge.fieldDefinitions).forEach((key)=> {
-      let fieldDef = this.restrictions.fieldForge.fieldDefinitions[key]
+    Object.keys(this.restrictions.fieldForge._fieldDefinitions).forEach((key)=> {
+      let fieldDef = this.restrictions.fieldForge._fieldDefinitions[key]
       let result = fieldDef.validate(value[key], key)
       if (result) {
         errors = errors || {}

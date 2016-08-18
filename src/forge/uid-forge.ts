@@ -14,6 +14,11 @@ export class UidForge extends BaseForge {
         .maxLength(20))
   }
 
+
+  newInstance(): any {
+    return this.gen()
+  }
+
   notNull(value?: boolean): this {
     let v:StringValidator = <StringValidator>this.getValidator()
     v.notNull(value)

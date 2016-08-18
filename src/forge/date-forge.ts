@@ -11,7 +11,7 @@ export class DateForge extends BaseForge implements DateRestrictionsFluent{
   }
 
   static date(defaultValue?:number) {
-    return new DateForge().initTo(defaultValue)
+    return new DateForge().initTo(defaultValue === undefined ? null : defaultValue)
   }
 
   isDate(value?: boolean): this {

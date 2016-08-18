@@ -9,12 +9,10 @@ export default {
   plugins: [ json(), babel() ],
   external: [
     'validator/index',
-    'check/index',
     'generate/index',
     'forge/index',
   ],
   globals: {
-    'check/index': 'Check',
     'validator/index': 'Validator',
     'generate/index': 'Generate',
     'forge/index': 'Forge'

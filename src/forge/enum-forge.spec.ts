@@ -1,7 +1,4 @@
-import {EntityForge, EnumForge} from "forge/index";
-
-let EF = EntityForge
-
+import {EF, EnumForge} from "forge/index";
 
 describe('Forge', function () {
   describe('EnumForge.enumeration', function () {

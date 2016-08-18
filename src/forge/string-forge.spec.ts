@@ -1,9 +1,6 @@
-import {EntityForge} from "forge/index";
+import {EF} from "./entity-forge";
 import {Strings} from "validator/index";
 import {DataGen} from "generate/index";
-
-
-let EF = EntityForge
 
 
 describe('StringForge', function () {

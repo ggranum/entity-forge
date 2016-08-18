@@ -1,17 +1,30 @@
 import {DataGen} from "./data-gen";
 import {uidGen} from "./uid-gen";
 import {NumberGen} from "./number-gen";
-import {Restriction, MaxLengthRestriction, MinLengthRestriction} from "validator/index";
-import {NotNullRestriction} from "../validator/base-validator";
+import {
+  MaxLengthRestriction,
+  MinLengthRestriction,
+  MaxLengthRestrictionFluent,
+  MinLengthRestrictionFluent
+} from "validator/index";
+import {BaseGen} from "./base-gen";
+import {Forge,ObjectRestrictions, ObjectRestrictionsFluent} from "forge/index";
 
 
-export interface MapRestrictions extends Restriction, NotNullRestriction, MinLengthRestriction, MaxLengthRestriction {
-  of: DataGen
-  keyedBy: DataGen
-  arrayLike:boolean
+export interface MapRestrictions extends ObjectRestrictions, MinLengthRestriction, MaxLengthRestriction {
+  of: DataGen|Forge
+  keyedBy: DataGen|string
+  arrayLike: boolean
 }
 
-export class MapGen extends DataGen {
+export interface MapRestrictionsFluent extends ObjectRestrictionsFluent,
+  MinLengthRestrictionFluent,
+  MaxLengthRestrictionFluent {
+  of(type: Forge|DataGen): this
+  keyedBy(keyGen: string|DataGen): this
+}
+
+export class MapGen extends BaseGen implements MapRestrictionsFluent {
 
   restrictions: MapRestrictions
 
@@ -22,6 +35,8 @@ export class MapGen extends DataGen {
   getDefaults(): MapRestrictions {
     return {
       notNull: false,
+      isOneOf: null,
+      fields: null,
       arrayLike: false,
       of: null,
       keyedBy: uidGen,
@@ -63,12 +78,20 @@ export class MapGen extends DataGen {
     return this
   }
 
+
+  fields(value: any): this {
+    this.restrictions.fields = value
+    return this
+  }
+
+
   doGen(R?: MapRestrictions) {
     let data: any = null
     let elementCount = NumberGen.nextInt(R.minLength.value, R.maxLength.value, R.minLength.inclusive, R.maxLength.inclusive)
     data = {}
     for (let i = 0; i < elementCount; i++) {
-      data[R.keyedBy.gen()] = R.of.gen()
+      let dataGen:DataGen = <DataGen>R.keyedBy
+      data[dataGen.gen()] = R.of.gen()
     }
     return data
   }

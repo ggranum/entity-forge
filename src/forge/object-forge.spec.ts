@@ -1,6 +1,4 @@
-import {EntityForge} from "forge/index";
-
-let EF = EntityForge
+import {EF} from "forge/index";
 
 describe('Forge', function () {
   describe('ObjectForge', function () {
