@@ -1,5 +1,5 @@
-import {Strings, StringValidator, StringRestrictions, StringRestrictionsFluent} from "validator/index";
-import {StringGen} from "generate/index";
+import {Strings, StringValidator, StringRestrictions, StringRestrictionsFluent} from "@entity-forge/validator";
+import {StringGen} from "@entity-forge/generate";
 import {BaseForge} from "./base-forge";
 
 export class StringForge extends BaseForge implements StringRestrictionsFluent{

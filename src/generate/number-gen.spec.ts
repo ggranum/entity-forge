@@ -1,4 +1,5 @@
-import {NumberGen} from "generate/index";
+import {NumberGen} from "@entity-forge/generate";
+import * as seedrandom from "seedrandom";
 
 
 describe("Data Generation", function(){
@@ -6,7 +7,7 @@ describe("Data Generation", function(){
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
       let seed = 4
-      Math.seedrandom(seed)
+      seedrandom('' + seed)
       let gen = new NumberGen()
       let count = 0
       for (let i = 0; i < 10000; i++) {
@@ -26,10 +27,10 @@ describe("Data Generation", function(){
       let cfg = {min: -100, max:100}
       let gen = new NumberGen().isInt().min(cfg.min, true).max(cfg.max, true)
       let seed = 1003
-      Math.seedrandom(seed)
+      seedrandom('' + seed)
 
       let find = [cfg.min, cfg.max, 0, null]
-      let found = {'null': 0}
+      let found:any = {'null': 0}
       for (let i = cfg.min; i <= cfg.max; i++) {
         found[i + ''] = 0
       }
@@ -40,7 +41,7 @@ describe("Data Generation", function(){
       }
 
       find.forEach((v)=>{
-        expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
+        expect(found[v + '']).toBeGreaterThan(0) // , "Should have found '" + v + "'")
       })
 
     })

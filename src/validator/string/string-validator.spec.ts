@@ -1,4 +1,5 @@
-import {StringValidator} from "validator/index";
+import {StringValidator} from "@entity-forge/validator";
+
 
 describe("Validators", function () {
 

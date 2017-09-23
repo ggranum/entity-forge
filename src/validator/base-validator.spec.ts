@@ -1,4 +1,4 @@
-import {NotNullValidator} from "validator/index";
+import {NotNullValidator} from "@entity-forge/validator";
 
 interface TestCase {
   inputs: any[],
@@ -26,7 +26,7 @@ describe("Validators", function () {
     }
 
     Object.keys(cases).forEach((key)=> {
-      let test: TestCase = cases[key]
+      let test: TestCase = (<any>cases)[key]
       test.inputs.forEach((input)=> {
         it(`is ${key} when input is '${input}'`, function () {
           let v = new NotNullValidator()

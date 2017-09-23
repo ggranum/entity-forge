@@ -1,7 +1,10 @@
-import {DataGen} from "generate/index";
+import {DataGen} from "@entity-forge/generate";
 
 
 describe("Data Generation", function () {
+
+  it('really is fucking stupid', () => {
+  })
 
 
 })

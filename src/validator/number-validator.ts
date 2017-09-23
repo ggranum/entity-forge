@@ -35,7 +35,8 @@ export class IsNumberValidator extends Validator implements IsNumberRestrictionF
   doValidate(value: any, R: IsNumberRestriction): ValidatorErrorsIF {
     let isValid = true
     if (R.isNumber) {
-      isValid = R.isNumber ? (typeof value === 'number' || value instanceof Number) && !Number.isNaN(value) : true
+      let isNumeric = (typeof value === 'number' || value instanceof Number)
+      isValid = isNumeric && !Number.isNaN(value)
     }
     return isValid
       ? null
@@ -77,7 +78,8 @@ export class IsIntValidator extends Validator implements IsIntRestrictionFluent 
   doValidate(value: any, R: IsIntRestriction): ValidatorErrorsIF {
     let isValid: boolean = true
     if (R.isInt) {
-      isValid = R.isInt ? (typeof value === 'number' || value instanceof Number) && (value % 1 === 0) : true
+      let isNumeric:boolean = (typeof value === 'number' || value instanceof Number)
+      isValid = isNumeric && (value % 1 === 0)
     }
     return isValid
       ? null

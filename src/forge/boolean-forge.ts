@@ -1,4 +1,4 @@
-import {BooleanGen} from "generate/index";
+import {BooleanGen} from "@entity-forge/generate";
 import {BaseForge} from "./base-forge";
 
 /**

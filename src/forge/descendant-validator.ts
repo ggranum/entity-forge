@@ -1,4 +1,4 @@
-import {Validator} from "validator/index";
+import {Validator} from "@entity-forge/validator";
 import {ValidatorErrorInfo} from "../validator/validator";
 import {Restriction} from "../validator/base-validator";
 
@@ -32,8 +32,8 @@ export class DescendantValidator extends Validator {
   }
 
   toError(value:any, childErrors:any) {
-    let response = {}
-    response[this.restrictions.fieldForge.fieldName || 'instance'] = {
+    let response = {};
+    (<any>response)[this.restrictions.fieldForge.fieldName || 'instance'] = {
       message: this.message,
       value: value,
       causedBy: childErrors,

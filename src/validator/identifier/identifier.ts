@@ -1,18 +1,15 @@
+import {BaseRestrictions} from "../base-validator";
 import {
-  Restriction,
-  Validators,
-  Validator,
-  ValidatorErrorsIF,
-  ValidatorErrorInfo,
-  AllowedCodePointsValidator,
-  Strings
-} from "validator/index";
+  MaxLengthRestriction,
+  MaxLengthRestrictionFluent,
+  MinLengthRestriction,
+  MinLengthRestrictionFluent
+} from "../common-validator";
+import {Strings, StringValidator, ValidatorErrorInfo, ValidatorErrorsIF, Validators} from "../index";
+// noinspection TypeScriptPreferShortImport
+import {AllowedCodePointsValidator} from "../string/allowed-codepoints-validator";
+import {Validator} from "../validator";
 import {UNICODE} from "./identifier_constants";
-import {
-  MinLengthRestrictionFluent, MaxLengthRestrictionFluent,
-  MinLengthRestriction, MaxLengthRestriction
-} from "../../../validator/common-validator";
-import {StringValidator} from "../../../validator/string/string-validator";
 
 export const RESERVED = {
   KEYWORDS: [
@@ -58,20 +55,21 @@ export const RESERVED = {
 }
 
 
-export interface IdentifierRestrictions extends Restriction, MinLengthRestriction, MaxLengthRestriction {
+export interface IdentifierRestrictions extends BaseRestrictions, MinLengthRestriction, MaxLengthRestriction {
   isIdentifier?: boolean
   arrayIndex?: boolean
   objectKey?: boolean
   quoted?: boolean,
 }
 
-export interface IdentifierFluent extends
-  MinLengthRestrictionFluent,
-  MaxLengthRestrictionFluent
-{
+export interface IdentifierFluent extends MinLengthRestrictionFluent,
+  MaxLengthRestrictionFluent {
   isIdentifier(value?: boolean): this
+
   arrayIndex(value?: boolean): this
+
   objectKey(value?: boolean): this
+
   quoted(value?: boolean): this
 }
 
@@ -82,15 +80,62 @@ let continueValidator = new AllowedCodePointsValidator(UNICODE.ID_Continue)
 export class IsIdentifierValidator extends Validator implements IdentifierFluent {
 
 
-  restrictions: IdentifierRestrictions
-
   static key = 'isIdentifier'
   static message = '@restriction.identifier'
-
+  restrictions: IdentifierRestrictions
 
   constructor() {
     super()
     this.isIdentifier()
+  }
+
+  private static isNotNull(v: any): string {
+    return (v !== null && v !== undefined) ? null : "@identifier.cannotBeNull"
+  }
+
+  private static isValidObjectKey(v: any, isValidIdentifier: boolean, quoted: boolean): string {
+    let isValid = isValidIdentifier || Validators.isNumber.isValid(v, true) || ( quoted && Validators.isString.isValid(v, true) )
+    return isValid ? null : "@identifier.invalidObjectKey"
+  }
+
+  private static isString(value: any): string {
+    return Validators.isString.isValid(value) ? null : "@identifier.mustBeString"
+  }
+
+  private static isAtLeastOneCharLong(value: any): string {
+    return value.length > 0 ? null : "@identifier.mustBeAtLeastOneCharacter"
+  }
+
+  private static isValidArrayIndex(value: string | number): string {
+    let isValid = true
+    if (Validators.isString.isValid(value)) {
+      try {
+        value = Number.parseInt(<string>value)
+      } catch (e) {
+        isValid = false
+      }
+    }
+    isValid = isValid && Validators.isInt.isValid(value, true)
+    return isValid ? null : "@identifier.notAnArrayIndex"
+  }
+
+  private static startsWithValidCodePoint(value: string) {
+    return startValidator.isValid(String.fromCodePoint(value.codePointAt(0))) ? null : "@identifier.illegalStartCharacter"
+  }
+
+  private static containsOnlyValidCodePoints(value: string) {
+    let isValid: any = null
+    if (value.length >= 1) {
+      let L = Strings.isHighSurrogate(value.charCodeAt(0)) ? 2 : 1
+      if (value.length >= L) {
+        isValid = continueValidator.validate(value.substring(L))
+      }
+    }
+    return isValid === null ? null : isValid[(<any>continueValidator.constructor)['key']].message
+  }
+
+  private static isNotReserved(value: string) {
+    return allReserved.indexOf(value) == -1 ? null : "@identifier.reservedWord"
   }
 
   minLength(value: number, inclusive?: boolean): this {
@@ -166,55 +211,6 @@ export class IsIdentifierValidator extends Validator implements IdentifierFluent
       r = new ValidatorErrorInfo(IsIdentifierValidator.key, msg, R, value).toComposite()
     }
     return r
-  }
-
-  private static isNotNull(v: any): string {
-    return (v !== null && v !== undefined) ? null : "@identifier.cannotBeNull"
-  }
-
-  private static isValidObjectKey(v: any, isValidIdentifier: boolean, quoted: boolean): string {
-    let isValid = isValidIdentifier || Validators.isNumber.isValid(v, true) || ( quoted && Validators.isString.isValid(v, true) )
-    return isValid ? null : "@identifier.invalidObjectKey"
-  }
-
-  private static isString(value: any): string {
-    return Validators.isString.isValid(value) ? null : "@identifier.mustBeString"
-  }
-
-  private static isAtLeastOneCharLong(value: any): string {
-    return value.length > 0 ? null : "@identifier.mustBeAtLeastOneCharacter"
-  }
-
-  private static isValidArrayIndex(value: string | number): string {
-    let isValid = true
-    if (Validators.isString.isValid(value)) {
-      try {
-        value = Number.parseInt(<string>value)
-      } catch (e) {
-        isValid = false
-      }
-    }
-    isValid = isValid && Validators.isInt.isValid(value, true)
-    return isValid ? null : "@identifier.notAnArrayIndex"
-  }
-
-  private static startsWithValidCodePoint(value: string) {
-    return startValidator.isValid(String.fromCodePoint(value.codePointAt(0))) ? null : "@identifier.illegalStartCharacter"
-  }
-
-  private static containsOnlyValidCodePoints(value: string) {
-    let isValid: any = null
-    if (value.length >= 1) {
-      let L = Strings.isHighSurrogate(value.charCodeAt(0)) ? 2 : 1
-      if (value.length >= L) {
-        isValid = continueValidator.validate(value.substring(L))
-      }
-    }
-    return isValid === null ? null : isValid[continueValidator.constructor['key']].message
-  }
-
-  private static isNotReserved(value: string) {
-    return allReserved.indexOf(value) == -1 ? null : "@identifier.reservedWord"
   }
 
 }

@@ -1,4 +1,4 @@
-import {StringGen} from "generate/index";
+import {StringGen} from "@entity-forge/generate";
 
 
 describe("Data Generation", function(){
@@ -6,8 +6,8 @@ describe("Data Generation", function(){
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
 
-      let seed = 5
-      Math.seedrandom(seed)
+      let r = Math.floor(100*Math.random());
+      expect(r).toEqual(19)
       let gen = new StringGen()
       let count = 0
       for (let i = 0; i < 10000; i++) {
@@ -16,7 +16,8 @@ describe("Data Generation", function(){
           count++
         }
       }
-      expect(count).toBe(11)
+      expect(count).toBeGreaterThan(1)
+      expect(count).toBeLessThan(15)
     })
 
     /**

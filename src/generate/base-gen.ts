@@ -1,5 +1,5 @@
-import {BaseRestrictionsFluent, BaseRestrictions} from "validator/index";
 import {DataGen} from "./data-gen";
+import {BaseRestrictions, BaseRestrictionsFluent} from "@entity-forge/validator";
 
 
 export class BaseGen extends DataGen implements BaseRestrictionsFluent {

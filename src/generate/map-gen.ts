@@ -6,9 +6,9 @@ import {
   MinLengthRestriction,
   MaxLengthRestrictionFluent,
   MinLengthRestrictionFluent
-} from "validator/index";
+} from "@entity-forge/validator";
 import {BaseGen} from "./base-gen";
-import {Forge,ObjectRestrictions, ObjectRestrictionsFluent} from "forge/index";
+import {Forge,ObjectRestrictions, ObjectRestrictionsFluent} from "@entity-forge/forge";
 
 
 export interface MapRestrictions extends ObjectRestrictions, MinLengthRestriction, MaxLengthRestriction {

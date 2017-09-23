@@ -1,5 +1,5 @@
 
-import {Strings} from "../../../validator/string/string-validator";
+import {Strings} from "../string/string-validator";
 export let UNICODE = {
   ID_Start: Strings.rangePairsToFlatList([
     0x24, 0x24,

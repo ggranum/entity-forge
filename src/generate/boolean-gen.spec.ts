@@ -1,4 +1,5 @@
-import {BooleanGen} from "generate/index";
+import {BooleanGen} from "@entity-forge/generate";
+import * as seedrandom  from "seedrandom";
 
 
 describe("Data Generation", function () {
@@ -10,9 +11,9 @@ describe("Data Generation", function () {
 
       let gen = new BooleanGen().nullChance(1 / 3)
       let seed = 1
-      Math.seedrandom(seed)
+      seedrandom('' + seed)
 
-      let found = {'true': 0, 'false': 0, 'null': 0}
+      let found:any = {'true': 0, 'false': 0, 'null': 0}
       let tries = 10
       while (tries--) {
         let x = gen.gen()
@@ -21,7 +22,7 @@ describe("Data Generation", function () {
 
       let find = [true, false, null]
       find.forEach((v)=> {
-        expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
+        expect(found[v + '']).toBeGreaterThan(0) // , "Should have found '" + v + "'")
       })
     })
   })

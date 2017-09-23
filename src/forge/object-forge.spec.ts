@@ -1,4 +1,5 @@
-import {EF} from "forge/index";
+import {EF} from "@entity-forge/forge";
+import * as seedrandom from "seedrandom";
 
 describe('Forge', function () {
   describe('ObjectForge', function () {
@@ -43,14 +44,14 @@ describe('Forge', function () {
           console.log(e)
           throw e
         }
-        Math.seedrandom(100)
+        seedrandom('' + 100)
         for (let i = 0; i < 100; i++) {
           try {
             let user = UserForge.gen()
-            expect(user).toBeDefined("Should create a user.")
-            expect(user.name).toBeDefined("Name field not generated: " + i)
-            expect(user.uid).toBeDefined("uid field not generated: " + i)
-            expect(user.email).toBeDefined("Email field not generated: " + i)
+            expect(user).toBeDefined() // "Should create a user.")
+            expect(user.name).toBeDefined() // "Name field not generated: " + i)
+            expect(user.uid).toBeDefined() // "uid field not generated: " + i)
+            expect(user.email).toBeDefined() // "Email field not generated: " + i)
             expect(user.uid.length).toBe(20)
             expect(user.name.length).toBeGreaterThan(9)
             expect(user.name.length).toBeLessThan(26)
@@ -92,7 +93,7 @@ describe('Forge', function () {
         } catch (error) {
           e = error
         }
-        expect(e).toBeDefined("Exception should have been thrown")
+        expect(e).toBeDefined() // "Exception should have been thrown")
         expect(uc.name).toBe(defaultName)
 
       })
@@ -109,7 +110,7 @@ describe('Forge', function () {
         } catch (error) {
           e = error
         }
-        expect(e).toBeDefined("Exception should have been thrown")
+        expect(e).toBeDefined() // "Exception should have been thrown")
         console.log(contact, e)
       })
 
@@ -131,13 +132,13 @@ describe('Forge', function () {
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
-          expect(contact.address).toBeDefined("Address should init to specified default value.")
+          expect(contact.address).toBeDefined() // "Address should init to specified default value.")
           expect(contact.address.line1).toBe(line1Val)
           contact.address = null
         } catch (error) {
           e = error
         }
-        expect(e).toBeDefined("Exception should have been thrown")
+        expect(e).toBeDefined() // "Exception should have been thrown")
         console.log(contact, e)
       })
     })
@@ -162,13 +163,13 @@ describe('Forge', function () {
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
-          expect(contact.address).toBeDefined("Address should init to specified default value.")
+          expect(contact.address).toBeDefined() // "Address should init to specified default value.")
           expect(contact.address.line1).toBe(line1Val)
         } catch (error) {
           console.error(error)
           e = error
         }
-        expect(e).toBeUndefined("Exception should not have been thrown")
+        expect(e).toBeUndefined() // "Exception should not have been thrown")
       })
 
       it("Validates child objects after setting the child to a raw POJO.", function () {
@@ -202,8 +203,8 @@ describe('Forge', function () {
         } catch (error) {
           e = error
         }
-        expect(contact.address.line1).toBe(pojoAddress.line1, "Value should have been reset to previous.")
-        expect(e).toBeDefined("Exception should have been thrown")
+        expect(contact.address.line1).toBe(pojoAddress.line1) // , "Value should have been reset to previous.")
+        expect(e).toBeDefined() // "Exception should have been thrown")
       })
     })
   })

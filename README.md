@@ -87,5 +87,7 @@ console.log("A randomly generated 'BiggerUser:", biggerUser)
 npm install typings --global
 npm install typescript --global
 npm install
-npm run build.test
+npm run build.dev
+# In another console tab
+npm run serve.test
 ```

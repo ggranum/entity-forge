@@ -1,4 +1,6 @@
-import {ObjectGen, StringGen} from "generate/index";
+import {ObjectGen, StringGen} from "@entity-forge/generate";
+import * as seedrandom from "seedrandom";
+
 
 
 describe("Data Generation", function(){
@@ -6,7 +8,7 @@ describe("Data Generation", function(){
 
     beforeEach(function () {
       let seed = 4
-      Math.seedrandom(seed)
+      seedrandom('' + seed)
     });
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
@@ -28,7 +30,7 @@ describe("Data Generation", function(){
       })
       for (let i = 0; i < 1000; i++) {
         let x = gen.gen()
-        expect(x).toBeDefined("Failed at index: " + i)
+        expect(x).toBeDefined() // "Failed at index: " + i)
         expect(x.aString).toBeDefined()
         expect(x.aString.length).toBeGreaterThan(1)
         expect(x.aString.length).toBeLessThan(6)

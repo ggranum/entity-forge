@@ -1,9 +1,9 @@
 import {ValidateFailedError} from "./validate-failed-error";
 import {ConfigurationError} from "./configuration-error";
-import {Restriction, ValidatorIF, ValidatorErrorsIF, CommonRestrictions} from "validator/index";
-import {DataGen} from "generate/index";
+import {Restriction, ValidatorIF, ValidatorErrorsIF, CommonRestrictions} from "@entity-forge/validator";
 import {EntityResolver} from "./store/resolver";
 import {EntityType} from "./entity-type";
+import {DataGen} from "@entity-forge/generate";
 
 
 export interface BeforeIgnitionEvent {
@@ -46,7 +46,11 @@ export interface CompositeForgeIF extends ForgeEntityInstanceIF {
 }
 
 
-let beforeIgnitionListeners = {}
+let beforeIgnitionListeners:{[key:string]: {fn: Function}[]} = {}
+
+const thisHack = function (something: any):any {
+  return something;
+}
 
 export class Forge {
 
@@ -75,13 +79,13 @@ export class Forge {
   }
 
   static onBeforeIgnition(targetType: any, listenerFn: Function) {
-    let ary = beforeIgnitionListeners['' + targetType] || []
+    let ary:{fn: Function}[] = beforeIgnitionListeners['' + targetType] || []
     ary.push({fn: listenerFn})
     beforeIgnitionListeners[targetType] = ary
   }
 
   getResolver(){
-    return this._resolver || Forge.constructor['DEFAULT_RESOLVER']
+    return this._resolver || (<any>Forge.constructor)['DEFAULT_RESOLVER']
   }
 
   setResolver(resolver:EntityResolver):void{
@@ -135,10 +139,11 @@ export class Forge {
 
   forgeSetter(privateFieldName: string) {
     let fieldForge = this
-    return function (value: any): void {
+    /* @note ggranum: apparently typescript compiles the 'this' out of the method params? */
+    return function (this: any, value: any): void {
       let r = fieldForge.validate(value)
       if (r == null) {
-        this[privateFieldName] = fieldForge.wrap(value)
+        this[privateFieldName] = fieldForge.wrap(value);
       } else {
         throw new ValidateFailedError("Validation Failed for " + privateFieldName + ': ' + r.toString(), r)
       }
@@ -146,8 +151,8 @@ export class Forge {
   }
 
   forgeGetter(privateFieldName: string) {
-    return function (): any {
-      return this[privateFieldName]
+    return function (this:any): any {
+      return this[privateFieldName];
     }
   }
 
@@ -181,8 +186,8 @@ export class Forge {
   ignite() {
     if (!this._lit) {
       if (!this._generatedBy) {
-        if (this.constructor['GENERATED_BY']) {
-          this._generatedBy = this.constructor['GENERATED_BY'].instance()
+        if ((<any>this.constructor)['GENERATED_BY']) {
+          this._generatedBy = (<any>this.constructor)['GENERATED_BY'].instance()
         } else {
           throw new ConfigurationError("No generator for type: " + this)
         }

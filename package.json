@@ -1,7 +1,7 @@
 {
   "name": "entityforge",
   "description": "Entities >> Objects",
-  "version": "0.0.3",
+  "version": "0.0.4-beta.01",
   "homepage": "https://github.com/ggranum/entity-forge",
   "repository": {
     "type": "git",
@@ -29,38 +29,38 @@
   "files": [
     "dist"
   ],
-  "devDependencies": {
-    "babel-preset-es2015-rollup": "^1.1.1",
-    "connect": "^3.4.1",
-    "del": "^2.x.x",
-    "git-rev": "^0.2.1",
-    "gulp": "^3.9.x",
-    "gulp-concat": "~2.6.x",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.3",
-    "http-proxy": "^1.11.3",
-    "jasmine-core": "^2.4.1",
-    "minimist": "^1.1.1",
-    "open": "0.0.5",
-    "proxy-middleware": "^0.x.x",
-    "rollup": "^0.34.7",
-    "rollup-plugin-babel": "^2.6.1",
-    "rollup-plugin-json": "^2.0.1",
-    "serve-index": "^1.6.3",
-    "serve-static": "^1.x.x",
-    "typescript": "^1.9.0-dev.20160409"
-  },
   "scripts": {
-    "build.prod": "./build.sh",
-    "build.dev": "tsc -p ./src/tsconfig-system.json -w",
+    "build.test": "tsc -p src/tsconfig.spec.json -w",
+    "build.dev": "tsc -p src/tsconfig.app.json -w",
     "serve": "gulp serve",
+    "jas": "jasmine-ts",
+    "test": "jasmine-ts --project=./tsconfig.json $NODE_DEBUG_OPTION  './src/**/*.spec.ts'",
     "serve.test": "gulp serve --open=/entity-forge-test.dev.html",
     "serve.prod": "gulp serve --open=/entity-forge-test.html",
     "serve.docs": "gulp serve --open=/src/docs/index.html",
     "docs": "echo '(re)implement me.'"
   },
   "dependencies": {
-    "es6-shim": ">=0.22.0",
-    "seedrandom": "^2.4.2"
+    "seedrandom": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/glob": "5.0.32",
+    "@types/gulp": "4.0.4",
+    "@types/jasmine": "^2.5.54",
+    "@types/merge2": "0.3.30",
+    "@types/minimist": "1.2.0",
+    "@types/seedrandom": "2.4.27",
+    "connect": "^3.6.5",
+    "del": "^2.x.x",
+    "git-rev": "^0.2.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "~2.6.x",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.3",
+    "http-proxy": "^1.11.3",
+    "jasmine-ts": "^0.2.1",
+    "json": "9.0.6",
+    "minimist": "^1.1.1",
+    "typescript": "~2.5.2"
   }
 }

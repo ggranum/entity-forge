@@ -1,5 +1,4 @@
 import {Restriction} from "./base-validator";
-import any = jasmine.any;
 
 
 export interface ValidatorErrorIF {
@@ -65,7 +64,7 @@ export class ValidatorErrorInfo implements ValidatorErrorIF {
   }
 
   toComposite(applyTo?: ValidatorErrorsIF): ValidatorErrorsIF {
-    let temp = {}
+    let temp:any = {}
     temp[this.key] = this
     if (this.childErrors) {
       Object.assign(temp[this.key], this.childErrors)

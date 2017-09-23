@@ -1,4 +1,5 @@
-import {EnumGen} from "generate/index";
+import {EnumGen} from "@entity-forge/generate";
+import * as seedrandom from "seedrandom";
 
 let someEnumValues = [
   "It is certain",
@@ -28,7 +29,7 @@ describe("Data Generation", function () {
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
       let seed = 4
-      Math.seedrandom(seed)
+      seedrandom('' + seed)
 
       let gen = new EnumGen().values(someEnumValues)
       let count = 0
@@ -46,9 +47,9 @@ describe("Data Generation", function () {
     it("Should generate all values in the enumeration.", function () {
       let gen = new EnumGen().nullChance(1 / (someEnumValues.length)).values(someEnumValues)
       let seed = 1
-      Math.seedrandom(seed)
+      seedrandom('' + seed)
 
-      let found = {'null': 0}
+      let found:any = {'null': 0}
       someEnumValues.forEach((value)=> {
         found[value] = 0
       })
@@ -60,7 +61,7 @@ describe("Data Generation", function () {
 
       let find = Object.keys(found)
       find.forEach((v)=> {
-        expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
+        expect(found[v + '']).toBeGreaterThan(0) // , "Should have found '" + v + "'")
       })
     })
   })

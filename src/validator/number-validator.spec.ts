@@ -1,4 +1,4 @@
-import {NumberValidator} from "validator/index";
+import {NumberValidator} from "@entity-forge/validator";
 
 describe("Validators", function () {
 
@@ -27,7 +27,7 @@ describe("Validators", function () {
     it("returns validation failure message if input is a string.", function () {
       let c = new NumberValidator()
       let result = c.validate("Not a number.")
-      expect(result).toBeTruthy("The value should not be allowed.")
+      expect(result).toBeTruthy()//"The value should not be allowed.")
       expect(result['isNumber']).toBeDefined()
     })
 
@@ -46,14 +46,14 @@ describe("Validators", function () {
     it("#min provides error when exclusive and input is equal to min. ", function () {
       let c = new NumberValidator().min(100, false)
       let result = c.validate(100)
-      expect(result).toBeTruthy("The value should not be allowed.")
+      expect(result).toBeTruthy()//"The value should not be allowed.")
       expect(result['min']).toBeDefined()
     })
 
     it("#min check returns only 'number' validation failure message if input is a string", function () {
       let c = new NumberValidator().min(100)
       let result = c.validate("12")
-      expect(result).toBeTruthy("The value should not be allowed.")
+      expect(result).toBeTruthy()//"The value should not be allowed.")
       expect(result['isNumber']).toBeDefined()
       expect(result['min']).toBeUndefined()
     })
@@ -73,14 +73,14 @@ describe("Validators", function () {
     it("#max inclusive=false check returns validation failure message if input is equal to the specified max value", function () {
       let c = new NumberValidator().max(100, false)
       let result = c.validate(100)
-      expect(result).toBeTruthy("The value should not be allowed.")
+      expect(result).toBeTruthy() // "The value should not be allowed.")
       expect(result['max']).toBeDefined()
     })
 
     it("#max check returns only 'number' validation failure message if input is a string", function () {
       let c = new NumberValidator().max(100)
       let result = c.validate("12")
-      expect(result).toBeTruthy("The value should not be allowed.")
+      expect(result).toBeTruthy() // "The value should not be allowed.")
       expect(result['isNumber']).toBeDefined()
       expect(result['max']).toBeUndefined()
     })

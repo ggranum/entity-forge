@@ -1,9 +1,9 @@
-import {StringValidator} from "validator/index";
+import {StringValidator} from "@entity-forge/validator";
 import {EntityResolver} from "./store/resolver";
 import {Forge} from "./forge";
 import {ObjectForge} from "./object-forge";
 import {EntityType, MapEntityType} from "./entity-type";
-import {MapGen, MapRestrictions, MapRestrictionsFluent} from "generate/index";
+import {MapGen, MapRestrictions, MapRestrictionsFluent} from "@entity-forge/generate";
 
 
 /**

@@ -1,5 +1,4 @@
-import {EntityForge} from "forge/index";
-let EF = EntityForge
+import {EF} from "@entity-forge/forge";
 
 
 let UIDForge = EF.string().minLength(20).maxLength(20).ascii()

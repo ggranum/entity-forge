@@ -1,5 +1,6 @@
-import {DateValidator, DateRestrictionsFluent, DateRestrictions} from "validator/index";
+import {DateValidator, DateRestrictionsFluent, DateRestrictions} from "@entity-forge/validator";
 import {BaseForge} from "./base-forge";
+import {DateGen} from "@entity-forge/generate";
 
 export class DateForge extends BaseForge implements DateRestrictionsFluent{
 
@@ -33,5 +34,5 @@ export class DateForge extends BaseForge implements DateRestrictionsFluent{
   }
 }
 
-import {DateGen} from "generate/index";
+
 DateForge.generatedByType(DateGen)

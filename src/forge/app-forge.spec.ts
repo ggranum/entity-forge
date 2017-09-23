@@ -1,5 +1,5 @@
-import {EF} from "forge/index";
-
+import {EF} from "@entity-forge/forge";
+import * as seedrandom from "seedrandom";
 
 describe('Forge', function () {
   describe('AppForge', function () {
@@ -10,8 +10,6 @@ describe('Forge', function () {
     let HOUR = 1000*60*60
     let DAY = 24*HOUR
     let now = Date.now()
-
-
 
     beforeEach(function () {
 
@@ -30,7 +28,8 @@ describe('Forge', function () {
         email: EF.string().minLength(5).maxLength(255),
         name: EF.string().minLength(10).maxLength(25),
         created: EF.date().before(now + 10*DAY).after(now - 10*DAY ).initTo(Date.now()).notNull(),
-        contact: EF.ref('/contacts/', UserContact).createIfAbsent()
+        /** @todo: ggranum: Implement ref */
+        // contact: EF.ref('/contacts/', UserContact).createIfAbsent()
       }, {}, "User").notNull()
 
       App = EF.app({
@@ -47,7 +46,7 @@ describe('Forge', function () {
       // it("Throws an error if member created before App..", function () {})
       it("creates child references and stores them.", function () {
 
-        Math.seedrandom(100)
+        seedrandom('' + 100)
 
 
 
@@ -56,14 +55,14 @@ describe('Forge', function () {
             let app = App.newInstance()
 
             let user = User.newInstance()
-            expect(user).toBeTruthy("Should create a user.")
-            expect(user.name).toBeNull('name')
-            expect(user.email).toBeNull('email')
+            expect(user).toBeTruthy() // "Should create a user."
+            expect(user.name).toBeNull() // 'name'
+            expect(user.email).toBeNull() //'email'
             expect(user.uid.length).toBe(20)
-            expect(user.created).toBeLessThan(Date.now(), 'created')
-            expect(user.contact).toBeTruthy('contact')
+            expect(user.created).toBeLessThan(Date.now()) //, 'created'
+            // expect(user.contact).toBeTruthy('contact')
 
-            let x = App._resolver.resolve('/contacts/' + user.contact)
+            // let x = App._resolver.resolve('/contacts/' + user.contact)
             debugger
             console.log(user.toJsonString())
           } catch (e) {

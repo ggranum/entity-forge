@@ -1,10 +1,11 @@
-import {EF} from "forge/index";
+import {EF} from "@entity-forge/forge";
+import * as seedrandom from "seedrandom";
 
 
 describe('Forge', function () {
   describe('NumberForge #int', function () {
     beforeEach(function () {
-      Math.seedrandom(4)
+      seedrandom('' + 4)
     });
 
     it('Allows null values by default', function () {
@@ -18,8 +19,8 @@ describe('Forge', function () {
       } catch (e) {
         error = e
       }
-      expect(error).toBeNull("Null is allowed, an error should not be thrown.")
-      expect(m.foo).toBe(null, "Value should now be null.")
+      expect(error).toBeNull() //"Null is allowed, an error should not be thrown.")
+      expect(m.foo).toBe(null)//, "Value should now be null.")
     });
 
     it('Does not allow null values when notNull set', function () {
@@ -34,7 +35,7 @@ describe('Forge', function () {
         error = e
       }
       expect(error).toBeDefined()
-      expect(m.foo).toBe(0, "Value should be reset to previous value (default).")
+      expect(m.foo).toBe(0)//, "Value should be reset to previous value (default).")
     });
 
     it('Does not allow non-numeric values', function () {
@@ -44,8 +45,8 @@ describe('Forge', function () {
       let disallowed: any = ['1', 1.001, "bob", ((x: any)=> false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
-        expect(result).toBeTruthy("The value '" + disallowed[i] + "' should not be allowed.")
-        expect(result['isNumber'] || result['isInt']).toBeDefined(disallowed[i] + " should not be allowed.")
+        expect(result).toBeTruthy()//"The value '" + disallowed[i] + "' should not be allowed.")
+        expect(result['isNumber'] || result['isInt']).toBeDefined() //disallowed[i] + " should not be allowed.")
       }
     });
 
@@ -59,10 +60,10 @@ describe('Forge', function () {
 
       it('Generates null integers when null values allowed: ', function () {
         let forge = EF.int().min(0).max(3)
-        Math.seedrandom(100)
+        seedrandom('' + 100)
         let values = [0, 1, 2, 3, null]
 
-        let found = {}
+        let found:any = {}
         values.forEach((value)=> {
           found[value + ''] = 0
         })
@@ -75,7 +76,7 @@ describe('Forge', function () {
         }
         console.log("found", found)
         Object.keys(found).forEach((v)=> {
-          expect(found[v + '']).toBeGreaterThan(0, "Should have generated all values. Missed: '" + v + "'")
+          expect(found[v + '']).toBeGreaterThan(0)//, "Should have generated all values. Missed: '" + v + "'")
         })
       })
 
@@ -90,7 +91,7 @@ describe('Forge', function () {
             break
           }
         }
-        expect(generatedNull).toBe(false, "Should not generate null values")
+        expect(generatedNull).toBe(false)//, "Should not generate null values")
       })
 
     })

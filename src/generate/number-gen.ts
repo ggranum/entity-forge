@@ -1,4 +1,4 @@
-import {NumberRestrictionsFluent, NumberRestrictions} from "validator/index";
+import {NumberRestrictionsFluent, NumberRestrictions} from "@entity-forge/validator";
 import {BaseGen} from "./base-gen";
 
 

@@ -7,11 +7,12 @@ import {ObjectForge} from "./index"
 import {UidForge} from "./index"
 import {DateForge} from "./index"
 import {ReferenceForge} from "./index"
-import {Forge} from "./index"
-import {EntityResolver, AppResolver} from "./store/resolver";
+import {EntityResolver} from "./store/resolver";
+// noinspection TypeScriptPreferShortImport
 import {EntityStore} from "./store/entity-store";
 import {AppForge} from "./app-forge";
 import {MapForge} from "./map-forge";
+import {Forge} from "./forge";
 
 
 export interface EntityForgeIF {
@@ -25,7 +26,7 @@ export interface EntityForgeIF {
   date: ((defaultValue?: number)=>DateForge);
   uid: ((defaultValue?: string)=>UidForge);
   map:  (() => MapForge)
-  obj:  ((fields: any, defaultValue?: any, fieldName?: string) => ObjectForge)
+  obj:  (<T>(fields: T, defaultValue?: any, fieldName?: string) => ObjectForge & T)
   app:  ((fields: any, defaultValue?: any, fieldName?: string) => AppForge)
 
   setGlobalDefaultResolver(resovler: EntityResolver): void
@@ -34,7 +35,7 @@ export interface EntityForgeIF {
 }
 
 /**
- * Intended as a singleton, but it doesn't really matter unless your extending with additional forges.
+ * Intended as a singleton, but it doesn't really matter unless you're extending with additional forges.
  */
 export class EntityForge implements EntityForgeIF {
   any: (defaultValue?: any)=>BaseForge;
@@ -47,7 +48,7 @@ export class EntityForge implements EntityForgeIF {
   date: (defaultValue?: number)=>DateForge;
   uid: (defaultValue?: string)=>UidForge
   map:  (() => MapForge)
-  obj: (fields?: any, defaultValue?: any, fieldName?: string)=>ObjectForge
+  obj:  (<T>(fields: T, defaultValue?: any, fieldName?: string) => ObjectForge & T)
   app: (fields: any, defaultValue?: any, fieldName?: string)=>AppForge
 
   resolver: EntityResolver
@@ -73,10 +74,10 @@ export class EntityForge implements EntityForgeIF {
       if (!name) {
         throw new Error("Invalid name for forge target: " + forgeType)
       }
-      else if(this[name]){
+      else if((<any>this)[name]){
         throw new Error(`Shortcut target already exists for ${name} on forge ${forgeType}.`)
       } else {
-        this[staticShortcutTarget.name] = staticShortcutTarget
+        (<any>this)[staticShortcutTarget.name] = staticShortcutTarget
       }
     }
 

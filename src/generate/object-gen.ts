@@ -1,5 +1,5 @@
-import {IsFunctionValidator} from "validator/index";
-import {ObjectRestrictions, ObjectRestrictionsFluent} from "forge/index";
+import {IsFunctionValidator} from "@entity-forge/validator";
+import {ObjectRestrictions, ObjectRestrictionsFluent} from "@entity-forge/forge";
 import {BaseGen} from "./base-gen";
 
 
@@ -23,7 +23,7 @@ export class ObjectGen extends BaseGen implements ObjectRestrictionsFluent{
   }
 
   doGen(R:ObjectRestrictions):any{
-    let n = {}
+    let n:any = {}
     Object.keys(R.fields).forEach((fieldName)=> {
       let field = R.fields[fieldName]
       n[fieldName] = field.gen(field.restrictions)

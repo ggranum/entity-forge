@@ -11,3 +11,12 @@ export * from "./reference-forge"
 export * from "./entity-forge"
 export * from './store/resolver'
 export * from './store/entity-store'
+
+
+export * from './identifier/identifier-forge'
+
+
+
+interface Math {
+  seedrandom(seed:any):void
+}

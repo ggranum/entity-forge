@@ -28,10 +28,10 @@ export class EntityType {
     Object.keys(this._defaults).forEach((key) => {
       let def = this._defaults[key]
       if (def instanceof Forge) {
-        this[key] = def.newInstance(undefined, this)
+        (<any>this)[key] = def.newInstance(undefined, this)
       }
       else {
-        this[key] = def
+        (<any>this)[key] = def
       }
     })
     return this
@@ -54,7 +54,7 @@ export class EntityType {
     }
 
     Object.keys(this._defaults).forEach((key) => {
-      json[key] = this[key]
+      (<any>json)[key] = (<any>this)[key]
     })
     return json
   }
@@ -85,7 +85,7 @@ EntityType.defineValidateFn = function (proto: any) {
     enumerable: false,
     writable: false,
     value: function () {
-      return this._forge.validate(this, this._forge.fieldName)
+      return (<any>this)._forge.validate(this, (<any>this)._forge.fieldName)
     }
   })
 }

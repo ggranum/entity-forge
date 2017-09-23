@@ -1,6 +1,6 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {NumberValidator, NumberRestrictions, NumberRestrictionsFluent} from "validator/index";
-import {NumberGen} from "generate/index";
+import {NumberValidator, NumberRestrictions, NumberRestrictionsFluent} from "@entity-forge/validator";
+import {NumberGen} from "@entity-forge/generate";
 import {BaseForge} from "./base-forge";
 
 export class NumberForge extends BaseForge implements NumberRestrictionsFluent{

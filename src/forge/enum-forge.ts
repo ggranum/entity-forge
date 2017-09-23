@@ -1,5 +1,5 @@
 import {Forge, BeforeIgnitionEvent} from "./forge";
-import {EnumGen} from "generate/index";
+import {EnumGen} from "@entity-forge/generate";
 import {BaseForge} from "./base-forge";
 
 

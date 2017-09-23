@@ -1,4 +1,4 @@
-import {BaseRestrictions} from "validator/index";
+import {BaseRestrictions} from "@entity-forge/validator";
 import {BaseGen} from "./base-gen";
 
 export class EnumGen extends BaseGen {

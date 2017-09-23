@@ -1,0 +1,46 @@
+{
+  "compileOnSave"  : false,
+  "compilerOptions": {
+    "alwaysStrict"              : true,
+    "baseUrl"                   : "",
+    "declaration"               : false,
+    "emitDecoratorMetadata"     : true,
+    "experimentalDecorators"    : true,
+    "lib"                       : [
+      "es2016",
+      "dom"
+    ],
+    "moduleResolution"          : "node",
+    "noImplicitAny"             : true,
+    "noEmitOnError"             : true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns"         : true,
+    "noImplicitThis"            : false,
+    "noUnusedLocals"            : false,
+    "outDir"                    : "dist",
+    "paths"                     : {
+      "@entity-forge/forge"    : [
+        "src/forge"
+      ],
+      "@entity-forge/validator": [
+        "src/validator"
+      ],
+      "@entity-forge/generate" : [
+        "src/generate"
+      ],
+      "@entity-forge/extra/"   : [
+        "src/extra"
+      ],
+      "*"                      : [
+        "node_modules/*"
+      ]
+    },
+    "pretty"                    : true,
+    "sourceMap"                 : true,
+    "strictNullChecks"          : false,
+    "target"                    : "esnext"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

@@ -1,8 +1,8 @@
-import {Forge, BaseForge, BeforeIgnitionEvent} from "forge/index";
-import {StringGen} from "generate/index";
-import {IdentifierGenRestrictions} from "extra/generate/index";
-import {IdentifierRestrictions, IdentifierFluent} from "extra/validator/index";
-
+import {IdentifierGenRestrictions, StringGen} from "@entity-forge/generate";
+import {IdentifierFluent, IdentifierRestrictions} from "@entity-forge/validator";
+// noinspection TypeScriptPreferShortImport
+import {BaseForge} from "../base-forge";
+import {BeforeIgnitionEvent, Forge} from "../forge";
 
 /**
  * Forge ECMAScript identifier keys.
@@ -22,7 +22,7 @@ export class IdentifierForge extends BaseForge implements IdentifierFluent {
   }
 
   static key(defaultValue: string) {
-    return  new IdentifierForge()
+    return new IdentifierForge()
       .initTo(defaultValue === undefined ? "" : defaultValue)
       .notNull()
       .minLength(1)

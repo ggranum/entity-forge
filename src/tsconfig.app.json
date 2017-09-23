@@ -1,0 +1,33 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "",
+    "outDir": "../dist",
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "paths": {
+      "@entity-forge/forge": [
+        "forge"
+      ],
+      "@entity-forge/validator": [
+        "validator"
+      ],
+      "@entity-forge/generate": [
+        "generate"
+      ],
+      "@entity-forge/extra/": [
+        "extra"
+      ],
+      "*": [
+        "node_modules/*"
+      ]
+    },
+  },
+  "include": [
+    "**/*"
+  ]
+
+
+}

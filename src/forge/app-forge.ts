@@ -1,6 +1,6 @@
-import {ObjectGen} from "generate/index";
 import {ObjectForge} from "./object-forge";
 import {AppResolver} from "./store/resolver";
+import {ObjectGen} from "@entity-forge/generate";
 
 
 /**

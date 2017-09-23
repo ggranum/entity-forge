@@ -1,16 +1,19 @@
-import {EF} from "forge/index";
+import {EF} from "@entity-forge/forge";
+import * as seedrandom from "seedrandom";
 
 
 describe('EntityForge.boolean', function () {
   beforeEach(function () {
-    Math.seedrandom(4)
+    seedrandom('' + 4)
   });
 
   it('Allows null values by default', function () {
     let Model = EF.obj({
       foo: EF.bool()
     }).asNewable()
+
     let m = new Model()
+
     let error: any = null
     try {
       m.foo = null
@@ -18,7 +21,7 @@ describe('EntityForge.boolean', function () {
       error = e
     }
     expect(error).toBeNull()
-    expect(m.foo).toBe(null, "Value should now be null.")
+    expect(m.foo).toBe(null) // , "Value should now be null.")
   });
 
   it('Does not allow null values when notNull set', function () {
@@ -33,7 +36,7 @@ describe('EntityForge.boolean', function () {
       error = e
     }
     expect(error).toBeDefined()
-    expect(m.foo).toBe(false, "Value should be reset to previous value (default).")
+    expect(m.foo).toBe(false) // , "Value should be reset to previous value (default).")
   });
 
   it('Does not allow non-boolean values', function () {
@@ -67,12 +70,12 @@ describe('EntityForge.boolean', function () {
         forge.ignite()
         forge._generatedBy.nullChance(1 / 3)
         while (tries--) {
-          let x = forge.gen()
-          found[x + '']++
+          let x:any = forge.gen();
+          (<any>found)[x + '']++
         }
         let find = [true, false, null]
         find.forEach((v)=> {
-          expect(found[v + '']).toBeGreaterThan(0, "Should have found '" + v + "'")
+          expect((<any>found)[v + '']).toBeGreaterThan(0) // , "Should have found '" + v + "'")
         })
       } catch (e) {
         console.log(e)
@@ -87,10 +90,10 @@ describe('EntityForge.boolean', function () {
       forge.ignite()
       forge._generatedBy.nullChance(1 / 3)
       while (tries--) {
-        let x = forge.gen()
-        found[x + '']++
+        let x:any = forge.gen();
+        (<any>found)[x + '']++
       }
-      expect(found['null']).toBe(0, "Should not generate null values.")
+      expect(found['null']).toBe(0) // , "Should not generate null values.")
     })
   })
 })

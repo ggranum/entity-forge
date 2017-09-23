@@ -1,4 +1,4 @@
-import {Validator, MinLengthValidator, MaxLengthValidator} from "validator/index";
+import {Validator, MinLengthValidator, MaxLengthValidator} from "@entity-forge/validator";
 
 describe("Validators", function () {
   describe("MinLengthValidator", function () {
