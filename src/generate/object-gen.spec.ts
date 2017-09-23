@@ -1,5 +1,6 @@
-import {ObjectGen, StringGen} from "@entity-forge/generate";
-import * as seedrandom from "seedrandom";
+import {ObjectGen} from "./object-gen";
+import {StringGen} from "./string-gen";
+import {PseudoRandom} from "./psuedo-random";
 
 
 
@@ -7,8 +8,7 @@ describe("Data Generation", function(){
   describe("Object", function () {
 
     beforeEach(function () {
-      let seed = 4
-      seedrandom('' + seed)
+      new PseudoRandom(5).patchMath()
     });
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
@@ -20,7 +20,7 @@ describe("Data Generation", function(){
           count++
         }
       }
-      expect(count).toBe(11)
+      expect(count).toBe(10)
     })
 
     it("should generate random string children when provided with a string generator as a child field.", function(){

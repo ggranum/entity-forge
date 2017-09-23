@@ -1,14 +1,14 @@
 import {DataGen} from "./data-gen";
 import {uidGen} from "./uid-gen";
 import {NumberGen} from "./number-gen";
-import {
-  MaxLengthRestriction,
-  MinLengthRestriction,
-  MaxLengthRestrictionFluent,
-  MinLengthRestrictionFluent
-} from "@entity-forge/validator";
+
 import {BaseGen} from "./base-gen";
-import {Forge,ObjectRestrictions, ObjectRestrictionsFluent} from "@entity-forge/forge";
+import {
+  MaxLengthRestriction, MaxLengthRestrictionFluent, MinLengthRestriction,
+  MinLengthRestrictionFluent
+} from "../validator/common-validator";
+import {ObjectRestrictions, ObjectRestrictionsFluent} from "../forge/object-forge";
+import {Forge} from "../forge/forge";
 
 
 export interface MapRestrictions extends ObjectRestrictions, MinLengthRestriction, MaxLengthRestriction {

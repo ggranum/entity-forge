@@ -1,10 +1,11 @@
-import {NumberGen, StringGen} from "@entity-forge/generate";
-import {
-  IdentifierFluent, IdentifierRestrictions, IsIdentifierValidator,
-  StringRestrictions, UNICODE,
-} from "@entity-forge/validator";
 
 
+
+import {IdentifierFluent, IdentifierRestrictions, IsIdentifierValidator} from "../../validator/identifier/identifier";
+import {StringRestrictions} from "../../validator/string/string-validator";
+import {StringGen} from "../string-gen";
+import {UNICODE} from "../../validator/identifier/identifier_constants";
+import {NumberGen} from "../number-gen";
 
 export interface IdentifierGenRestrictions extends IdentifierRestrictions, StringRestrictions {
   unique?: boolean;

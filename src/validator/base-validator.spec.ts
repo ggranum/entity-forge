@@ -1,4 +1,5 @@
-import {NotNullValidator} from "@entity-forge/validator";
+
+import {NotNullValidator} from "./base-validator";
 
 interface TestCase {
   inputs: any[],

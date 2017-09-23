@@ -1,7 +1,7 @@
 
-import {IdentifierGen} from "@entity-forge/generate";
-import {IsIdentifierValidator} from "@entity-forge/validator";
-import * as seedrandom from "seedrandom";
+import {IdentifierGen} from "./identifier-gen";
+import {IsIdentifierValidator} from "../../validator/identifier/identifier";
+import {PseudoRandom} from "../psuedo-random";
 
 xdescribe("Data Generation", function () {
   describe("Identifier", function () {
@@ -12,7 +12,7 @@ xdescribe("Data Generation", function () {
     it("Default generator should never generate null references.", function () {
       try {
         let seed = 4
-        seedrandom('' + seed)
+        new PseudoRandom(seed).patchMath()
         let gen = new IdentifierGen().maxLength(5)
         let count = 0
         for (let i = 0; i < 1000; i++) {
@@ -23,15 +23,14 @@ xdescribe("Data Generation", function () {
         }
         expect(count).toBe(0)
       } catch (e) {
-        console.log("grrrr", e)
-        throw e
+        fail(e)
       }
     })
 
     it("Should not generate illegal identifiers.", function () {
       try {
         let seed = 4
-        seedrandom('' + seed)
+        new PseudoRandom(seed).patchMath()
         let gen = new IdentifierGen()
         let v = new IsIdentifierValidator()
         for (let i = 0; i < 100; i++) {
@@ -40,7 +39,7 @@ xdescribe("Data Generation", function () {
           expect(r).toBeNull() // "Generated illegal id: " + identifier)
         }
       } catch (e) {
-        console.log("grrrr", e)
+        fail(e)
         throw e
       }
     })
@@ -55,7 +54,7 @@ xdescribe("Data Generation", function () {
 
 
     it("Should generate only unique values", function () {
-      seedrandom('' + 4)
+      new PseudoRandom(4).patchMath()
       let gen = new IdentifierGen().unique().minLength(3).maxLength(3).allowedChars(Array.from("abcABC1234567890"))
       let alreadyUsed:any = {}
       for (var i = 0; i < 100; i++) {
@@ -68,7 +67,7 @@ xdescribe("Data Generation", function () {
     })
 
     it("Should throw an error if it cannot generate a unique value", function () {
-      seedrandom('' + 4)
+      new PseudoRandom(4).patchMath()
       let gen = new IdentifierGen().unique().minLength(3).maxLength(3).allowedChars(Array.from("ABC"))
       let passed: any
       for (var i = 0; i < 100; i++) {

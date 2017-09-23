@@ -1,6 +1,6 @@
-import {Validator} from "@entity-forge/validator";
 import {ValidatorErrorInfo} from "../validator/validator";
 import {Restriction} from "../validator/base-validator";
+import {Validator} from "../validator/validator";
 
 
 /**

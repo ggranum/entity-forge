@@ -1,4 +1,5 @@
-import {IsIdentifierValidator} from "@entity-forge/validator";
+
+import {IsIdentifierValidator} from "./identifier";
 
 describe("Validators", function () {
 

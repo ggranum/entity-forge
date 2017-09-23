@@ -1,6 +1,8 @@
 import {Forge} from "./forge";
-import {BaseGen} from "@entity-forge/generate";
-import {BaseRestrictions, BaseRestrictionsFluent, BaseValidator} from "@entity-forge/validator";
+import {BaseGen} from "../generate/base-gen";
+import {BaseRestrictionsFluent} from "../validator/base-validator";
+import {BaseRestrictions} from "../validator/base-validator";
+import {BaseValidator} from "../validator/base-validator";
 
 
 export class BaseForge extends Forge implements BaseRestrictionsFluent{

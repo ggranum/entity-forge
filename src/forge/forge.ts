@@ -1,9 +1,11 @@
-import {ValidateFailedError} from "./validate-failed-error";
 import {ConfigurationError} from "./configuration-error";
-import {Restriction, ValidatorIF, ValidatorErrorsIF, CommonRestrictions} from "@entity-forge/validator";
-import {EntityResolver} from "./store/resolver";
 import {EntityType} from "./entity-type";
-import {DataGen} from "@entity-forge/generate";
+import {ValidateFailedError} from "./validate-failed-error";
+import {EntityResolver} from "./store/resolver";
+import {CommonRestrictions} from "../validator/common-validator";
+import {ValidatorErrorsIF, ValidatorIF} from "../validator/validator";
+import {DataGen} from "../generate/data-gen";
+import {Restriction} from "../validator/base-validator";
 
 
 export interface BeforeIgnitionEvent {
@@ -15,22 +17,30 @@ export interface BeforeIgnitionEvent {
 
 export interface ForgeCreationTimeIF {
   clone(): this
+
   validatedBy(validator: ValidatorIF): void
+
   getValidator(): ValidatorIF
+
   generatedBy(generator: DataGen): void
+
   getGenerator(): DataGen
 }
 
 export interface ForgeIgnitionTimeIF {
   forgeSetter(privateFieldName: string): Function
+
   forgeGetter(privateFieldName: string): Function
+
   ignite(): void
 }
 
 export interface ForgeEntityInstanceIF {
   validate(value: any): any
+
   gen(): EntityType
-  newInstance(defaultOverride?: any, parent?:EntityType): EntityType
+
+  newInstance(defaultOverride?: any, parent?: EntityType): EntityType
 }
 
 export interface ForgePropertyDescriptorIF {
@@ -42,13 +52,13 @@ export interface ForgePropertyDescriptorIF {
 
 export interface CompositeForgeIF extends ForgeEntityInstanceIF {
   _entityType: typeof EntityType
-  _fieldDefinitions: { [key: string]: Forge}
+  _fieldDefinitions: { [key: string]: Forge }
 }
 
 
-let beforeIgnitionListeners:{[key:string]: {fn: Function}[]} = {}
+let beforeIgnitionListeners: { [key: string]: { fn: Function }[] } = {}
 
-const thisHack = function (something: any):any {
+const thisHack = function (something: any): any {
   return something;
 }
 
@@ -56,22 +66,26 @@ export class Forge {
 
   static DEFAULT_RESOLVER: EntityResolver
   static GENERATED_BY: Object
-
-  private _defaultValue: any = null
-  private _version: number = null
-  private _versionFieldName: string = 'version'
-  private _validator: ValidatorIF
-  _resolver:EntityResolver
+  _resolver: EntityResolver
   _lit: boolean = false
   _isEnumerable: boolean = true
   _generatedBy: DataGen
   fieldName: string = null
   parent: CompositeForgeIF
   restrictions: Restriction
+  private _version: number = null
+  private _versionFieldName: string = 'version'
+  private _validator: ValidatorIF
 
   constructor() {
     this.restrictions = {}
     this._defaultValue = null
+  }
+
+  private _defaultValue: any = null
+
+  get defaultValue() {
+    return this._defaultValue
   }
 
   static generatedByType(type: Object) {
@@ -79,16 +93,16 @@ export class Forge {
   }
 
   static onBeforeIgnition(targetType: any, listenerFn: Function) {
-    let ary:{fn: Function}[] = beforeIgnitionListeners['' + targetType] || []
+    let ary: { fn: Function }[] = beforeIgnitionListeners['' + targetType] || []
     ary.push({fn: listenerFn})
     beforeIgnitionListeners[targetType] = ary
   }
 
-  getResolver(){
+  getResolver() {
     return this._resolver || (<any>Forge.constructor)['DEFAULT_RESOLVER']
   }
 
-  setResolver(resolver:EntityResolver):void{
+  setResolver(resolver: EntityResolver): void {
     this._resolver = resolver
   }
 
@@ -105,10 +119,6 @@ export class Forge {
     copy.restrictions = JSON.parse(JSON.stringify(instance.restrictions))
     copy._lit = false
     return copy
-  }
-
-  get defaultValue() {
-    return this._defaultValue
   }
 
   validatedBy(validator: ValidatorIF): void {
@@ -151,7 +161,7 @@ export class Forge {
   }
 
   forgeGetter(privateFieldName: string) {
-    return function (this:any): any {
+    return function (this: any): any {
       return this[privateFieldName];
     }
   }
@@ -162,12 +172,12 @@ export class Forge {
 
     return {
       initialValue: this,
-      privateKey:privateKey,
-      descriptor: {
+      privateKey  : privateKey,
+      descriptor  : {
         configurable: false,
-        enumerable: this._isEnumerable,
-        set: this.forgeSetter(privateKey),
-        get: this.forgeGetter(privateKey)
+        enumerable  : this._isEnumerable,
+        set         : this.forgeSetter(privateKey),
+        get         : this.forgeGetter(privateKey)
       }
     }
 
@@ -202,7 +212,7 @@ export class Forge {
   fireEvent(listeners: any, event: any) {
     let fail = false
     let listenerAry: any = listeners['' + this.constructor] || []
-    listenerAry.forEach((listener: any)=> {
+    listenerAry.forEach((listener: any) => {
       if (listener.fn(event) === false) {
         fail = true
       }
@@ -230,7 +240,7 @@ export class Forge {
     return this._generatedBy.gen(this.restrictions)
   }
 
-  newInstance(defaultOverride?: any, parent?:EntityType) {
+  newInstance(defaultOverride?: any, parent?: EntityType) {
     return defaultOverride === undefined ? this.defaultValue : defaultOverride
   }
 

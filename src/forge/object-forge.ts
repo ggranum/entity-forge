@@ -1,10 +1,10 @@
 import {EntityType, EntityTypeIF} from "./entity-type";
 import {DescendantValidator} from "./descendant-validator";
 import {ValidateFailedError} from "./validate-failed-error";
-import {ObjectGen} from "@entity-forge/generate";
 import {BaseForge} from "./base-forge";
 import {Forge, CompositeForgeIF, ForgePropertyDescriptorIF} from "./forge";
-import {BaseRestrictions, BaseRestrictionsFluent} from "@entity-forge/validator";
+import {BaseRestrictions, BaseRestrictionsFluent} from "../validator/base-validator";
+import {ObjectGen} from "../generate/object-gen";
 
 
 /**

@@ -1,6 +1,5 @@
-import {IsFunctionValidator} from "@entity-forge/validator";
-import {ObjectRestrictions, ObjectRestrictionsFluent} from "@entity-forge/forge";
 import {BaseGen} from "./base-gen";
+import {ObjectRestrictions, ObjectRestrictionsFluent} from "../forge/object-forge";
 
 
 export class ObjectGen extends BaseGen implements ObjectRestrictionsFluent{

@@ -4,7 +4,8 @@ import {generatePushID} from "./firebase-generate-push-id";
 xdescribe("Data Generation", function () {
 
   describe("generatePushID", function () {
-    it('really is fucking stupid', () => {
+    it('Should get some actual tests', () => {
+      expect(true).toBe(true);
     })
 
 

@@ -1,5 +1,5 @@
-import {NumberRestrictionsFluent, NumberRestrictions} from "@entity-forge/validator";
 import {BaseGen} from "./base-gen";
+import {NumberRestrictions, NumberRestrictionsFluent} from "../validator/number-validator";
 
 
 export class NumberGen extends BaseGen implements NumberRestrictionsFluent {

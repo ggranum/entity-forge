@@ -1,5 +1,5 @@
-import {StringValidator} from "@entity-forge/validator";
 
+import {StringValidator} from "./string-validator";
 
 describe("Validators", function () {
 
@@ -15,8 +15,8 @@ describe("Validators", function () {
             let result = c.validate(v)
             expect(result).toBeNull()
           } catch (e) {
-            console.log(e)
             expect(e).toBeNull()
+            fail(e);
           }
         })
       })

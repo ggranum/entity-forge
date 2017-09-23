@@ -1,8 +1,9 @@
-import {IdentifierGenRestrictions, StringGen} from "@entity-forge/generate";
-import {IdentifierFluent, IdentifierRestrictions} from "@entity-forge/validator";
 // noinspection TypeScriptPreferShortImport
 import {BaseForge} from "../base-forge";
 import {BeforeIgnitionEvent, Forge} from "../forge";
+import {IdentifierFluent, IdentifierRestrictions} from "../../validator/identifier/identifier";
+import {StringGen} from "../../generate/string-gen";
+import {IdentifierGenRestrictions} from "../../generate/identifier/identifier-gen";
 
 /**
  * Forge ECMAScript identifier keys.

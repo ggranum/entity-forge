@@ -1,5 +1,5 @@
-import {EF} from "@entity-forge/forge";
-import * as seedrandom from "seedrandom";
+import {EF} from "./entity-forge";
+import {PseudoRandom} from "../generate/psuedo-random";
 
 describe('Forge', function () {
   describe('AppForge', function () {
@@ -40,15 +40,12 @@ describe('Forge', function () {
     })
 
 
-    describe("#newInstance ", function () {
 
 
       // it("Throws an error if member created before App..", function () {})
       it("creates child references and stores them.", function () {
 
-        seedrandom('' + 100)
-
-
+        new PseudoRandom(100).patchMath()
 
         for (let i = 0; i < 1; i++) {
           try {
@@ -63,8 +60,7 @@ describe('Forge', function () {
             // expect(user.contact).toBeTruthy('contact')
 
             // let x = App._resolver.resolve('/contacts/' + user.contact)
-            debugger
-            console.log(user.toJsonString())
+            // console.log(user.toJsonString())
           } catch (e) {
             console.log(i, e)
             throw e
@@ -74,5 +70,4 @@ describe('Forge', function () {
       })
     })
 
-  })
 })

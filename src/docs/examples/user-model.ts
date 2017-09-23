@@ -1,8 +1,9 @@
-import {EF} from "@entity-forge/forge";
-
+import {EF} from "../../forge/entity-forge";
 
 let UIDForge = EF.string().minLength(20).maxLength(20).ascii()
 let URLForge = EF.string().minLength(5).maxLength(2000).ascii()
+
+
 
 let PermissionsF = EF.enumeration([
   'auth.register',
@@ -29,4 +30,5 @@ let UserInfo = EF.obj({
   //   // keys: EF.key()
   // })
 })
+
 

@@ -1,5 +1,6 @@
-import {MapGen, StringGen} from "@entity-forge/generate";
-import * as seedrandom from "seedrandom";
+import {StringGen} from "./string-gen";
+import {MapGen} from "./map-gen";
+import {PseudoRandom} from "./psuedo-random";
 
 let keyGen = new StringGen().allowedChars("abcdefg123456".split('')).minLength(2).maxLength(3)
 describe("Data Generation", function () {
@@ -12,7 +13,7 @@ describe("Data Generation", function () {
         .maxLength(2)
       let count = 0
       let seed = 2
-      seedrandom('' + seed)
+      new PseudoRandom(seed).patchMath()
       for (let i = 0; i < 2500; i++) {
         let x = gen.gen()
         if (x === null) {
@@ -26,7 +27,7 @@ describe("Data Generation", function () {
       let stringGen = new StringGen().minLength(2).maxLength(5).notNull()
       let gen = new MapGen().of(stringGen).keyedBy(keyGen).minLength(2).maxLength(2)
       let seed = 4
-      seedrandom('' + seed)
+      new PseudoRandom(seed).patchMath()
 
       let x = gen.gen()
       expect(Object.keys(x).length).toBe(2)
@@ -72,7 +73,7 @@ class TimedTest {
       .minLength(1)
       .maxLength(2)
     let seed = 4
-    seedrandom('' + seed)
+    new PseudoRandom(seed).patchMath()
   }
 
   testCase(){

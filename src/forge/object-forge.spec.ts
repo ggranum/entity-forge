@@ -1,5 +1,5 @@
-import {EF} from "@entity-forge/forge";
-import * as seedrandom from "seedrandom";
+import {EF} from "./entity-forge";
+import {PseudoRandom} from "../generate/psuedo-random";
 
 describe('Forge', function () {
   describe('ObjectForge', function () {
@@ -44,7 +44,8 @@ describe('Forge', function () {
           console.log(e)
           throw e
         }
-        seedrandom('' + 100)
+
+        new PseudoRandom(100).patchMath()
         for (let i = 0; i < 100; i++) {
           try {
             let user = UserForge.gen()
@@ -111,7 +112,6 @@ describe('Forge', function () {
           e = error
         }
         expect(e).toBeDefined() // "Exception should have been thrown")
-        console.log(contact, e)
       })
 
       it("does not allow setting child to null when notNull specified.", function () {
@@ -139,7 +139,6 @@ describe('Forge', function () {
           e = error
         }
         expect(e).toBeDefined() // "Exception should have been thrown")
-        console.log(contact, e)
       })
     })
 

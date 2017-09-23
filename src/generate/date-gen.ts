@@ -1,6 +1,6 @@
-import {DateRestrictionsFluent, DateRestrictions} from "@entity-forge/validator";
 import {BaseGen} from "./base-gen";
 import {NumberGen} from "./number-gen";
+import {DateRestrictions, DateRestrictionsFluent} from "../validator/date/date-validator";
 
 
 export class DateGen extends BaseGen implements DateRestrictionsFluent {

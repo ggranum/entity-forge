@@ -19,18 +19,6 @@
     "noUnusedLocals"            : false,
     "outDir"                    : "dist",
     "paths"                     : {
-      "@entity-forge/forge"    : [
-        "src/forge"
-      ],
-      "@entity-forge/validator": [
-        "src/validator"
-      ],
-      "@entity-forge/generate" : [
-        "src/generate"
-      ],
-      "@entity-forge/extra/"   : [
-        "src/extra"
-      ],
       "*"                      : [
         "node_modules/*"
       ]
@@ -38,7 +26,7 @@
     "pretty"                    : true,
     "sourceMap"                 : true,
     "strictNullChecks"          : false,
-    "target"                    : "esnext"
+    "target"                    : "es5"
   },
   "include": [
     "src/**/*"

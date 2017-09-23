@@ -1,6 +1,6 @@
 import {ObjectForge} from "./object-forge";
 import {AppResolver} from "./store/resolver";
-import {ObjectGen} from "@entity-forge/generate";
+import {ObjectGen} from "../generate/object-gen";
 
 
 /**
@@ -16,15 +16,10 @@ export class AppForge extends ObjectForge {
   constructor(fields: any = {}, fieldName: string = null) {
     super(fields, fieldName)
     this._resolver = new AppResolver(this)
-    Object.keys(fields).forEach((key)=>{
+    Object.keys(fields).forEach((key) => {
       this._fieldDefinitions[key].setResolver(this._resolver)
     })
   }
-
-  ignite() {
-    super.ignite()
-  }
-  /**********************   Fluent config methods.  **********************/
 
   /**
    * Create an AppForge. The Object forge contains child Forges as fields, including other Object forges.
@@ -35,6 +30,12 @@ export class AppForge extends ObjectForge {
    */
   static app(fields: any = {}, fieldName: string = 'app', defaultValue?: any) {
     return new AppForge(fields, fieldName).initTo(defaultValue || {})
+  }
+
+  /**********************   Fluent config methods.  **********************/
+
+  ignite() {
+    super.ignite()
   }
 }
 

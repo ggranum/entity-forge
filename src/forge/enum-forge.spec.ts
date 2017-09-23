@@ -1,21 +1,22 @@
-import {EF, EnumForge} from "@entity-forge/forge";
+import {EF} from "./entity-forge";
+import {EnumForge} from "./enum-forge";
 
 describe('Forge', function () {
   describe('EnumForge.enumeration', function () {
 
     it('Allows null values by default', function () {
-        let Model = EF.obj({
-          foo: EF.enumeration().values(["100", "Bob", "Sally"])
-        }).asNewable()
-        let m = new Model()
-        let error: any = null
-        try {
-          m.foo = null
-        } catch (e) {
-          error = e
-        }
-        expect(error).toBeNull() // "Null value should be valid.")
-        expect(m.foo).toBe(null) //  "Null value should be valid.")
+      let Model = EF.obj({
+        foo: EF.enumeration().values(["100", "Bob", "Sally"])
+      }).asNewable()
+      let m = new Model()
+      let error: any = null
+      try {
+        m.foo = null
+      } catch (e) {
+        error = e
+      }
+      expect(error).toBeNull() // "Null value should be valid.")
+      expect(m.foo).toBe(null) //  "Null value should be valid.")
     });
 
     it('Does not allow null values when notNull set', function () {
@@ -53,7 +54,7 @@ describe('Forge', function () {
       let model = {
         foo: EF.enumeration().values(["100", "Bob", "Sally"]).notNull()
       }
-      let disallowed: any = ['1', 100, "bob", "sally", "sam", false, true, 1.2, 0, ((x: any)=> false), model];
+      let disallowed: any = ['1', 100, "bob", "sally", "sam", false, true, 1.2, 0, ((x: any) => false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
         expect(result).toBeTruthy() // "The value '" + disallowed[i] + "' should not be allowed.")
@@ -73,8 +74,8 @@ describe('Forge', function () {
         let forge = EF.enumeration().values(values)
 
 
-        let found:any = {'null': 0}
-        values.forEach((value)=> {
+        let found: any = {'null': 0}
+        values.forEach((value) => {
           found[value] = 0
         })
         let tries = values.length * 5
@@ -84,10 +85,12 @@ describe('Forge', function () {
           let x = forge.gen()
           found[x + '']++
         }
-        Object.keys(found).forEach((v)=> {
+        Object.keys(found).forEach((v) => {
           expect(found[v + '']).toBeGreaterThan(0)
-          if(found[v + ''] ===0 ){}
-          console.log( "Should have generated all enum options. Missed: '" + v + "'")
+          if (found[v + ''] === 0) {
+            console.log("Should have generated all enum options. Missed: '" + v + "'")
+          }
+
         })
       })
 
@@ -95,8 +98,8 @@ describe('Forge', function () {
         let values = ["Bob", "Sally"]
         let forge = EF.enumeration().values(values).notNull()
 
-        let found:any = {'null': 0}
-        values.forEach((value)=> {
+        let found: any = {'null': 0}
+        values.forEach((value) => {
           found[value] = 0
         })
         let tries = values.length * 5

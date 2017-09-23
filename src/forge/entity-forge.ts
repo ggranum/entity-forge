@@ -1,62 +1,66 @@
-import {BaseForge} from "./index"
-import {BooleanForge} from "./index"
-import {EnumForge} from "./index"
-import {NumberForge} from "./index"
-import {StringForge} from "./index"
-import {ObjectForge} from "./index"
-import {UidForge} from "./index"
-import {DateForge} from "./index"
-import {ReferenceForge} from "./index"
-import {EntityResolver} from "./store/resolver";
+import {AppForge} from "./app-forge";
+import {Forge} from "./forge";
+import {
+  BaseForge,
+  BooleanForge,
+  DateForge,
+  EnumForge,
+  NumberForge,
+  ObjectForge,
+  ReferenceForge,
+  StringForge,
+  UidForge
+} from "./index"
+import {MapForge} from "./map-forge";
 // noinspection TypeScriptPreferShortImport
 import {EntityStore} from "./store/entity-store";
-import {AppForge} from "./app-forge";
-import {MapForge} from "./map-forge";
-import {Forge} from "./forge";
+import {EntityResolver} from "./store/resolver";
 
 
 export interface EntityForgeIF {
-  any: ((defaultValue?: any)=>BaseForge);
-  bool: ((defaultValue?: boolean)=>BooleanForge);
-  enumeration: ((defaultValue?: any)=>EnumForge);
-  number: ((defaultValue?: number)=>NumberForge);
-  int: ((defaultValue?: number)=>NumberForge);
-  string: ((defaultValue?: string)=>StringForge);
-  ref: ((path: string, to: Forge)=>ReferenceForge);
-  date: ((defaultValue?: number)=>DateForge);
-  uid: ((defaultValue?: string)=>UidForge);
-  map:  (() => MapForge)
-  obj:  (<T>(fields: T, defaultValue?: any, fieldName?: string) => ObjectForge & T)
-  app:  ((fields: any, defaultValue?: any, fieldName?: string) => AppForge)
+  any: ((defaultValue?: any) => BaseForge);
+  bool: ((defaultValue?: boolean) => BooleanForge);
+  enumeration: ((defaultValue?: any) => EnumForge);
+  number: ((defaultValue?: number) => NumberForge);
+  int: ((defaultValue?: number) => NumberForge);
+  string: ((defaultValue?: string) => StringForge);
+  ref: ((path: string, to: Forge) => ReferenceForge);
+  date: ((defaultValue?: number) => DateForge);
+  uid: ((defaultValue?: string) => UidForge);
+  map: (() => MapForge)
+  obj: (<T>(fields: T, defaultValue?: any, fieldName?: string) => ObjectForge & T)
+  app: ((fields: any, defaultValue?: any, fieldName?: string) => AppForge)
 
   setGlobalDefaultResolver(resovler: EntityResolver): void
+
   setGlobalDefaultStore(store: EntityStore): void
-  registerForge(forge: typeof Forge, staticTarget: Function): void
+
+  registerForge(forge: typeof Forge, staticTarget: Function, name?: string): void
 }
 
 /**
  * Intended as a singleton, but it doesn't really matter unless you're extending with additional forges.
  */
 export class EntityForge implements EntityForgeIF {
-  any: (defaultValue?: any)=>BaseForge;
-  bool: (defaultValue?: boolean)=>BooleanForge;
-  enumeration: (defaultValue?: any)=>EnumForge;
-  number: (defaultValue?: number)=>NumberForge;
-  int: (defaultValue?: number)=>NumberForge;
-  string: (defaultValue?: string)=>StringForge;
-  ref: (path: string, to: Forge)=>ReferenceForge;
-  date: (defaultValue?: number)=>DateForge;
-  uid: (defaultValue?: string)=>UidForge
-  map:  (() => MapForge)
-  obj:  (<T>(fields: T, defaultValue?: any, fieldName?: string) => ObjectForge & T)
-  app: (fields: any, defaultValue?: any, fieldName?: string)=>AppForge
+  any: (defaultValue?: any) => BaseForge;
+  bool: (defaultValue?: boolean) => BooleanForge;
+  enumeration: (defaultValue?: any) => EnumForge;
+  number: (defaultValue?: number) => NumberForge;
+  int: (defaultValue?: number) => NumberForge;
+  string: (defaultValue?: string) => StringForge;
+  ref: (path: string, to: Forge) => ReferenceForge;
+  date: (defaultValue?: number) => DateForge;
+  uid: (defaultValue?: string) => UidForge
+  map: (() => MapForge)
+  obj: (<T>(fields: T, defaultValue?: any, fieldName?: string) => ObjectForge & T)
+  app: (fields: any, defaultValue?: any, fieldName?: string) => AppForge
 
   resolver: EntityResolver
   forgeTypes: typeof Forge[] = []
 
   setGlobalDefaultResolver(resolver: EntityResolver): void {
     this.resolver = resolver
-    this.forgeTypes.forEach((forgeType: typeof Forge)=> {
+    this.forgeTypes.forEach((forgeType: typeof Forge) => {
       forgeType.DEFAULT_RESOLVER = resolver
     })
   }
@@ -65,19 +69,19 @@ export class EntityForge implements EntityForgeIF {
   }
 
 
-  registerForge(forgeType: typeof Forge, staticShortcutTarget?: Function): void {
+  registerForge(forgeType: typeof Forge, staticShortcutTarget?: Function, name?: string): void {
     this.forgeTypes.push(forgeType)
     this._applyDefaults(forgeType)
     if (staticShortcutTarget) {
 
-      let name: string = staticShortcutTarget.name
+      name = name || staticShortcutTarget.name
       if (!name) {
         throw new Error("Invalid name for forge target: " + forgeType)
       }
-      else if((<any>this)[name]){
+      else if ((<any>this)[name]) {
         throw new Error(`Shortcut target already exists for ${name} on forge ${forgeType}.`)
       } else {
-        (<any>this)[staticShortcutTarget.name] = staticShortcutTarget
+        (<any>this)[name] = staticShortcutTarget
       }
     }
 
@@ -90,20 +94,20 @@ export class EntityForge implements EntityForgeIF {
 }
 
 
-export let EF: EntityForgeIF = new EntityForge()
+export const EF: EntityForgeIF = new EntityForge()
 
-EF.registerForge(BaseForge, BaseForge.any)
-EF.registerForge(BooleanForge, BooleanForge.bool)
-EF.registerForge(EnumForge, EnumForge.enumeration)
-EF.registerForge(NumberForge, NumberForge.number)
-EF.registerForge(NumberForge, NumberForge.int)
-EF.registerForge(StringForge, StringForge.string)
-EF.registerForge(ReferenceForge, ReferenceForge.ref)
-EF.registerForge(DateForge, DateForge.date)
-EF.registerForge(UidForge, UidForge.uid)
-EF.registerForge(MapForge, MapForge.map)
-EF.registerForge(ObjectForge, ObjectForge.obj)
-EF.registerForge(AppForge, AppForge.app)
+EF.registerForge(BaseForge, BaseForge.any, "any")
+EF.registerForge(BooleanForge, BooleanForge.bool, "bool")
+EF.registerForge(EnumForge, EnumForge.enumeration, "enumeration")
+EF.registerForge(NumberForge, NumberForge.number, "number")
+EF.registerForge(NumberForge, NumberForge.int, "int")
+EF.registerForge(StringForge, StringForge.string, "string")
+EF.registerForge(ReferenceForge, ReferenceForge.ref, "ref")
+EF.registerForge(DateForge, DateForge.date, "date")
+EF.registerForge(UidForge, UidForge.uid, "uid")
+EF.registerForge(MapForge, MapForge.map, "map")
+EF.registerForge(ObjectForge, ObjectForge.obj, "obj")
+EF.registerForge(AppForge, AppForge.app, "app")
 
 
 

@@ -1,5 +1,5 @@
-import {EnumGen} from "@entity-forge/generate";
-import * as seedrandom from "seedrandom";
+import {EnumGen} from "./enum-gen";
+import {PseudoRandom} from "./psuedo-random";
 
 let someEnumValues = [
   "It is certain",
@@ -29,7 +29,7 @@ describe("Data Generation", function () {
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
       let seed = 4
-      seedrandom('' + seed)
+      new PseudoRandom(seed).patchMath()
 
       let gen = new EnumGen().values(someEnumValues)
       let count = 0
@@ -39,7 +39,7 @@ describe("Data Generation", function () {
           count++
         }
       }
-      expect(count).toBe(11)
+      expect(count).toBe(12)
     })
 
     /**
@@ -47,7 +47,7 @@ describe("Data Generation", function () {
     it("Should generate all values in the enumeration.", function () {
       let gen = new EnumGen().nullChance(1 / (someEnumValues.length)).values(someEnumValues)
       let seed = 1
-      seedrandom('' + seed)
+      new PseudoRandom(seed).patchMath()
 
       let found:any = {'null': 0}
       someEnumValues.forEach((value)=> {

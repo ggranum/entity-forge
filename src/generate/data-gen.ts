@@ -1,9 +1,11 @@
-import {ValidatorIF, Restriction} from "@entity-forge/validator";
 
 /**
  * Data generation avoid using the term 'generator' to avoid confusion with es2015 generators. Which we will hopefully
  * enable one day. But not yet.
  */
+
+import {ValidatorIF} from "../validator/validator";
+import {Restriction} from "../validator/base-validator";
 
 /**
  *

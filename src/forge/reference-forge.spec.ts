@@ -1,5 +1,5 @@
-import {EF} from "@entity-forge/forge";
-import * as seedrandom from "seedrandom";
+import {EF} from "./entity-forge";
+import {PseudoRandom} from "../generate/psuedo-random";
 
 
 describe('Forge', function () {
@@ -38,9 +38,9 @@ describe('Forge', function () {
     describe("#newInstance ", function () {
 
 
-      xit("creates child references and stores them.", function () {
+      it("creates child references and stores them.", function () {
 
-        seedrandom('' + 100)
+        new PseudoRandom(100).patchMath()
         for (let i = 0; i < 1; i++) {
           try {
             let user = User.newInstance()
@@ -50,7 +50,6 @@ describe('Forge', function () {
             expect(user.uid.length).toBe(20)
             expect(user.created).toBeLessThan(Date.now()) // , 'created')
             // expect(user.contact).toBeTruthy('contact')
-            console.log(user.toJsonString())
           } catch (e) {
             console.log(i, e)
             throw e

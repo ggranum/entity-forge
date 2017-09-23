@@ -1,5 +1,5 @@
-import {BooleanGen} from "@entity-forge/generate";
 import {BaseForge} from "./base-forge";
+import {BooleanGen} from "../generate/boolean-gen";
 
 /**
  * Forge booleans fields. A boolean field can be true, false or null. Null may be disabled by calling #notNull.

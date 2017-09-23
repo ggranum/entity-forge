@@ -1,4 +1,5 @@
-import {NumberValidator} from "@entity-forge/validator";
+
+import {NumberValidator} from "./number-validator";
 
 describe("Validators", function () {
 

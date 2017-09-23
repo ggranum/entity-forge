@@ -1,10 +1,12 @@
-import {EF} from "@entity-forge/forge";
-import * as seedrandom from "seedrandom";
+import {EF} from "./entity-forge";
+import {PseudoRandom} from "../generate/psuedo-random";
 
+
+console.log('[Debug]', 'global#EF == null ?', EF == null);
 
 describe('EntityForge.boolean', function () {
   beforeEach(function () {
-    seedrandom('' + 4)
+    new PseudoRandom(4).patchMath()
   });
 
   it('Allows null values by default', function () {
@@ -78,8 +80,7 @@ describe('EntityForge.boolean', function () {
           expect((<any>found)[v + '']).toBeGreaterThan(0) // , "Should have found '" + v + "'")
         })
       } catch (e) {
-        console.log(e)
-        debugger
+        fail(e)
       }
     })
 

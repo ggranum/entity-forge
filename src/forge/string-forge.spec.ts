@@ -1,7 +1,7 @@
 import {EF} from "./entity-forge";
-import {Strings} from "@entity-forge/validator";
-import {DataGen} from "@entity-forge/generate";
-import * as seedrandom from "seedrandom";
+import {Strings} from "../validator/string/string-validator";
+import {DataGen} from "../generate/data-gen";
+import {PseudoRandom} from "../generate/psuedo-random";
 
 
 describe('StringForge', function () {
@@ -165,17 +165,17 @@ describe('EntityForge.string.generate', function () {
   /**
    * This test requires Math.seedrandom: https://github.com/davidbau/seedrandom
    */
-  xit('is reproducibly random', function () {
+  it('is reproducibly random', function () {
     let forge = EF.string().notNull().minLength(25).maxLength(50).allowedCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
-    seedrandom('' + 100)
+    new PseudoRandom(100).patchMath()
     let first: DataGen[] = []
     first.push(forge.gen(), forge.gen(), forge.gen())
 
-    seedrandom('' + 100)
+    new PseudoRandom(100).patchMath()
     let second: DataGen[] = []
     second.push(forge.gen(), forge.gen(), forge.gen())
 
-    seedrandom('' + 101)
+    new PseudoRandom(101).patchMath()
     let third: DataGen[] = []
     third.push(forge.gen(), forge.gen(), forge.gen())
 

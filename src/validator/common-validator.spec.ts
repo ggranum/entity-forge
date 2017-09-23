@@ -1,4 +1,6 @@
-import {Validator, MinLengthValidator, MaxLengthValidator} from "@entity-forge/validator";
+
+import {Validator} from "./validator";
+import {MaxLengthValidator, MinLengthValidator} from "./common-validator";
 
 describe("Validators", function () {
   describe("MinLengthValidator", function () {

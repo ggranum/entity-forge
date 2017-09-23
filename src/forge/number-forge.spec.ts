@@ -1,11 +1,11 @@
-import {EF} from "@entity-forge/forge";
-import * as seedrandom from "seedrandom";
+import {EF} from "./entity-forge";
+import {PseudoRandom} from "../generate/psuedo-random";
 
 
 describe('Forge', function () {
   describe('NumberForge #int', function () {
     beforeEach(function () {
-      seedrandom('' + 4)
+      new PseudoRandom(4).patchMath()
     });
 
     it('Allows null values by default', function () {
@@ -60,7 +60,7 @@ describe('Forge', function () {
 
       it('Generates null integers when null values allowed: ', function () {
         let forge = EF.int().min(0).max(3)
-        seedrandom('' + 100)
+        new PseudoRandom(100).patchMath()
         let values = [0, 1, 2, 3, null]
 
         let found:any = {}
@@ -74,7 +74,6 @@ describe('Forge', function () {
           let x = forge.gen()
           found[x + '']++
         }
-        console.log("found", found)
         Object.keys(found).forEach((v)=> {
           expect(found[v + '']).toBeGreaterThan(0)//, "Should have generated all values. Missed: '" + v + "'")
         })

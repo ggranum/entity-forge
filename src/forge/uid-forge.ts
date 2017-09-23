@@ -1,5 +1,7 @@
-import {Strings, StringValidator, NotNullRestriction} from "@entity-forge/validator";
 import {BaseForge} from "./base-forge";
+import {NotNullRestriction} from "../validator/base-validator";
+import {Strings, StringValidator} from "../validator/string/string-validator";
+import {UIDGen} from "../generate/uid-gen";
 
 export class UidForge extends BaseForge {
 
@@ -30,5 +32,4 @@ export class UidForge extends BaseForge {
   }
 }
 
-import {UIDGen} from "@entity-forge/generate";
 UidForge.generatedByType(UIDGen)

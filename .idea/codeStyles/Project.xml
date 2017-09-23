@@ -1,0 +1,16 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <JSON>
+      <option name="PROPERTY_ALIGNMENT" value="2" />
+      <option name="OBJECT_WRAPPING" value="5" />
+    </JSON>
+    <MarkdownNavigatorCodeStyleSettings>
+      <option name="WRAP_ON_TYPING" value="1" />
+      <option name="RIGHT_MARGIN" value="120" />
+    </MarkdownNavigatorCodeStyleSettings>
+    <TypeScriptCodeStyleSettings>
+      <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
+      <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+    </TypeScriptCodeStyleSettings>
+  </code_scheme>
+</component>

@@ -1,5 +1,5 @@
-import {NumberGen} from "@entity-forge/generate";
-import * as seedrandom from "seedrandom";
+import {NumberGen} from "./number-gen";
+import {PseudoRandom} from "./psuedo-random";
 
 
 describe("Data Generation", function(){
@@ -7,7 +7,7 @@ describe("Data Generation", function(){
 
     it("Default generator should generate null about 1 in 1000 calls.", function () {
       let seed = 4
-      seedrandom('' + seed)
+      new PseudoRandom(seed).patchMath()
       let gen = new NumberGen()
       let count = 0
       for (let i = 0; i < 10000; i++) {
@@ -16,7 +16,7 @@ describe("Data Generation", function(){
           count++
         }
       }
-      expect(count).toBe(11)
+      expect(count).toBe(12)
     })
 
 
@@ -26,8 +26,8 @@ describe("Data Generation", function(){
     it("Should generate integers between a range.", function(){
       let cfg = {min: -100, max:100}
       let gen = new NumberGen().isInt().min(cfg.min, true).max(cfg.max, true)
-      let seed = 1003
-      seedrandom('' + seed)
+      let seed = 3
+      new PseudoRandom(seed).patchMath()
 
       let find = [cfg.min, cfg.max, 0, null]
       let found:any = {'null': 0}

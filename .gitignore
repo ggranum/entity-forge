@@ -4,6 +4,7 @@
 *.class
 *.tmp
 *.mwb.bak
+.npmrc
 
 
 # Intellij Configuration

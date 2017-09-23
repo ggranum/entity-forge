@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Jasmine-Ts Debug" type="NodeJSConfigurationType" factoryName="Node.js" application-parameters="./src/**/*.spec.ts" path-to-js-file="node_modules/jasmine-ts/lib/index.js" working-dir="$PROJECT_DIR$">
+    <method />
+  </configuration>
+</component>

@@ -3,7 +3,6 @@ import {NotNullRestriction, NotNullRestrictionFluent} from "../validator/base-va
 import {BaseForge} from "./base-forge";
 import {EntityResolver} from "./store/resolver";
 import {EntityType} from "./entity-type";
-// import {ReferenceRestrictions, ReferenceRestrictionsFluent, ReferenceValidator} from "@entity-forge/validator";
 
 
 export interface ReferenceRestrictions extends NotNullRestriction {
