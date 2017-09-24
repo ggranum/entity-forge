@@ -1,3 +1,8 @@
+<a name="0.1.3-beta"></a>
+## [0.1.3-beta](https://github.com/ggranum/entity-forge/compare/v0.1.2-beta...v0.1.3-beta) (2017-09-24)
+
+
+
 <a name="0.1.2-beta"></a>
 ## [0.1.2-beta](https://github.com/ggranum/entity-forge/compare/v0.1.1-beta...v0.1.2-beta) (2017-09-24)
 
