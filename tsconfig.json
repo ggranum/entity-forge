@@ -10,6 +10,7 @@
       "es2016",
       "dom"
     ],
+    "module"                    : "commonjs",
     "moduleResolution"          : "node",
     "noImplicitAny"             : true,
     "noEmitOnError"             : true,
@@ -19,16 +20,17 @@
     "noUnusedLocals"            : false,
     "outDir"                    : "dist",
     "paths"                     : {
-      "*"                      : [
+      "*": [
         "node_modules/*"
       ]
     },
     "pretty"                    : true,
     "sourceMap"                 : true,
+    "strict"                    : true,
     "strictNullChecks"          : false,
     "target"                    : "es5"
   },
-  "include": [
+  "include"        : [
     "src/**/*"
   ]
 }
