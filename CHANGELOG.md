@@ -1,3 +1,13 @@
+<a name="0.1.4-beta"></a>
+## [0.1.4-beta](https://github.com/ggranum/entity-forge/compare/v0.1.3-beta...v0.1.4-beta) (2017-09-24)
+
+
+### Bug Fixes
+
+* **compile:** Enable strict null checks, fix related issues ([625dbe1](https://github.com/ggranum/entity-forge/commit/625dbe1))
+
+
+
 <a name="0.1.3-beta"></a>
 ## [0.1.3-beta](https://github.com/ggranum/entity-forge/compare/v0.1.2-beta...v0.1.3-beta) (2017-09-24)
 
