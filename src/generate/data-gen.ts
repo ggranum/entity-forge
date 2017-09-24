@@ -87,7 +87,7 @@ export class DataGen implements DataGenerator {
     return data
   }
 
-  doGen(R:Restriction):any{
+  doGen(R?:Restriction):any{
       throw new Error("Override doGen")
   }
 

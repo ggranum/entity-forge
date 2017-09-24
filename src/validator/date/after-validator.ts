@@ -5,7 +5,7 @@ import {IsDateValidator} from "./is-date-validator";
 
 
 export interface AfterRestriction extends Restriction {
-  after?: { value: number, inclusive: boolean }
+  after: { value: number, inclusive: boolean }
 }
 
 export interface AfterRestrictionFluent {
@@ -33,7 +33,7 @@ export class AfterValidator extends Validator implements AfterRestrictionFluent 
     return this
   }
 
-  doValidate(value: any, R: AfterRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: AfterRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if(R.after ){
       let millis = value instanceof Date ? (<Date>value).valueOf() : value

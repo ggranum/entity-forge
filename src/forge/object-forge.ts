@@ -53,10 +53,10 @@ export class ObjectForge extends BaseForge implements CompositeForgeIF, ObjectRe
   _entityType: typeof EntityType
   _fieldDefinitions: { [key: string]: Forge}
 
-  constructor(fields: any = {}, fieldName: string = null) {
+  constructor(fields: any = {}, fieldName?: string) {
     super()
     this._fieldDefinitions = fields || {}
-    this.fieldName = fieldName
+    this.fieldName = fieldName || null
     super.validatedBy(new DescendantValidator(this))
   }
 

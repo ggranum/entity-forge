@@ -9,6 +9,7 @@ import {
 } from "../validator/common-validator";
 import {ObjectRestrictions, ObjectRestrictionsFluent} from "../forge/object-forge";
 import {Forge} from "../forge/forge";
+import {StringForge} from "../forge/string-forge";
 
 
 export interface MapRestrictions extends ObjectRestrictions, MinLengthRestriction, MaxLengthRestriction {
@@ -35,10 +36,9 @@ export class MapGen extends BaseGen implements MapRestrictionsFluent {
   getDefaults(): MapRestrictions {
     return {
       notNull: false,
-      isOneOf: null,
       fields: null,
       arrayLike: false,
-      of: null,
+      of: StringForge.string(),
       keyedBy: uidGen,
       minLength: {
         value: 0,
@@ -85,13 +85,20 @@ export class MapGen extends BaseGen implements MapRestrictionsFluent {
   }
 
 
-  doGen(R?: MapRestrictions) {
-    let data: any = null
-    let elementCount = NumberGen.nextInt(R.minLength.value, R.maxLength.value, R.minLength.inclusive, R.maxLength.inclusive)
+  doGen(R?: Partial<MapRestrictions>) {
+    let data: any
+    const defaults = this.getDefaults();
+    R = R || defaults;
+    let elementCount = NumberGen.nextInt(
+      R.minLength ? R.minLength.value : defaults.minLength.value,
+      R.maxLength ? R.maxLength.value : defaults.maxLength.value,
+      R.minLength ? R.minLength.inclusive : defaults.minLength.inclusive,
+      R.maxLength ? R.maxLength.inclusive : defaults.maxLength.inclusive,
+    )
     data = {}
     for (let i = 0; i < elementCount; i++) {
       let dataGen:DataGen = <DataGen>R.keyedBy
-      data[dataGen.gen()] = R.of.gen()
+      data[dataGen.gen()] = (R.of ? R.of : defaults.of).gen()
     }
     return data
   }

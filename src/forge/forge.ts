@@ -70,10 +70,10 @@ export class Forge {
   _lit: boolean = false
   _isEnumerable: boolean = true
   _generatedBy: DataGen
-  fieldName: string = null
+  fieldName: string | null= null
   parent: CompositeForgeIF
   restrictions: Restriction
-  private _version: number = null
+  private _version: number | null = null
   private _versionFieldName: string = 'version'
   private _validator: ValidatorIF
 
@@ -220,7 +220,7 @@ export class Forge {
     return fail !== false
   }
 
-  validate(value: any): ValidatorErrorsIF {
+  validate(value: any): ValidatorErrorsIF | null {
     let validator = this.getValidator();
     let R = Object.assign({}, validator.restrictions, this.restrictions)
     return validator.validate(value, R)

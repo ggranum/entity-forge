@@ -20,8 +20,8 @@ export interface ValidatorIF {
   clone():this
   getPreconditions(): ValidatorIF[]
   isValid(value: any, preconditionsTriggerFailure?: boolean): boolean
-  validate(value: any, restrictions?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF
-  doValidate(value: any, restrictions?: Restriction): ValidatorErrorsIF
+  validate(value: any, restrictions?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF | null
+  doValidate(value: any, restrictions?: Restriction): ValidatorErrorsIF | null
 }
 
 
@@ -119,9 +119,9 @@ export class Validator implements ValidatorIF {
     return this.validate(value, this.restrictions, preconditionsTriggerFailure) === null
   }
 
-  validate(value: any, restrictionOverrides?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF {
+  validate(value: any, restrictionOverrides?: Restriction, preconditionsTriggerFailure?: boolean): ValidatorErrorsIF | null {
     let R = restrictionOverrides ? restrictionOverrides : this.restrictions
-    let results: ValidatorErrorsIF = null
+    let results: ValidatorErrorsIF  | null = null
     let preResults = this.testPreconditions(value, R)
 
     if (preResults === null) {
@@ -133,11 +133,11 @@ export class Validator implements ValidatorIF {
   }
 
 
-  testPreconditions(value: any, R?: Restriction): ValidatorErrorsIF {
+  testPreconditions(value: any, R?: Restriction): ValidatorErrorsIF | null {
     let preconditions = this.getPreconditions()
-    let preResult: ValidatorErrorsIF = null
+    let preResult: ValidatorErrorsIF | null = null
     for (let i = 0; i < preconditions.length; i++) {
-      preResult = preconditions[i].validate(value, null, true)
+      preResult = preconditions[i].validate(value, undefined, true)
       if (preResult !== null) {
         break
       }
@@ -155,7 +155,7 @@ export class Validator implements ValidatorIF {
    * @param value
    * @param restrictions
    */
-  doValidate(value: any, restrictions?: Restriction): ValidatorErrorsIF {
+  doValidate(value: any, restrictions?: Restriction): ValidatorErrorsIF | null {
     throw new Error("Not implemented. Either provide a static 'doValidate' function or override the validate method.")
   }
 }
@@ -165,8 +165,8 @@ export class CompositeValidator extends Validator {
 
 
   //noinspection JSMethodCanBeStatic
-  doValidateComposite(value: string, R: Restriction, validations: ValidatorIF[]): ValidatorErrorsIF {
-    let result: ValidatorErrorsIF = null
+  doValidateComposite(value: string, R: Restriction, validations: ValidatorIF[]): ValidatorErrorsIF | null {
+    let result: ValidatorErrorsIF | null = null
     for (let i = 0; i < validations.length; i++) {
       result = validations[i].validate(value, R)
       if (result !== null) {

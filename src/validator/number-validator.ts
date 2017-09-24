@@ -32,7 +32,7 @@ export class IsNumberValidator extends Validator implements IsNumberRestrictionF
     return this
   }
 
-  doValidate(value: any, R: IsNumberRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsNumberRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if (R.isNumber) {
       let isNumeric = (typeof value === 'number' || value instanceof Number)
@@ -75,7 +75,7 @@ export class IsIntValidator extends Validator implements IsIntRestrictionFluent 
     return [IsNumberValidator.instance()]
   }
 
-  doValidate(value: any, R: IsIntRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsIntRestriction): ValidatorErrorsIF | null{
     let isValid: boolean = true
     if (R.isInt) {
       let isNumeric:boolean = (typeof value === 'number' || value instanceof Number)
@@ -89,7 +89,7 @@ export class IsIntValidator extends Validator implements IsIntRestrictionFluent 
 
 
 export interface MaxRestriction extends Restriction {
-  max?: RangeLimitRestriction
+  max: RangeLimitRestriction
 }
 
 export interface MaxRestrictionFluent {
@@ -119,7 +119,7 @@ export class MaxValidator extends Validator implements MaxRestrictionFluent {
   }
 
 
-  doValidate(value: number, R: MaxRestriction): ValidatorErrorsIF {
+  doValidate(value: number, R: MaxRestriction): ValidatorErrorsIF | null {
     let isValid: boolean = true
     if (R.max) {
       isValid = R.max.inclusive ? value <= R.max.value : value < R.max.value
@@ -131,7 +131,7 @@ export class MaxValidator extends Validator implements MaxRestrictionFluent {
 }
 
 export interface MinRestriction extends Restriction {
-  min?: RangeLimitRestriction
+  min: RangeLimitRestriction
 }
 
 export interface MinRestrictionFluent {
@@ -161,7 +161,7 @@ export class MinValidator extends Validator implements MinRestrictionFluent {
     return this
   }
 
-  doValidate(value: number, R: MinRestriction): ValidatorErrorsIF {
+  doValidate(value: number, R: MinRestriction): ValidatorErrorsIF | null {
     let isValid: boolean = true
     if (R.min) {
       isValid = R.min.inclusive ? value >= R.min.value : value > R.min.value
@@ -229,7 +229,7 @@ export class NumberValidator extends CompositeValidator implements NumberRestric
     return this
   }
 
-  doValidate(value: any, R: NumberRestrictions): ValidatorErrorsIF {
+  doValidate(value: any, R: NumberRestrictions): ValidatorErrorsIF | null{
     let chain = [
       NotNullValidator.instance(),
       IsNumberValidator.instance(),

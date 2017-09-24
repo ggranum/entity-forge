@@ -39,7 +39,7 @@ export class MinLengthValidator extends Validator implements MinLengthRestrictio
     return this
   }
 
-  doValidate(value: any, R: MinLengthRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: MinLengthRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if (R.minLength) {
       isValid = R.minLength.inclusive ? value.length >= R.minLength.value : value.length > R.minLength.value
@@ -114,7 +114,7 @@ export class IsObjectValidator extends Validator implements IsObjectRestrictionF
     return this
   }
 
-  doValidate(value: any, R: IsObjectRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsObjectRestriction): ValidatorErrorsIF | null {
     let isValid = R.isObject ? (typeof value === 'object' || value.constructor === Object) : true
     return isValid
       ? null
@@ -147,7 +147,7 @@ export class IsFunctionValidator extends Validator implements IsFunctionRestrict
     return this
   }
 
-  doValidate(value: any, R: IsFunctionRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsFunctionRestriction): ValidatorErrorsIF | null {
     let isValid = R.isFunction ? (typeof value === 'function' || value instanceof Function) : true
     return isValid
       ? null
@@ -179,7 +179,7 @@ export class IsBooleanValidator extends Validator implements IsBooleanRestrictio
     return this
   }
 
-  doValidate(value: any, R: IsBooleanRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsBooleanRestriction): ValidatorErrorsIF | null {
     let isValid = R.isBoolean ? (value === true || value === false) : true
     return isValid
       ? null

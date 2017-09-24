@@ -24,7 +24,7 @@ export class IsArrayValidator extends Validator implements IsArrayRestrictionFlu
     return this
   }
 
-  doValidate(value: any, R: IsArrayRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsArrayRestriction): ValidatorErrorsIF | null {
     let isValid = R.isArray ? (value instanceof Array) : true
     return isValid
       ? null

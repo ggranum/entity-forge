@@ -151,7 +151,7 @@ export class StringValidator extends CompositeValidator implements NotNullValida
   }
 
 
-  doValidate(value: any, R: StringRestrictions): ValidatorErrorsIF {
+  doValidate(value: any, R: StringRestrictions): ValidatorErrorsIF | null {
     let chain = [
       NotNullValidator.instance(),
       IsStringValidator.instance(),

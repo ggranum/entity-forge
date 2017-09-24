@@ -29,7 +29,7 @@ describe("Validators", function () {
       let c = new NumberValidator()
       let result = c.validate("Not a number.")
       expect(result).toBeTruthy()//"The value should not be allowed.")
-      expect(result['isNumber']).toBeDefined()
+      expect(result!['isNumber']).toBeDefined()
     })
 
     it("#min check returns null if input greater than specified min value", function () {
@@ -48,15 +48,15 @@ describe("Validators", function () {
       let c = new NumberValidator().min(100, false)
       let result = c.validate(100)
       expect(result).toBeTruthy()//"The value should not be allowed.")
-      expect(result['min']).toBeDefined()
+      expect(result!['min']).toBeDefined()
     })
 
     it("#min check returns only 'number' validation failure message if input is a string", function () {
       let c = new NumberValidator().min(100)
       let result = c.validate("12")
       expect(result).toBeTruthy()//"The value should not be allowed.")
-      expect(result['isNumber']).toBeDefined()
-      expect(result['min']).toBeUndefined()
+      expect(result!['isNumber']).toBeDefined()
+      expect(result!['min']).toBeUndefined()
     })
 
     it("#max returns null if input less than specified max value", function () {
@@ -75,15 +75,15 @@ describe("Validators", function () {
       let c = new NumberValidator().max(100, false)
       let result = c.validate(100)
       expect(result).toBeTruthy() // "The value should not be allowed.")
-      expect(result['max']).toBeDefined()
+      expect(result!['max']).toBeDefined()
     })
 
     it("#max check returns only 'number' validation failure message if input is a string", function () {
       let c = new NumberValidator().max(100)
       let result = c.validate("12")
       expect(result).toBeTruthy() // "The value should not be allowed.")
-      expect(result['isNumber']).toBeDefined()
-      expect(result['max']).toBeUndefined()
+      expect(result!['isNumber']).toBeDefined()
+      expect(result!['max']).toBeUndefined()
     })
   })
 })

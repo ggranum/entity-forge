@@ -73,7 +73,7 @@ export interface IdentifierFluent extends MinLengthRestrictionFluent,
   quoted(value?: boolean): this
 }
 
-let allReserved = [].concat(RESERVED.KEYWORDS, RESERVED.FUTURE, RESERVED.STRICT_MODE_FUTURE, RESERVED.LITERALS).sort()
+let allReserved = (<string[]>[]).concat(RESERVED.KEYWORDS, RESERVED.FUTURE, RESERVED.STRICT_MODE_FUTURE, RESERVED.LITERALS).sort()
 let startValidator = new AllowedCodePointsValidator(UNICODE.ID_Start)
 let continueValidator = new AllowedCodePointsValidator(UNICODE.ID_Continue)
 
@@ -89,24 +89,24 @@ export class IsIdentifierValidator extends Validator implements IdentifierFluent
     this.isIdentifier()
   }
 
-  private static isNotNull(v: any): string {
+  private static isNotNull(v: any): string | null {
     return (v !== null && v !== undefined) ? null : "@identifier.cannotBeNull"
   }
 
-  private static isValidObjectKey(v: any, isValidIdentifier: boolean, quoted: boolean): string {
+  private static isValidObjectKey(v: any, isValidIdentifier: boolean, quoted: boolean = false): string | null {
     let isValid = isValidIdentifier || Validators.isNumber.isValid(v, true) || ( quoted && Validators.isString.isValid(v, true) )
     return isValid ? null : "@identifier.invalidObjectKey"
   }
 
-  private static isString(value: any): string {
+  private static isString(value: any): string | null {
     return Validators.isString.isValid(value) ? null : "@identifier.mustBeString"
   }
 
-  private static isAtLeastOneCharLong(value: any): string {
+  private static isAtLeastOneCharLong(value: any): string | null {
     return value.length > 0 ? null : "@identifier.mustBeAtLeastOneCharacter"
   }
 
-  private static isValidArrayIndex(value: string | number): string {
+  private static isValidArrayIndex(value: string | number): string | null {
     let isValid = true
     if (Validators.isString.isValid(value)) {
       try {
@@ -119,8 +119,13 @@ export class IsIdentifierValidator extends Validator implements IdentifierFluent
     return isValid ? null : "@identifier.notAnArrayIndex"
   }
 
-  private static startsWithValidCodePoint(value: string) {
-    return startValidator.isValid(String.fromCodePoint(value.codePointAt(0))) ? null : "@identifier.illegalStartCharacter"
+  private static startsWithValidCodePoint(value: string): string | null {
+    const cp: number | undefined = value.codePointAt(0);
+    let result: string | null = null;
+    if(cp){
+      result = startValidator.isValid(String.fromCodePoint(cp)) ? null : "@identifier.illegalStartCharacter"
+    }
+    return result;
   }
 
   private static containsOnlyValidCodePoints(value: string) {
@@ -168,9 +173,9 @@ export class IsIdentifierValidator extends Validator implements IdentifierFluent
     return this
   }
 
-  doValidate(value: any, R: IdentifierRestrictions): ValidatorErrorsIF {
-    let r: ValidatorErrorsIF = null
-    let msg: string = null
+  doValidate(value: any, R: IdentifierRestrictions): ValidatorErrorsIF | null {
+    let r: ValidatorErrorsIF | null = null
+    let msg: string | null = null
     try {
       let V = IsIdentifierValidator
       if (R.quoted) {

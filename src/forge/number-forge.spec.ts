@@ -46,7 +46,7 @@ describe('Forge', function () {
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
         expect(result).toBeTruthy()//"The value '" + disallowed[i] + "' should not be allowed.")
-        expect(result['isNumber'] || result['isInt']).toBeDefined() //disallowed[i] + " should not be allowed.")
+        expect(result!['isNumber'] || result!['isInt']).toBeDefined() //disallowed[i] + " should not be allowed.")
       }
     });
 

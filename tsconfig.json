@@ -27,7 +27,7 @@
     "pretty"                    : true,
     "sourceMap"                 : true,
     "strict"                    : true,
-    "strictNullChecks"          : false,
+    "strictNullChecks"          : true,
     "target"                    : "es5"
   },
   "include"        : [

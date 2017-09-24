@@ -112,7 +112,8 @@ class MapEntityType<K, V> extends EntityType implements Map<K,V> {
   [Symbol.toStringTag]: "Map";
 
   [Symbol.iterator](): IterableIterator<[K,V]> {
-    return undefined
+    /* overwritten in constructor*/
+    return <any>{}
   }
 
   size: number;
@@ -134,7 +135,7 @@ class MapEntityType<K, V> extends EntityType implements Map<K,V> {
     this._map.forEach(callbackfn)
   }
 
-  get(key: K): V {
+  get(key: K): V | undefined {
     return this._map.get(key)
   }
 
@@ -146,7 +147,7 @@ class MapEntityType<K, V> extends EntityType implements Map<K,V> {
     return this._map.keys()
   }
 
-  set(key: K, value?: V): this {
+  set(key: K, value: V): this {
     this._map.set(key, value)
     return this
   }

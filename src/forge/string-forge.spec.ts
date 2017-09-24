@@ -126,7 +126,7 @@ describe('StringForge', function () {
     }
     let result = model.foo.validate("abc")
     expect(result).toBeTruthy()
-    expect(result['minLength']).toBeTruthy()
+    expect(result!['minLength']).toBeTruthy()
   });
 
 

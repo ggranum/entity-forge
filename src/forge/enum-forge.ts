@@ -16,7 +16,7 @@ export class EnumForge extends BaseForge {
 
   ignite() {
     if (this.restrictions.notNull && this.defaultValue === undefined ) {
-      this.initTo(this.restrictions.isOneOf[0])
+      this.initTo(this.restrictions.isOneOf![0])
     }
     super.ignite()
   }

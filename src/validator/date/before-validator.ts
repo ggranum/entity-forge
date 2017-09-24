@@ -5,7 +5,7 @@ import {IsDateValidator} from "./is-date-validator";
 
 
 export interface BeforeRestriction extends Restriction {
-  before?: { value: number, inclusive: boolean }
+  before: { value: number, inclusive: boolean }
 }
 
 export interface BeforeRestrictionFluent {
@@ -33,7 +33,7 @@ export class BeforeValidator extends Validator implements BeforeRestrictionFluen
     return this
   }
 
-  doValidate(value: any, R: BeforeRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: BeforeRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if(R.before ){
       let millis = value instanceof Date ? (<Date>value).valueOf() : value

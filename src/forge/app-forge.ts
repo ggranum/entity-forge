@@ -1,6 +1,6 @@
+import {ObjectGen} from "../generate/object-gen";
 import {ObjectForge} from "./object-forge";
 import {AppResolver} from "./store/resolver";
-import {ObjectGen} from "../generate/object-gen";
 
 
 /**
@@ -13,7 +13,7 @@ import {ObjectGen} from "../generate/object-gen";
  */
 export class AppForge extends ObjectForge {
 
-  constructor(fields: any = {}, fieldName: string = null) {
+  constructor(fields: any = {}, fieldName?: string) {
     super(fields, fieldName)
     this._resolver = new AppResolver(this)
     Object.keys(fields).forEach((key) => {

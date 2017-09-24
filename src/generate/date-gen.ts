@@ -43,15 +43,18 @@ export class DateGen extends BaseGen implements DateRestrictionsFluent {
     return this
   }
 
-  doGen(R: DateRestrictions): number {
+  doGen(R?: Partial<DateRestrictions>): number {
     let data: number
-    let max = R.before.value
-    let min = R.after.value
+    const defaults = this.getDefaults();
+    R = R || defaults;
+
+    let max = R.before ? R.before.value : defaults.before.value;
+    let min = R.after ? R.after.value : defaults.after.value;
     data = NumberGen.nextInt(
       min > Number.MIN_SAFE_INTEGER ? min : Number.MAX_SAFE_INTEGER,
       max < Number.MAX_SAFE_INTEGER ? max : Number.MAX_SAFE_INTEGER,
-      R.after.inclusive,
-      R.before.inclusive
+      R.after ? R.after.inclusive : defaults.after.inclusive,
+      R.before ? R.before.inclusive : defaults.before.inclusive
     )
     return data
   }

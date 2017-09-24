@@ -37,14 +37,14 @@ describe("Validators", function () {
         let v = new StringValidator().minLength(3, false)
         let result = v.validate("abc")
         expect(result).not.toBeNull()
-        expect(result['minLength']).not.toBeNull()
+        expect(result!['minLength']).not.toBeNull()
       })
 
       it(`Is invalid if length < minLength`, function(){
         let v = new StringValidator().minLength(3)
         let result = v.validate("ab")
         expect(result).not.toBeNull()
-        expect(result['minLength']).not.toBeNull()
+        expect(result!['minLength']).not.toBeNull()
       })
     })
 
@@ -63,14 +63,14 @@ describe("Validators", function () {
         let v = new StringValidator().maxLength(3, false)
         let result = v.validate("abc")
         expect(result).not.toBeNull()
-        expect(result['maxLength']).not.toBeNull()
+        expect(result!['maxLength']).not.toBeNull()
       })
 
       it(`Is invalid if length > maxLength`, function(){
         let v = new StringValidator().maxLength(3)
         let result = v.validate("abcd")
         expect(result).not.toBeNull()
-        expect(result['maxLength']).not.toBeNull()
+        expect(result!['maxLength']).not.toBeNull()
       })
     })
 

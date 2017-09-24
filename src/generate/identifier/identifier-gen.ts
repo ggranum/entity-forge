@@ -1,11 +1,8 @@
-
-
-
 import {IdentifierFluent, IdentifierRestrictions, IsIdentifierValidator} from "../../validator/identifier/identifier";
-import {StringRestrictions} from "../../validator/string/string-validator";
-import {StringGen} from "../string-gen";
 import {UNICODE} from "../../validator/identifier/identifier_constants";
+import {StringRestrictions} from "../../validator/string/string-validator";
 import {NumberGen} from "../number-gen";
+import {StringGen} from "../string-gen";
 
 export interface IdentifierGenRestrictions extends IdentifierRestrictions, StringRestrictions {
   unique?: boolean;
@@ -14,6 +11,7 @@ export interface IdentifierGenRestrictions extends IdentifierRestrictions, Strin
 
 export interface IdentifierGenFluent extends IdentifierFluent {
   unique(value?: boolean): this
+
   incremental(value?: boolean): this
 }
 
@@ -24,7 +22,7 @@ export interface IdentifierGenFluent extends IdentifierFluent {
  */
 export class IdentifierGen extends StringGen implements IdentifierGenFluent {
   restrictions: IdentifierGenRestrictions
-  private _instanceData: {previous: number|string, used?: {[key: string]: boolean}}
+  private _instanceData: { previous: number | string, used: { [key: string]: boolean } }
   maxAttempts = 10;
 
   constructor() {
@@ -36,21 +34,16 @@ export class IdentifierGen extends StringGen implements IdentifierGenFluent {
   reset() {
     this._instanceData = {
       previous: -1,
-      used: {}
+      used    : {}
     }
   }
 
   getDefaults(): IdentifierGenRestrictions {
     return {
-      allowedChars: null,
       allowedCodePoints: UNICODE.ID_Start,
-      notNull: true,
-      arrayIndex: null,
-      quoted: null,
-      incremental: null,
-      unique: null,
-      minLength: {value: 1, inclusive: true},
-      maxLength: {value: 20, inclusive: true},
+      notNull          : true,
+      minLength        : {value: 1, inclusive: true},
+      maxLength        : {value: 20, inclusive: true},
     }
   }
 
@@ -93,24 +86,25 @@ export class IdentifierGen extends StringGen implements IdentifierGenFluent {
   doGen(R?: IdentifierGenRestrictions): string {
     let data: any
     let attempts = this.maxAttempts
-    do {
-      if (R.arrayIndex) {
-        data = IdentifierGen.nextArrayIndex(R.incremental, <number>this._instanceData.previous);
-      } else {
-        data = super.doGen(R)
-        // v = RefGen.nextValidStringIdentifier(super, R.quoted, <string>this._instanceData.previous)
+    if (R) {
+      do {
+        if (R.arrayIndex) {
+          data = IdentifierGen.nextArrayIndex(R.incremental, <number>this._instanceData.previous);
+        } else {
+          data = super.doGen(R)
+          // v = RefGen.nextValidStringIdentifier(super, R.quoted, <string>this._instanceData.previous)
+        }
+      } while (--attempts && (!this.validator.isValid(data) || (R.unique && (this._instanceData.used[data] == true))))
+      if (attempts === 0) {
+        throw new Error("Could not generate valid identifier values within the constraints provided.")
       }
-    } while (--attempts && (!this.validator.isValid(data) || (R.unique && (this._instanceData.used[data] == true ) )))
-    if (attempts === 0) {
-      throw new Error("Could not generate valid identifier values within the constraints provided.")
+      this._instanceData.used[data] = true
+      this._instanceData.previous = data
     }
-    this._instanceData.used[data] = true
-    this._instanceData.previous = data
-
     return data
   }
 
-  static nextArrayIndex(incremental: boolean, previous: number) {
+  static nextArrayIndex(incremental: boolean = false, previous: number) {
     let v: number
     if (incremental) {
       v = previous + 1

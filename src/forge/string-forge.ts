@@ -15,7 +15,7 @@ export class StringForge extends BaseForge implements StringRestrictionsFluent{
     this.allowedCodePoints(Strings.COMMON_UTF_RANGES.UTF_PLANE_BMP)
   }
 
-  static string(defaultValue: string = null) {
+  static string(defaultValue: string | null = null) {
     return new StringForge().initTo(defaultValue)
   }
 

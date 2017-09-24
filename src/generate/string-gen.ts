@@ -16,10 +16,7 @@ export class StringGen extends DataGen implements StringRestrictionsFluent {
       isString: true,
       minLength: {value: 0, inclusive: true},
       maxLength: {value: 1024, inclusive: true},
-      allowedChars: null,
       allowedCodePoints: Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP,
-      matchesRegex: null,
-      notMatchesRegex: null
     }
   }
 
@@ -71,12 +68,16 @@ export class StringGen extends DataGen implements StringRestrictionsFluent {
 
   doGen(R?: StringRestrictions): any {
     let data: string
+    if(!R){
+      R = this.getDefaults();
+    }
     let {start, range} = StringGen._range(R)
-    let charCount = start + Math.floor(Math.random() * range)
+    let charCount = start + Math.floor(Math.random() * range);
+
     if (R.allowedChars) {
       data = StringGen.generateStringFromChars(charCount, R.allowedChars);
     } else {
-      data = StringGen.generateStringFromCodePoints(charCount, R.allowedCodePoints, R);
+      data = StringGen.generateStringFromCodePoints(charCount, R.allowedCodePoints);
     }
     return data
   }
@@ -90,7 +91,8 @@ export class StringGen extends DataGen implements StringRestrictionsFluent {
     return data.join('')
   }
 
-  static generateStringFromCodePoints(charCount: number, allowedCodePoints: number[], R?: StringRestrictions) {
+  static generateStringFromCodePoints(charCount: number,
+                                      allowedCodePoints: number[] = Strings.COMMON_UTF_RANGES.UTF_PRINTABLE_PLANE_BMP) {
     let str = ""
     let maxNextLen = charCount
     do {

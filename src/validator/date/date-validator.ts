@@ -59,7 +59,7 @@ export class DateValidator extends CompositeValidator implements DateRestriction
   }
 
 
-  doValidate(value: any, R: DateRestrictions): ValidatorErrorsIF {
+  doValidate(value: any, R: DateRestrictions): ValidatorErrorsIF | null {
     let chain = [
       NotNullValidator.instance(),
       IsDateValidator.instance(),

@@ -2,7 +2,7 @@ import {ValidatorErrorInfo, ValidatorErrorsIF, Validator, ValidatorIF} from "../
 import {Restriction, NotNullValidator} from "../base-validator";
 import {IsIntValidator} from "../number-validator";
 export interface IsDateRestriction extends Restriction {
-  isDate?: boolean
+  isDate: boolean
 }
 
 export interface IsDateRestrictionFluent {
@@ -29,7 +29,7 @@ export class IsDateValidator extends Validator implements IsDateRestrictionFluen
     return this
   }
 
-  doValidate(value: any, R: IsDateRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsDateRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if(R.isDate ){
       isValid = value instanceof Date || IsIntValidator.instance().isValid(value, true)

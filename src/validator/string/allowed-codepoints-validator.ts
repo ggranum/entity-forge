@@ -30,9 +30,9 @@ export class AllowedCodePointsValidator extends Validator implements AllowedCode
     return this
   }
 
-  doValidate(value: any, R: AllowedCodePointsRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: AllowedCodePointsRestriction): ValidatorErrorsIF | null {
     let isValid = true
-    let msg:string = null
+    let msg:string = ''
     if (R.allowedCodePoints) {
       let L = value.length
       for (let i = 0; i < L; i++) {

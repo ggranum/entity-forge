@@ -1,7 +1,7 @@
 import {ValidatorErrorInfo, ValidatorErrorsIF, Validator, ValidatorIF} from "../validator";
 import {IsStringValidator} from "./is-string-validator";
 export interface AllowedCharactersRestriction {
-  allowedChars: string[]
+  allowedChars?: string[]
 }
 
 export interface AllowedCharactersRestrictionFluent {
@@ -29,7 +29,7 @@ export class AllowedCharactersValidator extends Validator implements AllowedChar
     return this
   }
 
-  doValidate(value: any, R: AllowedCharactersRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: AllowedCharactersRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if (R.allowedChars) {
       let L = value.length

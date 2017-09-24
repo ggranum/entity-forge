@@ -7,9 +7,9 @@ import {EntityType} from "./entity-type";
 
 export interface ReferenceRestrictions extends NotNullRestriction {
   // Define the type that we are referencing.
-  to?: {type: Forge, path: string}
-  resolvedBy?: EntityResolver,
-  createIfAbsent?: boolean
+  to: {type: Forge, path: string}
+  resolvedBy: EntityResolver,
+  createIfAbsent: boolean
 }
 
 export interface ReferenceRestrictionsFluent extends NotNullRestrictionFluent {
@@ -30,7 +30,7 @@ export class ReferenceForge extends BaseForge implements ReferenceRestrictionsFl
   }
 
   newInstance(defaultOverride?:any, parent?:EntityType): any {
-    let reference: string = null
+    let reference: string = ''
     if (this.restrictions.createIfAbsent) {
       let path = this.restrictions.to.path
       reference = this._resolver.createAndStore(path, this.restrictions.to.type)

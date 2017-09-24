@@ -13,8 +13,8 @@ export class MapForge extends ObjectForge implements MapRestrictionsFluent {
 
   restrictions: MapRestrictions
 
-  constructor() {
-    super()
+  constructor(fieldName?:string) {
+    super(undefined, fieldName);
   }
 
   setResolver(resolver: EntityResolver): void {

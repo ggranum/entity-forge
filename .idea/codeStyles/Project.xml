@@ -12,5 +12,10 @@
       <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
       <option name="IMPORT_SORT_MODULE_NAME" value="true" />
     </TypeScriptCodeStyleSettings>
+    <codeStyleSettings language="TypeScript">
+      <arrangement>
+        <groups />
+      </arrangement>
+    </codeStyleSettings>
   </code_scheme>
 </component>

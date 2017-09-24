@@ -11,7 +11,7 @@ export class BaseGen extends DataGen implements BaseRestrictionsFluent {
   getDefaults(): BaseRestrictions {
     return {
       notNull: false,
-      isOneOf: null
+      isOneOf: undefined
     };
   }
 
@@ -25,9 +25,9 @@ export class BaseGen extends DataGen implements BaseRestrictionsFluent {
     return this
   }
 
-  doGen(R:BaseRestrictions):any{
+  doGen(R?:BaseRestrictions):any{
     let data:any = null
-    if(R.isOneOf){
+    if(R && R.isOneOf){
       if (R.isOneOf.length == 0) {
         throw new Error("No valid values - add items via 'isOneOf'.")
       }

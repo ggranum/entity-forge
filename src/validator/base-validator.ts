@@ -29,7 +29,7 @@ export class NotNullValidator extends Validator implements NotNullRestrictionFlu
     return this
   }
 
-  doValidate(value: any, R: NotNullRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: NotNullRestriction): ValidatorErrorsIF | null {
     let isValid = R.notNull ? !(value === null || value === undefined) : true
     return isValid
       ? null
@@ -66,7 +66,7 @@ export class IsOneOfValidator extends Validator implements IsOneOfRestrictionFlu
     return this
   }
 
-  doValidate(value: any, R?: IsOneOfRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsOneOfRestriction): ValidatorErrorsIF | null {
     let isValid = true
     if (R.isOneOf) {
       isValid = R.isOneOf.some((allowedValue: any)=> {
@@ -108,7 +108,7 @@ export class BaseValidator extends CompositeValidator implements NotNullValidato
     return this
   }
 
-  doValidate(value: any, R: BaseRestrictions): ValidatorErrorsIF {
+  doValidate(value: any, R: BaseRestrictions): ValidatorErrorsIF | null {
     let chain = [
       NotNullValidator.instance(),
       IsOneOfValidator.instance()

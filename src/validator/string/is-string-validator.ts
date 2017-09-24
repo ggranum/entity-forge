@@ -28,7 +28,7 @@ export class IsStringValidator extends Validator implements IsStringRestrictionF
     return this
   }
 
-  doValidate(value: any, R: IsStringRestriction): ValidatorErrorsIF {
+  doValidate(value: any, R: IsStringRestriction): ValidatorErrorsIF | null {
     let isValid = R.isString ? (typeof value === 'string' || value instanceof String) : true
     return isValid
       ? null
