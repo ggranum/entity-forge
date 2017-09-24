@@ -2,15 +2,13 @@
 
 An integer isn't a data type, it's a compiler hint.
 
-## Models are sophisticated entities, not bundles of generic primitives.
-
-*If you clone the project you can see the following in a browser by running `npm run docs' and opening the debug console in your browser.* 
-
+## Models aren't just bundles of generic primitives.
 
 Define a model to match reality:
 
-```javascript
-let EF = EntityForge
+```typescript
+import {EF} from "entityforge";
+
 let UserForge = EF.obj({
     uuid: EF.string().minLength(20).maxLength(20).ascii(),
     email: EF.string().minLength(5).maxLength(255),
@@ -18,7 +16,7 @@ let UserForge = EF.obj({
 })
 ```
 
-Unless we specify otherwise, we can't create or modify the created model type in a way that would cause it to become invalid:
+Now create an instance of your model:
 
 ```javascript
 let NullableUserModel = UserForge.asNewable()
@@ -33,7 +31,7 @@ try {
     example.uuid = example.uuid.substring(0, 10)
 } catch (e) {
     console.log("I'm sorry dave....") // Nope, not allowed.
-    console.log("Validation errors provide a cause", e.cause) restrictions
+    console.log("Validation errors provide a cause", e.cause); 
     console.log("To be clear, the messaging system needs some work. The cause message is: ", e.cause.minLength.message) // @restriction.minLength
 }
 console.log("UUID wasn't modified by the attempt to set it to illegal value:", example.uuid) // "-JhLeOlGIEjaIOFHR0xd" --- value not modified if invalid.
@@ -54,7 +52,7 @@ There is still work to be done on the data generation side. Of the missing funct
 
 ### Built In Forges
 
-The initial batch of forges cover only the basic primitive types, with Arrays/Lists 'on the way'.
+The initial batch of forges cover the basic primitive types, and object wrappers:
 
 ```javascript
 let BiggerUserForge = EF.obj({
@@ -83,11 +81,7 @@ console.log("A randomly generated 'BiggerUser:", biggerUser)
 ### Getting started
 
 
-```console
-npm install typings --global
-npm install typescript --global
-npm install
-npm run build.dev
-# In another console tab
-npm run serve.test
+```bash
+npm install 
+npm run test
 ```

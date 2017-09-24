@@ -1,7 +1,7 @@
 {
   "name": "entityforge",
   "description": "Entities >> Objects",
-  "version": "0.0.4-beta.01",
+  "version": "0.1.1-beta",
   "homepage": "https://github.com/ggranum/entity-forge",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/ggranum/entity-forge/issues"
   },
-  "main": "dist/es3/forge/index.js",
+  "main": "dist/index.js",
   "keywords": [
     "utilities",
     "types",
@@ -31,6 +31,7 @@
   ],
   "scripts": {
     "clean": "gulp clean",
+    "build": "tsc -p src/tsconfig.app.json",
     "build.test": "tsc -p src/tsconfig.spec.json -w",
     "build.dev": "tsc -p src/tsconfig.app.json -w",
     "test": "jasmine-ts --project=./tsconfig.json  './src/**/*.spec.ts'",
