@@ -20,7 +20,7 @@
     "entities",
     "objects"
   ],
-  "license": "MIT",
+  "license": "GPL",
   "private": false,
   "author": "Geoff M. Granum <geoff.granum@gmail.com> (https://geoffgranum.com)",
   "contributors": [
@@ -31,7 +31,7 @@
   ],
   "scripts": {
     "clean": "gulp clean",
-    "build": "tsc -p src/tsconfig.app.json",
+    "build": "gulp clean && tsc -p src/tsconfig.app.json",
     "build.test": "tsc -p src/tsconfig.spec.json -w",
     "build.dev": "tsc -p src/tsconfig.app.json -w",
     "test": "jasmine-ts --project=./tsconfig.json  './src/**/*.spec.ts'",

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "alwaysStrict"              : true,
     "baseUrl"                   : "",
-    "declaration"               : false,
+    "declaration"               : true,
     "emitDecoratorMetadata"     : true,
     "experimentalDecorators"    : true,
     "lib"                       : [
