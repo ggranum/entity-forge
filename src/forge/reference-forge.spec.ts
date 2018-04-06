@@ -1,7 +1,6 @@
 import {EF} from "./entity-forge";
 import {PseudoRandom} from "../generate/psuedo-random";
 
-
 describe('Forge', function () {
   describe('ReferenceForge', function () {
 
@@ -10,8 +9,6 @@ describe('Forge', function () {
     let HOUR = 1000*60*60
     let DAY = 24*HOUR
     let now = Date.now()
-
-
 
     beforeEach(function () {
       UserContact = EF.obj({
@@ -34,9 +31,7 @@ describe('Forge', function () {
       }).notNull()
     })
 
-
     describe("#newInstance ", function () {
-
 
       it("creates child references and stores them.", function () {
 
@@ -45,11 +40,10 @@ describe('Forge', function () {
           try {
             let user = User.newInstance()
             expect(user).toBeTruthy() // "Should create a user.")
-            expect(user.name).toBeNull() // 'name')
-            expect(user.email).toBeNull() // 'email')
+            expect(user.name).toBeNull()
+            expect(user.email).toBeNull()
             expect(user.uid.length).toBe(20)
-            expect(user.created).toBeLessThan(Date.now()) // , 'created')
-            // expect(user.contact).toBeTruthy('contact')
+            expect(user.created).toBeLessThanOrEqual(Date.now())
           } catch (e) {
             console.log(i, e)
             throw e
