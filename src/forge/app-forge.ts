@@ -1,4 +1,4 @@
-import {ObjectGen} from "../generate/object-gen";
+import {ObjectGen} from "../generate";
 import {ObjectForge} from "./object-forge";
 import {AppResolver} from "./store/resolver";
 

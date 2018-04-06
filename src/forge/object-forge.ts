@@ -1,10 +1,10 @@
-import {EntityType, EntityTypeIF} from "./entity-type";
+import {EntityType} from "./entity-type";
 import {DescendantValidator} from "./descendant-validator";
 import {ValidateFailedError} from "./validate-failed-error";
 import {BaseForge} from "./base-forge";
 import {Forge, CompositeForgeIF, ForgePropertyDescriptorIF} from "./forge";
-import {BaseRestrictions, BaseRestrictionsFluent} from "../validator/base-validator";
-import {ObjectGen} from "../generate/object-gen";
+import {BaseRestrictions, BaseRestrictionsFluent} from "../validator";
+import {ObjectGen} from "../generate";
 
 
 /**
@@ -126,7 +126,6 @@ export class ObjectForge extends BaseForge implements CompositeForgeIF, ObjectRe
 
   gen(): any {
     this.ignite()
-    let childFields = {}
     let value = this._generatedBy.gen(this.restrictions)
     if (value) {
       Object.keys(this._fieldDefinitions).forEach((fieldName)=> {
