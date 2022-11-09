@@ -5,48 +5,44 @@ import {EntityResolver} from "./store/resolver";
 import {EntityType} from "./entity-type";
 
 
-export interface ReferenceRestrictions extends NotNullRestriction {
+export interface OfTypeRestrictions extends NotNullRestriction {
   // Define the type that we are referencing.
-  to: { type: Forge, path: string }
+  to: { type: any }
   resolvedBy: EntityResolver,
   createIfAbsent: boolean
 }
 
-export interface ReferenceRestrictionsFluent extends NotNullRestrictionFluent {
-  to(path: string, toType: Forge): this
-
+export interface OfTypeRestrictionsFluent extends NotNullRestrictionFluent {
+  to(toType: Forge): this
   createIfAbsent(value?: boolean): this
 }
 
 /**
  * [Incomplete]
  *
- * Model a reference to another Forge defined within a DomainModelForge.
- *
- * Probably this is just a bad idea that requires too much work for too little value.
+ * Model a reference to any non-primitive data type that we don't have built in forges for already.
  *
  * For instance, in a typical 'Address Book' application, there will be a Contact model, as well as a User
- * model, to represent the current user, and that User will likely have their own Contact field that references a
+ * model, to represent the current user, and that User will likely have their own Contact field that OfTypes a
  * contact instance.
- *  @todo: ggranum: Implement or remove.
+ *  @todo: ggranum: Implement.
  */
-export class ReferenceForge extends BaseForge implements ReferenceRestrictionsFluent {
+export class OfTypeForge extends BaseForge implements OfTypeRestrictionsFluent {
 
-  restrictions: ReferenceRestrictions
+  restrictions: OfTypeRestrictions
 
   constructor() {
     super()
   }
 
-  static ref(path: string, to: Forge): ReferenceForge {
-    return new ReferenceForge().to(path, to)
+  static ofType(type: any): OfTypeForge {
+    return new OfTypeForge().to(type)
   }
 
   newInstance(defaultOverride?: any, parent?: EntityType): any {
-    let reference: string = ''
+    let reference: any = super.newInstance(defaultOverride, parent)
     if (this.restrictions.createIfAbsent) {
-      let path = this.restrictions.to.path
-      reference = this._resolver.createAndStore(path, this.restrictions.to.type)
+      reference = this.restrictions.to.type.newInstance(defaultOverride)
     }
     return reference
   }
@@ -56,8 +52,8 @@ export class ReferenceForge extends BaseForge implements ReferenceRestrictionsFl
     return this.newInstance()
   }
 
-  to(path: string, toType: Forge): this {
-    this.restrictions.to = {type: toType, path: path || 'uid'}
+  to(toType: Forge): this {
+    this.restrictions.to = {type: toType}
     return this
   }
 

@@ -30,7 +30,7 @@ export class DataGen implements DataGenerator {
   private _nullChance:number = 1 / 1000
 
   validator:ValidatorIF
-  restrictions:any
+  protected restrictions:any
 
   constructor() {
     this.restrictions = this.getDefaults()

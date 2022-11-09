@@ -1,3 +1,5 @@
+import 'mocha';
+import { expect } from 'chai';
 import {EF} from "./entity-forge";
 import {Strings} from "../validator/string/string-validator";
 import {DataGen} from "../generate/data-gen";
@@ -13,7 +15,7 @@ describe('StringForge', function () {
       foo: EF.string()
     }
     let result = model.foo.validate(null)
-    expect(result).toBeNull()
+    expect(result).to.be.null
   });
 
   it('is valid when no constraints and is string, character or null', function () {
@@ -31,7 +33,7 @@ describe('StringForge', function () {
       foo: EF.string()
     }
     validValues.map((value)=> {
-      expect(model.foo.validate(value)).toBeNull()
+      expect(model.foo.validate(value)).to.be.null
     })
   });
 
@@ -40,7 +42,7 @@ describe('StringForge', function () {
       foo: EF.string().minLength(4)
     }
     let result = model.foo.validate("abcdef")
-    expect(result).toBeNull()
+    expect(result).to.be.null
   });
 
   it('is valid when maxLength set and value is valid', function () {
@@ -48,7 +50,7 @@ describe('StringForge', function () {
       foo: EF.string().maxLength(10)
     }
     let result = model.foo.validate("abcdef")
-    expect(result).toBeNull()
+    expect(result).to.be.null
   });
 
   it('is valid when minLength and maxLength are set and value is valid', function () {
@@ -56,32 +58,32 @@ describe('StringForge', function () {
       foo: EF.string().minLength(5).maxLength(10)
     }
     let result = model.foo.validate("12345")
-    expect(result).toBeNull()
+    expect(result).to.be.null
   });
 
   it('minLength is inclusive', function () {
     let model = {
       foo: EF.string().minLength(5)
     }
-    expect(model.foo.validate("12345")).toBeNull()
-    expect(model.foo.validate("1234")).toBeDefined()
+    expect(model.foo.validate("12345")).to.be.null
+    expect(model.foo.validate("1234")).not.to.be.undefined
   });
 
   it('maxLength is inclusive', function () {
     let model = {
       foo: EF.string().maxLength(5)
     }
-    expect(model.foo.validate("12345")).toBeNull()
-    expect(model.foo.validate("123456")).toBeDefined()
+    expect(model.foo.validate("12345")).to.be.null
+    expect(model.foo.validate("123456")).not.to.be.undefined
   });
 
   it('handles minLength == maxLength', function () {
     let model = {
       foo: EF.string().minLength(5).maxLength(5)
     }
-    expect(model.foo.validate("12345")).toBeNull()
-    expect(model.foo.validate("123456")).toBeDefined()
-    expect(model.foo.validate("1234")).toBeDefined()
+    expect(model.foo.validate("12345")).to.be.null
+    expect(model.foo.validate("123456")).not.to.be.undefined
+    expect(model.foo.validate("1234")).not.to.be.undefined
   });
 
   it('Provides error when value is a number.', function () {
@@ -89,7 +91,7 @@ describe('StringForge', function () {
       foo: EF.string()
     }
     let result = model.foo.validate(100)
-    expect(result).toBeDefined()
+    expect(result).not.to.be.undefined
   });
 
   it('Provides error when value is an object.', function () {
@@ -97,7 +99,7 @@ describe('StringForge', function () {
       foo: EF.string()
     }
     let result = model.foo.validate({"asdfasdf": "Asdfsd"})
-    expect(result).toBeDefined()
+    expect(result).not.to.be.undefined
   });
 
 
@@ -108,7 +110,7 @@ describe('StringForge', function () {
     let result = model.foo.validate(()=> {
       return "a string";
     })
-    expect(result).toBeDefined()
+    expect(result).not.to.be.undefined
   });
 
   it('Allows null value by default.', function () {
@@ -116,7 +118,7 @@ describe('StringForge', function () {
       foo: EF.string().minLength(4)
     }
     let result = model.foo.validate(null)
-    expect(result).toBeNull()
+    expect(result).to.be.null
 
   });
 
@@ -125,8 +127,8 @@ describe('StringForge', function () {
       foo: EF.string().minLength(4)
     }
     let result = model.foo.validate("abc")
-    expect(result).toBeTruthy()
-    expect(result!['minLength']).toBeTruthy()
+    expect(result).to.be.ok
+    expect(result!['minLength']).to.be.ok
   });
 
 
@@ -146,8 +148,8 @@ describe('StringForge.string.accessors', function () {
     } catch (error) {
       e = error
     }
-    expect(model.name).toBe(null)
-    expect(e).not.toBe(null)
+    expect(model.name).to.be.null;
+    expect(e).not.to.be.null
   });
 })
 
@@ -157,9 +159,9 @@ describe('EntityForge.string.generate', function () {
   it('generates random strings', function () {
     let forge = EF.string().notNull().minLength(25).maxLength(50).allowedCodePoints(Strings.COMMON_UTF_RANGES.PRINTABLE_ASCII)
     let ex = forge.gen()
-    expect(ex).toBeDefined()
-    expect(ex.length).toBeGreaterThan(24)
-    expect(ex.length).toBeLessThan(51)
+    expect(ex).not.to.be.undefined
+    expect(ex.length).to.be.above(24)
+    expect(ex.length).to.be.below(51)
   })
 
   /**
@@ -180,8 +182,8 @@ describe('EntityForge.string.generate', function () {
     third.push(forge.gen(), forge.gen(), forge.gen())
 
     for (let i = 0; i < first.length; i++) {
-      expect(first[i]).toBe(second[i])
-      expect(first[i]).not.toBe(third[i])
+      expect(first[i]).to.equal(second[i])
+      expect(first[i]).not.to.equal(third[i])
     }
   })
 

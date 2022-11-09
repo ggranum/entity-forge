@@ -124,6 +124,9 @@ export class ObjectForge extends BaseForge implements CompositeForgeIF, ObjectRe
     }
   }
 
+  /**
+   * @todo: Move this into an augmentation pattern so we can remove our dependencies on the `generate` package.
+   */
   gen(): any {
     this.ignite()
     let value = this._generatedBy.gen(this.restrictions)

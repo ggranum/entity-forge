@@ -1,7 +1,9 @@
+import 'mocha';
+import { expect } from 'chai';
 import {EF} from "./entity-forge";
 import {PseudoRandom} from "../generate/psuedo-random";
 
-describe('Forge', function () {
+describe('Object Forge', function () {
   describe('ObjectForge', function () {
 
     let UserContactForge: any
@@ -41,7 +43,6 @@ describe('Forge', function () {
             created: EF.date().before(now + 10*DAY).after(now - 10*DAY ).notNull()
           }).notNull()
         } catch (e) {
-          console.log(e)
           throw e
         }
 
@@ -49,17 +50,16 @@ describe('Forge', function () {
         for (let i = 0; i < 100; i++) {
           try {
             let user = UserForge.gen()
-            expect(user).toBeDefined() // "Should create a user.")
-            expect(user.name).toBeDefined() // "Name field not generated: " + i)
-            expect(user.uid).toBeDefined() // "uid field not generated: " + i)
-            expect(user.email).toBeDefined() // "Email field not generated: " + i)
-            expect(user.uid.length).toBe(20)
-            expect(user.name.length).toBeGreaterThan(9)
-            expect(user.name.length).toBeLessThan(26)
-            expect(user.created).toBeLessThan(now + 10*DAY)
-            expect(user.created).toBeGreaterThan(now - 10*DAY)
+            expect(user).not.to.be.undefined // "Should create a user.")
+            expect(user.name).not.to.be.undefined // "Name field not generated: " + i)
+            expect(user.uid).not.to.be.undefined // "uid field not generated: " + i)
+            expect(user.email).not.to.be.undefined // "Email field not generated: " + i)
+            expect(user.uid.length).to.equal(20)
+            expect(user.name.length).to.be.above(9)
+            expect(user.name.length).to.be.below(26)
+            expect(user.created).to.be.below(now + 10*DAY)
+            expect(user.created).to.be.above(now - 10*DAY)
           } catch (e) {
-            console.log(i, e)
             throw e
           }
         }
@@ -75,7 +75,7 @@ describe('Forge', function () {
         u.uuid = "-JhLeOlGIEjaIOFHR0xd"
         u.email = "bob@vila.com"
         u.name = "0123456789"
-        expect(u.uuid).toBe("-JhLeOlGIEjaIOFHR0xd")
+        expect(u.uuid).to.equal("-JhLeOlGIEjaIOFHR0xd")
       })
 
       it('Should validate when created using a default.', function () {
@@ -94,8 +94,8 @@ describe('Forge', function () {
         } catch (error) {
           e = error
         }
-        expect(e).toBeDefined() // "Exception should have been thrown")
-        expect(uc.name).toBe(defaultName)
+        expect(e).not.to.be.undefined // "Exception should have been thrown")
+        expect(uc.name).to.equal(defaultName)
 
       })
 
@@ -111,7 +111,7 @@ describe('Forge', function () {
         } catch (error) {
           e = error
         }
-        expect(e).toBeDefined() // "Exception should have been thrown")
+        expect(e).not.to.be.undefined // "Exception should have been thrown")
       })
 
       it("does not allow setting child to null when notNull specified.", function () {
@@ -132,13 +132,13 @@ describe('Forge', function () {
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
-          expect(contact.address).toBeDefined() // "Address should init to specified default value.")
-          expect(contact.address.line1).toBe(line1Val)
+          expect(contact.address).not.to.be.undefined // "Address should init to specified default value.")
+          expect(contact.address.line1).to.equal(line1Val)
           contact.address = null
         } catch (error) {
           e = error
         }
-        expect(e).toBeDefined() // "Exception should have been thrown")
+        expect(e).not.to.be.undefined // "Exception should have been thrown")
       })
     })
 
@@ -162,13 +162,12 @@ describe('Forge', function () {
         try {
           let UserContact = UserContactForge.asNewable()
           contact = new UserContact()
-          expect(contact.address).toBeDefined() // "Address should init to specified default value.")
-          expect(contact.address.line1).toBe(line1Val)
+          expect(contact.address).not.to.be.undefined // "Address should init to specified default value.")
+          expect(contact.address.line1).to.equal(line1Val)
         } catch (error) {
-          console.error(error)
           e = error
         }
-        expect(e).toBeUndefined() // "Exception should not have been thrown")
+        expect(e).to.be.undefined // "Exception should not have been thrown")
       })
 
       it("Validates child objects after setting the child to a raw POJO.", function () {
@@ -195,16 +194,57 @@ describe('Forge', function () {
           contact = new UserContact()
 
           contact.address = Object.assign({}, pojoAddress)
-          expect(contact.address.line1).toBe(pojoAddress.line1)
+          expect(contact.address.line1).to.equal(pojoAddress.line1)
 
           // setting address line 1 to null should fail:
           contact.address.line1 = null
         } catch (error) {
           e = error
         }
-        expect(contact.address.line1).toBe(pojoAddress.line1) // , "Value should have been reset to previous.")
-        expect(e).toBeDefined() // "Exception should have been thrown")
+        expect(contact.address.line1).to.equal(pojoAddress.line1) // , "Value should have been reset to previous.")
+        expect(e).not.to.be.undefined // "Exception should have been thrown")
       })
     })
+
+    describe("Composite Forge Objects", function () {
+
+      it("initializes child forge field correctly when 'initTo' specified.", function () {
+        let line1Val = "This is the default value for line one."
+        let UserContactForge = EF.obj({
+          name: EF.string().minLength(3).maxLength(255),
+          surname: EF.string().maxLength(255),
+          birthYear: EF.int(2016).min(1900).max(2100).notNull(),
+          address: EF.obj({
+            line1: EF.string().minLength(10).maxLength(255),
+            line2: EF.string().minLength(0).maxLength(255)
+          }).notNull().initTo({
+            line1: line1Val
+          })
+        })
+
+        let UserContact = UserContactForge.asNewable()
+
+        let UserForge = EF.obj({
+          uuid: EF.string().minLength(20).maxLength(20),
+          email: EF.string().minLength(5).maxLength(255),
+          name: EF.string().minLength(10).maxLength(25),
+          contact: EF.ofType(UserContact).notNull().initTo(new UserContact())
+        })
+        let e: any
+        let contact: any
+        try {
+          let User = UserForge.asNewable()
+          let user = new User()
+          contact = user.contact
+          expect(contact.address).not.to.be.undefined // "Address should init to specified default value.")
+          expect(contact.address.line1).to.equal(line1Val)
+        } catch (error) {
+          e = error
+        }
+        expect(e).to.be.undefined // "Exception should not have been thrown")
+      })
+
+    })
+
   })
 })

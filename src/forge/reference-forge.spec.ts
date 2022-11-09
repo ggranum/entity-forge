@@ -1,3 +1,5 @@
+import 'mocha';
+import { expect } from 'chai';
 import {EF} from "./entity-forge";
 import {PseudoRandom} from "../generate/psuedo-random";
 
@@ -39,13 +41,12 @@ describe('Forge', function () {
         for (let i = 0; i < 1; i++) {
           try {
             let user = User.newInstance()
-            expect(user).toBeTruthy() // "Should create a user.")
-            expect(user.name).toBeNull()
-            expect(user.email).toBeNull()
-            expect(user.uid.length).toBe(20)
-            expect(user.created).toBeLessThanOrEqual(Date.now())
+            expect(user).to.be.ok // "Should create a user.")
+            expect(user.name).to.be.null
+            expect(user.email).to.be.null
+            expect(user.uid.length).to.equal(20)
+            expect(user.created).to.be.at.most(Date.now())
           } catch (e) {
-            console.log(i, e)
             throw e
           }
         }

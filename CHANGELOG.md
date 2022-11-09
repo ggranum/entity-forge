@@ -5,8 +5,6 @@
 ### Bug Fixes
 
 * **forge:** Super class constructor requires value, subclass doesn't ([cc119d2](https://github.com/ggranum/entity-forge/commit/cc119d2))
-* **tests:** Fast machine goes fast ([02223cd](https://github.com/ggranum/entity-forge/commit/02223cd))
-
 
 
 <a name="0.1.4-beta"></a>

@@ -4,7 +4,6 @@ import {Forge} from "../forge";
 export interface EntityResolver {
   resolve(path: string): any
   createAndStore(path: string, forge: Forge): string
-
 }
 
 

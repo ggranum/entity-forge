@@ -1,7 +1,9 @@
+import 'mocha';
+import { expect } from 'chai';
 import {EF} from "./entity-forge";
 import {PseudoRandom} from "../generate/psuedo-random";
 
-describe('Forge', function () {
+describe('App Forge', function () {
   describe('AppForge', function () {
 
     let App: any
@@ -52,17 +54,17 @@ describe('Forge', function () {
             let app = App.newInstance()
 
             let user = User.newInstance()
-            expect(user).toBeTruthy() // "Should create a user."
-            expect(user.name).toBeNull() // 'name'
-            expect(user.email).toBeNull() //'email'
-            expect(user.uid.length).toBe(20)
-            expect(user.created).toBeLessThan(Date.now()) //, 'created'
+            expect(user).to.be.ok // "Should create a user."
+            expect(user.name).to.be.null // 'name'
+            expect(user.email).to.be.null //'email'
+            expect(user.uid.length).to.equal(20)
+            expect(user.created).to.be.below(Date.now()) //, 'created'
             // expect(user.contact).toBeTruthy('contact')
 
             // let x = App._resolver.resolve('/contacts/' + user.contact)
             // console.log(user.toJsonString())
           } catch (e) {
-            console.log(i, e)
+            /** @todo: ggranum: Log message */
             throw e
           }
         }

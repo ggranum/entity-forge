@@ -1,9 +1,9 @@
-
+import 'mocha';
+import { expect } from 'chai';
 import {IsIdentifierValidator} from "./identifier";
 
-describe("Validators", function () {
 
-  describe("IsIdentifierValidator", function () {
+  describe("Validator > IsIdentifier", function () {
 
     let invalidIdentifiers = [
       "_-_",
@@ -42,7 +42,7 @@ describe("Validators", function () {
       let foo = new IsIdentifierValidator()
       invalidIdentifiers.forEach((id) => {
         let x = foo.validate(id)
-        expect(x).not.toBe(null) //, `${id} should have been invalid.`)
+        expect(x).not.to.be.null //, `${id} should have been invalid.`)
       })
     })
 
@@ -50,7 +50,7 @@ describe("Validators", function () {
       let foo = new IsIdentifierValidator()
       validIdentifiers.forEach((id) => {
         let x = foo.validate(id)
-        expect(x).toBe(null)// `${id} should have been valid.`)
+        expect(x).to.be.null// `${id} should have been valid.`)
       })
     })
 
@@ -61,7 +61,7 @@ describe("Validators", function () {
 
         validArrayIds.forEach((id) => {
           let x = validator.validate('' + id)
-          expect(x).toBe(null)// "A quoted number should be valid as an array index: " + id)
+          expect(x).to.be.null// "A quoted number should be valid as an array index: " + id)
         })
       })
 
@@ -69,12 +69,12 @@ describe("Validators", function () {
         let validator = new IsIdentifierValidator().arrayIndex()
         validIdentifiers.forEach((id) => {
           let x = validator.validate(id)
-          expect(x).not.toBe(null)//, `${id} should have been invalid as an array index.`)
+          expect(x).not.to.be.null//, `${id} should have been invalid as an array index.`)
         })
         let validArrayIds = [0, 1, 2, 3, 100, 0x99]
         validArrayIds.forEach((id) => {
           let x = validator.validate(id)
-          expect(x).toBe(null)//, "Id should have been valid as an array index: " + id)
+          expect(x).to.be.null//, "Id should have been valid as an array index: " + id)
         })
       })
     })
@@ -88,7 +88,7 @@ describe("Validators", function () {
         let validator = new IsIdentifierValidator().objectKey()
         validUnquotedKeys.forEach((id) => {
           let x = validator.validate(id)
-          expect(x).toBe(null)//, "Id should have been valid as property key: " + id)
+          expect(x).to.be.null//, "Id should have been valid as property key: " + id)
         })
       })
 
@@ -96,7 +96,7 @@ describe("Validators", function () {
         let validator = new IsIdentifierValidator().objectKey()
         validQuotedKeys.forEach((id) => {
           let x = validator.validate(id)
-          expect(x).not.toBe(null)//, `'${id}' is an invalid property key unless it's quoted.`)
+          expect(x).not.to.be.null//, `'${id}' is an invalid property key unless it's quoted.`)
         })
       })
 
@@ -105,9 +105,8 @@ describe("Validators", function () {
         let allKeys: any[] = validQuotedKeys.concat(validUnquotedKeys)
         allKeys.forEach((id: any) => {
           let x = validator.validate(id)
-          expect(x).toBe(null)//, `${id} should have been treated as valid.`)
+          expect(x).to.be.null//, `${id} should have been treated as valid.`)
         })
       })
     })
   })
-})

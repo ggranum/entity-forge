@@ -12,6 +12,7 @@ import {
   UidForge
 } from "./index"
 import {MapForge} from "./map-forge";
+import {OfTypeForge} from "./of-type-forge";
 // noinspection TypeScriptPreferShortImport
 import {EntityStore} from "./store/entity-store";
 import {EntityResolver} from "./store/resolver";
@@ -25,6 +26,7 @@ export interface EntityForgeIF {
   int: ((defaultValue?: number) => NumberForge);
   string: ((defaultValue?: string) => StringForge);
   ref: ((path: string, to: Forge) => ReferenceForge);
+  ofType: ((ofType?:any) => OfTypeForge);
   date: ((defaultValue?: number) => DateForge);
   uid: ((defaultValue?: string) => UidForge);
   map: (() => MapForge)
@@ -49,6 +51,7 @@ export class EntityForge implements EntityForgeIF {
   int: (defaultValue?: number) => NumberForge;
   string: (defaultValue?: string) => StringForge;
   ref: (path: string, to: Forge) => ReferenceForge;
+  ofType: (type: any) => OfTypeForge;
   date: (defaultValue?: number) => DateForge;
   uid: (defaultValue?: string) => UidForge
   map: (() => MapForge)
@@ -103,6 +106,7 @@ EF.registerForge(NumberForge, NumberForge.number, "number")
 EF.registerForge(NumberForge, NumberForge.int, "int")
 EF.registerForge(StringForge, StringForge.string, "string")
 EF.registerForge(ReferenceForge, ReferenceForge.ref, "ref")
+EF.registerForge(OfTypeForge, OfTypeForge.ofType, "ofType")
 EF.registerForge(DateForge, DateForge.date, "date")
 EF.registerForge(UidForge, UidForge.uid, "uid")
 EF.registerForge(MapForge, MapForge.map, "map")

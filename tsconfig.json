@@ -12,25 +12,17 @@
     ],
     "module"                    : "commonjs",
     "moduleResolution"          : "node",
-    "noImplicitAny"             : true,
+    "noImplicitAny"             : false,
     "noEmitOnError"             : true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns"         : true,
     "noImplicitThis"            : false,
     "noUnusedLocals"            : false,
     "outDir"                    : "dist",
-    "paths"                     : {
-      "*": [
-        "node_modules/*"
-      ]
-    },
     "pretty"                    : true,
     "sourceMap"                 : true,
     "strict"                    : true,
     "strictNullChecks"          : true,
     "target"                    : "es5"
-  },
-  "include"        : [
-    "src/**/*"
-  ]
+  }
 }

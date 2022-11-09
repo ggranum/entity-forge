@@ -10,6 +10,6 @@ gulp.task('clean', function () {
 });
 
 
-gulp.task('default', [], function(cb) {
+gulp.task('default', function(cb) {
   runSequence('clean', 'build', cb);
 });

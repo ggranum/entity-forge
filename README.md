@@ -1,6 +1,6 @@
 # EntityForge
 
-An integer isn't a data type, it's a compiler hint.
+An integer isn't a data type. It's a compiler hint.
 
 ## Models aren't just bundles of generic primitives.
 
@@ -24,11 +24,12 @@ let example = new NullableUserModel()
 console.log("UUID: ", example.uuid) // null
 console.log("Email: ", example.email) // null
 console.log("MemberSince: ", example.memberSince) // 2016
-example.uuid = "-JhLeOlGIEjaIOFHR0xd"
-example.email = "foo@bar.com"
+
 
 try {
-    example.uuid = example.uuid.substring(0, 10)
+    example.uuid = "-JhLeOlGIEjaIOFHR0xd" // Set succeeds.
+    example.email = "foo@bar.com" // Set succeeds.
+    example.uuid = example.uuid.substring(0, 10) // throws exception
 } catch (e) {
     console.log("I'm sorry dave....") // Nope, not allowed.
     console.log("Validation errors provide a cause", e.cause); 

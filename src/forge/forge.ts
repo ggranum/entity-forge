@@ -58,15 +58,14 @@ export interface CompositeForgeIF extends ForgeEntityInstanceIF {
 
 let beforeIgnitionListeners: { [key: string]: { fn: Function }[] } = {}
 
-const thisHack = function (something: any): any {
-  return something;
-}
-
 export class Forge {
 
   static DEFAULT_RESOLVER: EntityResolver
   static GENERATED_BY: Object
   _resolver: EntityResolver
+  /**
+   * _lit: if 'ignite' has been called on this Forge instance.
+   */
   _lit: boolean = false
   _isEnumerable: boolean = true
   _generatedBy: DataGen
@@ -98,14 +97,14 @@ export class Forge {
     beforeIgnitionListeners[targetType] = ary
   }
 
-  getResolver() {
-    return this._resolver || (<any>Forge.constructor)['DEFAULT_RESOLVER']
-  }
-
   setResolver(resolver: EntityResolver): void {
     this._resolver = resolver
   }
 
+  /**
+   * Create a deep clone of this Forge, copying all defaults, validations, generators and applied restrictions.
+   * @returns {this}
+   */
   clone(): this {
     let instance = this
     let ctor: any = instance.constructor
@@ -166,6 +165,9 @@ export class Forge {
     }
   }
 
+  /**
+   * Forge the property and return the descriptor.
+   */
   forgeProperty(): ForgePropertyDescriptorIF {
     this.ignite()
     let privateKey = '_' + this.fieldName
@@ -191,12 +193,16 @@ export class Forge {
    * to create an instance type (`MyType = myForge.asNewable()`) and then forget that the forge ever existed.
    *
    *
-   * All but the simplest forges will need to override this method.
+   * All but the simplest forges will need to override this method and call super.
    */
   ignite() {
     if (!this._lit) {
       if (!this._generatedBy) {
         if ((<any>this.constructor)['GENERATED_BY']) {
+          // This is 'generate' code, referring to things that should only really happen if we're in a test
+          // environment (or, at least, only when we've included the supposed-to-be optional 'generate' package).
+          // Perhaps we can augment the 'forge' class when we're testing, to avoid having this logic
+          // in production code?
           this._generatedBy = (<any>this.constructor)['GENERATED_BY'].instance()
         } else {
           throw new ConfigurationError("No generator for type: " + this)

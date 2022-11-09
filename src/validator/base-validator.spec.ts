@@ -1,4 +1,5 @@
-
+import 'mocha';
+import { expect } from 'chai';
 import {NotNullValidator} from "./base-validator";
 
 interface TestCase {
@@ -6,9 +7,7 @@ interface TestCase {
   expectation: Function
 }
 
-describe("Validators", function () {
-
-  describe("NotNullValidator", function () {
+describe("Validator > Not Null", function () {
 
     let cases: {
       valid: TestCase
@@ -18,11 +17,11 @@ describe("Validators", function () {
     cases = {
       valid: {
         inputs: [0, false, Number.NaN, Number.POSITIVE_INFINITY, "0", ""],
-        expectation: (response: any) => expect(response).toBeNull()
+        expectation: (response: any) => expect(response).to.be.null
       },
       invalid: {
         inputs: [null, undefined],
-        expectation: (response: any) => expect(response).not.toBeNull()
+        expectation: (response: any) => expect(response).not.to.be.null
       }
     }
 
@@ -34,16 +33,14 @@ describe("Validators", function () {
           test.expectation(v.validate(input))
         })
       })
-
     })
 
 
     it('is always valid when disabled via #notNull(false)', function () {
       let v = new NotNullValidator().notNull(false)
       cases.invalid.inputs.forEach((input)=> {
-        expect(v.validate(input)).toBeNull()
+        expect(v.validate(input)).to.be.null
       })
 
     })
   })
-})

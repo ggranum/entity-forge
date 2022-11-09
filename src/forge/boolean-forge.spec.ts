@@ -1,3 +1,5 @@
+import 'mocha';
+import { expect, assert } from 'chai';
 import {EF} from "./entity-forge";
 import {PseudoRandom} from "../generate/psuedo-random";
 
@@ -22,8 +24,8 @@ describe('EntityForge.boolean', function () {
     } catch (e) {
       error = e
     }
-    expect(error).toBeNull()
-    expect(m.foo).toBe(null) // , "Value should now be null.")
+    expect(error).to.be.null
+    expect(m.foo).to.be.null // , "Value should now be null.")
   });
 
   it('Does not allow null values when notNull set', function () {
@@ -37,8 +39,8 @@ describe('EntityForge.boolean', function () {
     } catch (e) {
       error = e
     }
-    expect(error).toBeDefined()
-    expect(m.foo).toBe(false) // , "Value should be reset to previous value (default).")
+    expect(error).not.to.be.undefined
+    expect(m.foo).to.be.false // , "Value should be reset to previous value (default).")
   });
 
   it('Does not allow non-boolean values', function () {
@@ -48,7 +50,7 @@ describe('EntityForge.boolean', function () {
     let disallowed: any = ['1', 1, 10, 100, "bob", 1.2, 0, ((x: any)=> false), model];
     for (let i = 0; i < disallowed.length; i++) {
       let result = model.foo.validate(disallowed[i])
-      expect(result).toBeDefined()
+      expect(result).not.to.be.undefined
     }
   });
 
@@ -58,7 +60,7 @@ describe('EntityForge.boolean', function () {
       try {
         let forge = EF.bool()
         let ex = forge.gen()
-        expect(ex).toBeDefined()
+        expect(ex).not.to.be.undefined
       } catch (e) {
         debugger
       }
@@ -77,10 +79,10 @@ describe('EntityForge.boolean', function () {
         }
         let find = [true, false, null]
         find.forEach((v)=> {
-          expect((<any>found)[v + '']).toBeGreaterThan(0) // , "Should have found '" + v + "'")
+          expect((<any>found)[v + '']).to.be.above(0) // , "Should have found '" + v + "'")
         })
       } catch (e) {
-        fail(e)
+        assert.fail(e)
       }
     })
 
@@ -94,7 +96,7 @@ describe('EntityForge.boolean', function () {
         let x:any = forge.gen();
         (<any>found)[x + '']++
       }
-      expect(found['null']).toBe(0) // , "Should not generate null values.")
+      expect(found['null']).to.equal(0) // , "Should not generate null values.")
     })
   })
 })

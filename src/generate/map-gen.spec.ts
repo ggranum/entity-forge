@@ -1,55 +1,54 @@
-import {StringGen} from "./string-gen";
+import {expect} from 'chai';
+import 'mocha';
 import {MapGen} from "./map-gen";
 import {PseudoRandom} from "./psuedo-random";
+import {StringGen} from "./string-gen";
 
 let keyGen = new StringGen().allowedChars("abcdefg123456".split('')).minLength(2).maxLength(3)
-describe("Data Generation", function () {
-  describe("MapGen", function () {
+describe("Generation > Object Map", function () {
 
-    it("Default generator should generate null about 1 in 1000 calls.", function () {
-      let gen = new MapGen().of(new StringGen().minLength(2).maxLength(3))
-        .keyedBy(keyGen)
-        .minLength(1)
-        .maxLength(2)
-      let count = 0
-      let seed = 2
-      new PseudoRandom(seed).patchMath()
-      for (let i = 0; i < 2500; i++) {
-        let x = gen.gen()
-        if (x === null) {
-          count++
-        }
-      }
-      expect(count).toBe(2)
-    })
-    it("should generate random string members when provided with a string generator as a child field.", function () {
-
-      let stringGen = new StringGen().minLength(2).maxLength(5).notNull()
-      let gen = new MapGen().of(stringGen).keyedBy(keyGen).minLength(2).maxLength(2)
-      let seed = 4
-      new PseudoRandom(seed).patchMath()
-
+  it("Default generator should generate null about 1 in 1000 calls.", function () {
+    let gen = new MapGen().of(new StringGen().minLength(2).maxLength(3))
+      .keyedBy(keyGen)
+      .minLength(1)
+      .maxLength(2)
+    let count = 0
+    let seed = 2
+    new PseudoRandom(seed).patchMath()
+    for (let i = 0; i < 2500; i++) {
       let x = gen.gen()
-      expect(Object.keys(x).length).toBe(2)
+      if (x === null) {
+        count++
+      }
+    }
+    expect(count).to.equal(2)
+  })
+  it("should generate random string members when provided with a string generator as a child field.", function () {
 
-    })
+    let stringGen = new StringGen().minLength(2).maxLength(5).notNull()
+    let gen = new MapGen().of(stringGen).keyedBy(keyGen).minLength(2).maxLength(2)
+    let seed = 4
+    new PseudoRandom(seed).patchMath()
+
+    let x = gen.gen()
+    expect(Object.keys(x).length).to.equal(2)
+
   })
 })
 
 
 class TimedTest {
 
-  count:number = 1000
-  start:number
-  end:number
-  deltaT:number
-  deltaTPerTest:number
+  count: number = 1000
+  start: number
+  end: number
+  deltaT: number
+  deltaTPerTest: number
 
 
+  generator: MapGen
 
-  generator:MapGen
-
-  perform(){
+  perform() {
     this.setup()
     this.start = Date.now()
     for (let i = 0; i < this.count; i++) {
@@ -62,12 +61,12 @@ class TimedTest {
   }
 
 
-  printResults(){
-    console.log("TimedTest", `Ran ${this.count} times in ${this.deltaT/1000} seconds ( ${this.deltaTPerTest} ms/execution)`)
+  printResults() {
+    console.log("TimedTest", `Ran ${this.count} times in ${this.deltaT / 1000} seconds ( ${this.deltaTPerTest} ms/execution)`)
   }
 
 
-  setup(){
+  setup() {
     this.generator = new MapGen().of(new StringGen().minLength(2).maxLength(3))
       .keyedBy(keyGen)
       .minLength(1)
@@ -76,7 +75,7 @@ class TimedTest {
     new PseudoRandom(seed).patchMath()
   }
 
-  testCase(){
+  testCase() {
     let x = this.generator.gen()
 
   }

@@ -1,7 +1,9 @@
+import 'mocha';
+import { expect } from 'chai';
 import {EF} from "./entity-forge";
 import {EnumForge} from "./enum-forge";
 
-describe('Forge', function () {
+describe('Enum Forge', function () {
   describe('EnumForge.enumeration', function () {
 
     it('Allows null values by default', function () {
@@ -15,8 +17,8 @@ describe('Forge', function () {
       } catch (e) {
         error = e
       }
-      expect(error).toBeNull() // "Null value should be valid.")
-      expect(m.foo).toBe(null) //  "Null value should be valid.")
+      expect(error).to.be.null // "Null value should be valid.")
+      expect(m.foo).to.be.null //  "Null value should be valid.")
     });
 
     it('Does not allow null values when notNull set', function () {
@@ -30,8 +32,8 @@ describe('Forge', function () {
       } catch (e) {
         error = e
       }
-      expect(error).toBeDefined() // "Setting to null should throw error")
-      expect(m.foo).toBe("100") // , "Value should be reset to previous value (default).")
+      expect(error).not.to.be.undefined // "Setting to null should throw error")
+      expect(m.foo).to.equal("100") // , "Value should be reset to previous value (default).")
     });
 
     it('Order of operations has no effect. ', function () {
@@ -45,8 +47,8 @@ describe('Forge', function () {
       } catch (e) {
         error = e
       }
-      expect(error).toBeDefined() // "Setting to null should throw error")
-      expect(m.foo).toBe("100") // , "Value should be reset to previous value (default).")
+      expect(error).not.to.be.undefined // "Setting to null should throw error")
+      expect(m.foo).to.equal("100") // , "Value should be reset to previous value (default).")
     });
 
 
@@ -57,8 +59,8 @@ describe('Forge', function () {
       let disallowed: any = ['1', 100, "bob", "sally", "sam", false, true, 1.2, 0, ((x: any) => false), model];
       for (let i = 0; i < disallowed.length; i++) {
         let result = model.foo.validate(disallowed[i])
-        expect(result).toBeTruthy() // "The value '" + disallowed[i] + "' should not be allowed.")
-        expect(result!['isOneOf']).toBeDefined()
+        expect(result).to.be.ok // "The value '" + disallowed[i] + "' should not be allowed.")
+        expect(result!['isOneOf']).not.to.be.undefined
       }
     });
     describe('Generation', function () {
@@ -66,7 +68,7 @@ describe('Forge', function () {
       it('Generates random values from the enum options', function () {
         let forge = EF.enumeration().values(["100", "Bob", "Sally"])
         let ex = forge.gen()
-        expect(ex).toBeDefined()
+        expect(ex).not.to.be.undefined
       })
 
       it('Can generate null values when null values allowed: ', function () {
@@ -86,7 +88,7 @@ describe('Forge', function () {
           found[x + '']++
         }
         Object.keys(found).forEach((v) => {
-          expect(found[v + '']).toBeGreaterThan(0)
+          expect(found[v + '']).to.be.above(0)
           if (found[v + ''] === 0) {
             console.log("Should have generated all enum options. Missed: '" + v + "'")
           }
@@ -107,7 +109,7 @@ describe('Forge', function () {
           let x = forge.gen()
           found[x + '']++
         }
-        expect(found['null']).toBe(0) // , "Should not have generated null values.")
+        expect(found['null']).to.equal(0) // , "Should not have generated null values.")
       })
     })
   })

@@ -25,6 +25,11 @@ export class BaseGen extends DataGen implements BaseRestrictionsFluent {
     return this
   }
 
+  /**
+   * @todo: For BaseForges that do not provide an 'isOneOf' restriction, provide a value from a list that includes
+   * all the major types, such as decimal, string, null (unless notNull set), Object, etc.
+   * @param R The set of restrictions.
+   */
   doGen(R?:BaseRestrictions):any{
     let data:any = null
     if(R && R.isOneOf){

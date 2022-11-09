@@ -1,13 +1,11 @@
-
+import 'mocha';
+import { expect, assert } from 'chai';
 import {IdentifierGen} from "./identifier-gen";
 import {IsIdentifierValidator} from "../../validator/identifier/identifier";
 import {PseudoRandom} from "../psuedo-random";
 
 xdescribe("Data Generation", function () {
   describe("Identifier", function () {
-    beforeEach(function () {
-      spyOn(console, 'error');
-    })
 
     it("Default generator should never generate null references.", function () {
       try {
@@ -21,9 +19,9 @@ xdescribe("Data Generation", function () {
             count++
           }
         }
-        expect(count).toBe(0)
+        expect(count).to.equal(0)
       } catch (e) {
-        fail(e)
+        assert.fail(e)
       }
     })
 
@@ -36,10 +34,10 @@ xdescribe("Data Generation", function () {
         for (let i = 0; i < 100; i++) {
           let identifier = gen.gen()
           let r = v.validate(identifier)
-          expect(r).toBeNull() // "Generated illegal id: " + identifier)
+          expect(r).to.be.null // "Generated illegal id: " + identifier)
         }
       } catch (e) {
-        fail(e)
+        assert.fail(e)
         throw e
       }
     })
@@ -48,8 +46,8 @@ xdescribe("Data Generation", function () {
       let cfg = {minLength: {value: 20}, maxLength: {value: 20}, notNull: true}
       let gen = new IdentifierGen().applyRestrictions(cfg)
       let s = gen.gen()
-      expect(s).toBeDefined()
-      expect(s.length).toEqual(20)
+      expect(s).not.to.be.undefined
+      expect(s.length).to.equal(20)
     })
 
 
@@ -59,9 +57,9 @@ xdescribe("Data Generation", function () {
       let alreadyUsed:any = {}
       for (var i = 0; i < 100; i++) {
         let s = gen.gen()
-        expect(s).toBeDefined()
-        expect(s.length).toEqual(3)
-        expect(alreadyUsed[s]).toBeUndefined() // "Failed at index: " + i) // this will throw if 's' is invalid, but only 'invalid quoted'.
+        expect(s).not.to.be.undefined
+        expect(s.length).to.equal(3)
+        expect(alreadyUsed[s]).to.be.undefined // "Failed at index: " + i) // this will throw if 's' is invalid, but only 'invalid quoted'.
         alreadyUsed[s] = true
       }
     })
@@ -78,7 +76,7 @@ xdescribe("Data Generation", function () {
           break
         }
       }
-      expect(passed).toBeTruthy() // "Error should have been thrown.")
+      expect(passed).to.be.ok // "Error should have been thrown.")
     })
   })
 })

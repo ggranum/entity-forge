@@ -8,7 +8,7 @@
       <option name="WRAP_ON_TYPING" value="1" />
       <option name="RIGHT_MARGIN" value="120" />
     </MarkdownNavigatorCodeStyleSettings>
-    <TypeScriptCodeStyleSettings>
+    <TypeScriptCodeStyleSettings version="0">
       <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
       <option name="IMPORT_SORT_MODULE_NAME" value="true" />
     </TypeScriptCodeStyleSettings>

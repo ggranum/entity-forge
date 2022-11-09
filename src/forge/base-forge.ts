@@ -4,7 +4,13 @@ import {BaseRestrictionsFluent} from "../validator/base-validator";
 import {BaseRestrictions} from "../validator/base-validator";
 import {BaseValidator} from "../validator/base-validator";
 
-
+/**
+ * The root of all Forges.
+ *
+ * Available Restrictions:
+ *  * notNull
+ *  * isOneOf
+ */
 export class BaseForge extends Forge implements BaseRestrictionsFluent{
 
   restrictions:BaseRestrictions
@@ -19,11 +25,17 @@ export class BaseForge extends Forge implements BaseRestrictionsFluent{
   }
 
   notNull(value?:boolean):this {
+    if(this._lit){
+      throw "Cannot modify Forge after ignite has been called."
+    }
     this.restrictions.notNull = value !== false
     return this
   }
 
   isOneOf(value: any[]): this {
+    if(this._lit){
+      throw "Cannot modify Forge after ignite has been called."
+    }
     this.restrictions.isOneOf = value
     return this
   }

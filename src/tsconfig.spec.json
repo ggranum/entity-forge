@@ -1,22 +1,16 @@
 {
   "extends"        : "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl"         : "",
+    "baseUrl"         : ".",
     "outDir"          : "../dist",
     "lib"             : [
       "es2016",
-      "dom"
     ],
-    "paths"           : {
-      "*"            : [
-        "node_modules/*"
-      ]
-    },
     "types"           : [
       "jasmine"
     ]
   },
   "include"        : [
-    "**/*"
+    "**/*.ts"
   ]
 }

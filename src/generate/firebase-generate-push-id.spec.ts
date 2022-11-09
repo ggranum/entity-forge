@@ -1,11 +1,12 @@
-// noinspection TypeScriptPreferShortImport
+import 'mocha';
+import { expect } from 'chai';
 import {generatePushID} from "./firebase-generate-push-id";
 
 xdescribe("Data Generation", function () {
 
   describe("generatePushID", function () {
     it('Should get some actual tests', () => {
-      expect(true).toBe(true);
+      expect(true).to.equal(true);
     })
 
 

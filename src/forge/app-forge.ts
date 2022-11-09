@@ -5,11 +5,7 @@ import {AppResolver} from "./store/resolver";
 
 /**
  *  Holder for an application. Provides a Root for child Object and Map fields
- *
- *
- *
- *
- *
+ *  todo: Rename to DomainModelForge. Or maybe just remove it!
  */
 export class AppForge extends ObjectForge {
 
