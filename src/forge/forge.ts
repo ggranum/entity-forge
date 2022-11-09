@@ -237,8 +237,8 @@ export class Forge {
    * Generate a new valid instance of this type.
    *
    * Note that this class's version of the #gen method produces primitives; by definition these cannot be
-   * validated unless the are assigned to a field on some parent object.
-   *
+   * validated unless they are assigned to a field on some parent object.
+   * todo: This method should only exist during testing (or when the supposedly optional 'generate' package is included)
    *
    */
   gen() {

@@ -18,7 +18,7 @@ let UserForge = EF.obj({
 
 Now create an instance of your model:
 
-```javascript
+```typescript
 let NullableUserModel = UserForge.asNewable()
 let example = new NullableUserModel()
 console.log("UUID: ", example.uuid) // null
@@ -55,7 +55,7 @@ There is still work to be done on the data generation side. Of the missing funct
 
 The initial batch of forges cover the basic primitive types, and object wrappers:
 
-```javascript
+```typescript
 let BiggerUserForge = EF.obj({
     uuid: EF.string().minLength(20).maxLength(20).ascii(),
     email: EF.string().minLength(5).maxLength(255),
@@ -74,12 +74,38 @@ let BiggerUserForge = EF.obj({
 let biggerUser = BiggerUserForge.gen()
 console.log("A randomly generated 'BiggerUser:", biggerUser)
 ```
- 
 
+
+### Composite Data Models
+
+Plain Old TypeScript Classes can be referenced as well, allowing a cleaner version of the above:
+
+```typescript
+let ContactForge = EF.obj({
+    surname: EF.string().minLength(1).maxLength(255).ascii(),
+    forename: EF.string().minLength(1).maxLength(255).ascii(),
+    addressLine1: EF.string().minLength(1).maxLength(255).ascii(),
+    addressLine2: EF.string().minLength(1).maxLength(255).ascii(),
+    postcode: EF.string().minLength(3).maxLength(25).ascii(),
+})
+let ContactModel = ContactForge.asNewable()
+let BiggerUserForge = EF.obj({
+    uuid: EF.string().minLength(20).maxLength(20).ascii(),
+    email: EF.string().minLength(5).maxLength(255),
+    memberSince: EF.int(2016).min(2000).max(2200),
+    karmaScore: EF.number().min(0).max(1).initTo(0.5),
+    groups: EF.enumeration().values(["admin", "guest", "subscriber", "paid-member"]),
+    contact: EF.ofType(ContactModel).notNull().initTo(new UserContact())
+})
+let BiggerUserModel = BiggerUserForge.asNewable()
+console.log("A new BiggerUserModel, ready for validated updates", new BiggerUserModel())
+```
+
+Generation of 'ofType' child fields is not yet implemented.
 
 ## Contributing
 
-### Getting started
+Please see CONTRIBUTING.adoc
 
 
 ```bash
